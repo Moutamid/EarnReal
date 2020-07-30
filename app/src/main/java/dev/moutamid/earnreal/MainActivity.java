@@ -3,6 +3,7 @@ package dev.moutamid.earnreal;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.Toast;
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     private FrameLayout frameLayout;
     private NavigationView navigationView;
-    private SwitchCompat darkModeSwitch;
+    private SwitchCompat urduSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initializeViews();
         toggleDrawer();
         initializeDefaultFragment(savedInstanceState,0);
-        setDarkModeSwitchListener();
+        setUrduSwitchListener();
 
     }
 
@@ -42,13 +43,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private void initializeViews() {
         toolbar = findViewById(R.id.toolbar_id);
-        toolbar.setTitle("toolbar_title");
-        setSupportActionBar(toolbar);
+        toolbar.setTitle("Dashboard");
+//        setSupportActionBar(toolbar);
         drawerLayout = findViewById(R.id.drawer_layout_id);
         frameLayout = findViewById(R.id.framelayout_id);
         navigationView = findViewById(R.id.navigationview_id);
         navigationView.setNavigationItemSelectedListener(this);
-        darkModeSwitch = (SwitchCompat)navigationView.getMenu().findItem(R.id.nav_darkmode_id).getActionView();
+        urduSwitch = (SwitchCompat) navigationView.getMenu().findItem(R.id.nav_urdu_id).getActionView();
+
+        navigationView.getHeaderView(0).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "First item header", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     /**
@@ -93,60 +101,61 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
-            case R.id.nav_message_id:
-                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new MessageFragment())
+            case R.id.nav_dashboard_id:
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new DashboardFragment())
                         .commit();
+                toolbar.setTitle("Dashboard");
                 closeDrawer();
                 break;
-            case R.id.nav_chat_id:
-                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new ChatFragment())
+            case R.id.nav_upgrade_id:
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new UpgradeFragment())
                         .commit();
+                toolbar.setTitle("Upgrade");
                 closeDrawer();
                 break;
-            case R.id.nav_profile_id:
-                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new ProfileFragment())
+            case R.id.nav_premium_ads_id:
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new PremiumAdsFragment())
                         .commit();
+                toolbar.setTitle("Premium Ads");
                 closeDrawer();
                 break;
-            case R.id.nav_notebooks_id:
-                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new NotebooksFragment())
+            case R.id.nav_daily_ads_id:
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new DailyAdsFragment())
                         .commit();
+                toolbar.setTitle("Daily Ads");
                 closeDrawer();
                 break;
-            case R.id.nav_send_id:
-                Toast.makeText(this, "Send Pressed", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.nav_share_id:
-                Toast.makeText(this, "Share Pressed", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.nav_photos_id:
-                Toast.makeText(this, "Photos Pressed", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.nav_trash_id:
-                Toast.makeText(this, "Trash Pressed", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.nav_settings_id:
-                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new SettingsFragment())
+            case R.id.nav_team_id:
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new TeamFragment())
                         .commit();
-                deSelectCheckedState();
+                toolbar.setTitle("Team");
                 closeDrawer();
+                break;
+            case R.id.nav_withdraw_id:
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new WithdrawFragment())
+                        .commit();
+                toolbar.setTitle("Withdraw");
+                closeDrawer();
+                break;
+            case R.id.nav_logout_id:
+                Toast.makeText(this, "Logout Pressed", Toast.LENGTH_SHORT).show();
                 break;
         }
         return true;
     }
 
     /**
-     * Attach setOnCheckedChangeListener to the dark mode switch
+     * Attach setOnCheckedChangeListener to the urdu switch
      */
-    private void setDarkModeSwitchListener(){
-        darkModeSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+    private void setUrduSwitchListener(){
+        urduSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (!isChecked){
-                    Toast.makeText(MainActivity.this, "Dark Mode Turn Off", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Urdu Off", Toast.LENGTH_SHORT).show();
                 }
                 else {
-                    Toast.makeText(MainActivity.this, "Dark Mode Turn On", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Urdu On", Toast.LENGTH_SHORT).show();
                 }
             }
         });

@@ -5,58 +5,65 @@
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_message_id"
+            android:id="@+id/nav_dashboard_id"
             android:icon="@drawable/ic_email_black_24dp"
-            android:title="Message" />
+            android:title="Dashboard" />
         <item
-            android:id="@+id/nav_chat_id"
+            android:id="@+id/nav_upgrade_id"
             android:icon="@drawable/ic_message_black_24dp"
-            android:title="Chat" />
+            android:title="Upgrade" />
         <item
-            android:id="@+id/nav_profile_id"
+            android:id="@+id/nav_premium_ads_id"
             android:icon="@drawable/ic_person_black_24dp"
-            android:title="Profile" />
+            android:title="Premium Ads" />
         <item
-            android:id="@+id/nav_notebooks_id"
-            android:title="Notebooks"
-            android:icon="@drawable/ic_book_black_24dp"
-            />
+            android:id="@+id/nav_daily_ads_id"
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="Daily Ads" />
+        <item
+            android:id="@+id/nav_team_id"
+            android:title="Team"
+            android:icon="@drawable/ic_book_black_24dp" />
+        <item
+            android:id="@+id/nav_withdraw_id"
+            android:title="Withdraw"
+            android:icon="@drawable/ic_book_black_24dp" />
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_send_id"
-                android:icon="@drawable/ic_send_black_24dp"
-                android:title="Send" />
-            <item
-                android:id="@+id/nav_share_id"
-                android:icon="@drawable/ic_publish_black_24dp"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_photos_id"
-                android:title="Photos"
-                android:icon="@drawable/ic_photo_black_24dp"
-                />
-            <item
-                android:id="@+id/nav_trash_id"
-                android:title="Trash"
-                android:icon="@drawable/ic_delete_black_24dp"
-                />
-        </menu>
-    </item>
+<!--    <item android:title="Communicate">-->
+<!--        <menu>-->
+<!--            <item-->
+<!--                android:id="@+id/nav_send_id"-->
+<!--                android:icon="@drawable/ic_send_black_24dp"-->
+<!--                android:title="Send" />-->
+<!--            <item-->
+<!--                android:id="@+id/nav_share_id"-->
+<!--                android:icon="@drawable/ic_publish_black_24dp"-->
+<!--                android:title="Share" />-->
+<!--            <item-->
+<!--                android:id="@+id/nav_photos_id"-->
+<!--                android:title="Photos"-->
+<!--                android:icon="@drawable/ic_photo_black_24dp"-->
+<!--                />-->
+<!--            <item-->
+<!--                android:id="@+id/nav_trash_id"-->
+<!--                android:title="Trash"-->
+<!--                android:icon="@drawable/ic_delete_black_24dp"-->
+<!--                />-->
+<!--        </menu>-->
+<!--    </item>-->
 
     <item android:title="Others">
         <menu>
             <item
-                android:id="@+id/nav_darkmode_id"
-                android:title="Dark Mode"
+                android:id="@+id/nav_urdu_id"
+                android:title="Urdu Language"
                 android:icon="@drawable/ic_brightness_3_black_24dp"
-                app:actionLayout="@layout/nav_drawer_darkmode_switch"
+                app:actionLayout="@layout/nav_drawer_urdu_switch"
                 />
             <item
-                android:id="@+id/nav_settings_id"
-                android:title="Settings"
+                android:id="@+id/nav_logout_id"
+                android:title="Logout"
                 android:icon="@drawable/ic_settings_black_24dp"
                 />
         </menu>
