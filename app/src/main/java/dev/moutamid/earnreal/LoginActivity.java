@@ -8,7 +8,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 
@@ -38,7 +37,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-//import Utils.MyUtils;
+//import Utils.Utils;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -48,7 +47,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button loginBtn;
     private Boolean passwordShowing = false;
     private Dialog mDialog;
-    private MyUtils utils = new MyUtils();
+    private Utils utils = new Utils();
     private RelativeLayout progressLayout;
 
     private ProgressDialog mProgressDialog;
@@ -190,62 +189,7 @@ public class LoginActivity extends AppCompatActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                progressLayout.setVisibility(View.VISIBLE);
-
-                TextView closeBtn_RSD, forgotUsernameBtn_RSD;
-                Button submitBtn_RSD;
-
-                mDialog.setContentView(R.layout.dialog_reset_password);
-
-                closeBtn_RSD = mDialog.findViewById(R.id.close_btn_reset_password_dialog);
-                userNameEditText_RSD = mDialog.findViewById(R.id.userName_editText_reset_password_dialog);
-                submitBtn_RSD = mDialog.findViewById(R.id.submit_btn_reset_password_dialog);
-                forgotUsernameBtn_RSD = mDialog.findViewById(R.id.forgot_userName_Textview_reset_password_dialog);
-
-                closeBtn_RSD.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        mDialog.dismiss();
-                    }
-                });
-
-                submitBtn_RSD.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-
-                        if (isOnline) {
-
-                            String userName = userNameEditText_RSD.getText().toString().trim().toLowerCase();
-
-                            if (TextUtils.isEmpty(userName)) {
-
-                                userNameEditText_RSD.setError("Please enter a username.");
-                                userNameEditText_RSD.requestFocus();
-
-                            } else {
-
-                                checkUserExistForReset(userName);
-
-                            }
-                        } else {
-                            utils.showOfflineDialog(LoginActivity.this);
-                        }
-
-                    }
-                });
-
-                forgotUsernameBtn_RSD.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-//                        startActivity(new Intent(LoginActivity.this, ForgotUsernameActivity.class));
-                    }
-                });
-
-                mDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-
-                progressLayout.setVisibility(View.GONE);
-
-                mDialog.show();
+                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
             }
         };
     }
@@ -388,11 +332,9 @@ public class LoginActivity extends AppCompatActivity {
     private void initViews() {
         userNameEditText = findViewById(R.id.userName_login_editText);
         passwordEditText = findViewById(R.id.password_login_editText);
-        showPasswordBtn = findViewById(R.id.showPassword_btn_login);
         forgotPasswordBtn = findViewById(R.id.forgotPassword_login_textView);
         goToSignUpActivityBtn = findViewById(R.id.goTo_signUp_activity_textView);
         loginBtn = findViewById(R.id.login_btn);
-        progressLayout = findViewById(R.id.progressBar_layout_login);
         // For Dialog
         mDialog = new Dialog(this);
     }

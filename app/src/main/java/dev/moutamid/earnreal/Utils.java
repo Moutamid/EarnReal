@@ -16,13 +16,15 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 
+import com.google.android.material.snackbar.Snackbar;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
 //import dev.moutamid.strangers.R;
 
-public class MyUtils {
+public class Utils {
 
     private static final String PUBLIC = "Public";
     private static final String PRIVATE = "Private";
@@ -112,6 +114,11 @@ public class MyUtils {
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
         return sdf.format(date);
 
+    }
+
+    public void showSnackBar(View view, String msg){
+        Snackbar.make(view, msg, Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show();
     }
 
     public void showDialog(Context context, String title, String message, String positiveBtnName, String negativeBtnName, DialogInterface.OnClickListener positiveListener, DialogInterface.OnClickListener negativeListener) {

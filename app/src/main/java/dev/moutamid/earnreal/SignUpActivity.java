@@ -5,16 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 //import android.support.annotation.NonNull;
 //import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextUtils;
-import android.text.TextWatcher;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +16,6 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 //import com.google.android.gms.tasks.OnCompleteListener;
 //import com.google.android.gms.tasks.Task;
@@ -38,20 +31,17 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Random;
 
-//import Utils.MyUtils;
+//import Utils.Utils;
 
 public class SignUpActivity extends AppCompatActivity {
 
     private LinearLayout maleBtnLayout, femaleBtnLayout;
     private EditText userNameEditText, passwordEditText, confirmPasswordEditText;
-    private ImageView showPasswordBtn, showConfirmPasswordBtn;
     private Button signUpBtn;
     private TextView goToLoginActivityBtn;
 
-    private MyUtils utils = new MyUtils();
+    private Utils utils = new Utils();
     private String userGender = "male";
-    private Boolean passwordShowing = false;
-    private Boolean confirmPasswordShowing = false;
     private ProgressDialog mDialog;
 
     private static final String PUBLIC = "Public";
