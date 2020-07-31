@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      */
     private void initializeViews() {
         toolbar = findViewById(R.id.toolbar_id);
-        toolbar.setTitle("Dashboard");
+        toolbar.setTitle("EarnReal - Dashboard");
 //        setSupportActionBar(toolbar);
         drawerLayout = findViewById(R.id.drawer_layout_id);
         frameLayout = findViewById(R.id.framelayout_id);
@@ -104,38 +104,44 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case R.id.nav_dashboard_id:
                 getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new DashboardFragment())
                         .commit();
-                toolbar.setTitle("Dashboard");
+                toolbar.setTitle("EarnReal - Dashboard");
                 closeDrawer();
                 break;
             case R.id.nav_upgrade_id:
                 getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new UpgradeFragment())
                         .commit();
-                toolbar.setTitle("Upgrade");
+                toolbar.setTitle("EarnReal - Upgrade");
                 closeDrawer();
                 break;
             case R.id.nav_premium_ads_id:
                 getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new PremiumAdsFragment())
                         .commit();
-                toolbar.setTitle("Premium Ads");
+                toolbar.setTitle("EarnReal - Premium Ads");
                 closeDrawer();
                 break;
             case R.id.nav_daily_ads_id:
                 getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new DailyAdsFragment())
                         .commit();
-                toolbar.setTitle("Daily Ads");
+                toolbar.setTitle("EarnReal - Daily Ads");
                 closeDrawer();
                 break;
             case R.id.nav_team_id:
                 getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new TeamFragment())
                         .commit();
-                toolbar.setTitle("Team");
+                toolbar.setTitle("EarnReal - Team");
                 closeDrawer();
                 break;
             case R.id.nav_withdraw_id:
                 getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new WithdrawFragment())
                         .commit();
-                toolbar.setTitle("Withdraw");
+                toolbar.setTitle("EarnReal - Withdraw");
                 closeDrawer();
+                break;
+            case R.id.nav_urdu_id:
+                Toast.makeText(this, "1Logout Pressed", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.nav_urdu_id:
+                Toast.makeText(this, "1Logout Pressed", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.nav_logout_id:
                 Toast.makeText(this, "Logout Pressed", Toast.LENGTH_SHORT).show();

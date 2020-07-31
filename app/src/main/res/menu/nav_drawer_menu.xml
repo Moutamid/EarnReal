@@ -30,28 +30,32 @@
             android:icon="@drawable/ic_book_black_24dp" />
     </group>
 
-<!--    <item android:title="Communicate">-->
-<!--        <menu>-->
-<!--            <item-->
-<!--                android:id="@+id/nav_send_id"-->
-<!--                android:icon="@drawable/ic_send_black_24dp"-->
-<!--                android:title="Send" />-->
-<!--            <item-->
-<!--                android:id="@+id/nav_share_id"-->
-<!--                android:icon="@drawable/ic_publish_black_24dp"-->
-<!--                android:title="Share" />-->
-<!--            <item-->
-<!--                android:id="@+id/nav_photos_id"-->
-<!--                android:title="Photos"-->
-<!--                android:icon="@drawable/ic_photo_black_24dp"-->
-<!--                />-->
-<!--            <item-->
-<!--                android:id="@+id/nav_trash_id"-->
-<!--                android:title="Trash"-->
-<!--                android:icon="@drawable/ic_delete_black_24dp"-->
-<!--                />-->
-<!--        </menu>-->
-<!--    </item>-->
+    <item android:title="Miscellaneous">
+        <menu>
+            <group android:checkableBehavior="single">
+            <item
+                android:id="@+id/nav_payment_proof_id"
+                android:icon="@drawable/ic_send_black_24dp"
+                android:title="Payment proof" />
+            <item
+                android:id="@+id/nav_privacy_policy_id"
+                android:icon="@drawable/ic_publish_black_24dp"
+                android:title="Privacy policy" />
+            <item
+                android:id="@+id/nav_terms_of_services_id"
+                android:icon="@drawable/ic_photo_black_24dp"
+                android:title="Terms of services" />
+            <item
+                android:id="@+id/nav_contact_us_id"
+                android:title="Contact us"
+                android:icon="@drawable/ic_delete_black_24dp" />
+            <item
+                android:id="@+id/nav_help_id"
+                android:title="Help"
+                android:icon="@drawable/ic_delete_black_24dp" />
+            </group>
+        </menu>
+    </item>
 
     <item android:title="Others">
         <menu>
@@ -59,13 +63,11 @@
                 android:id="@+id/nav_urdu_id"
                 android:title="Urdu Language"
                 android:icon="@drawable/ic_brightness_3_black_24dp"
-                app:actionLayout="@layout/nav_drawer_urdu_switch"
-                />
+                app:actionLayout="@layout/nav_drawer_urdu_switch" />
             <item
                 android:id="@+id/nav_logout_id"
                 android:title="Logout"
-                android:icon="@drawable/ic_settings_black_24dp"
-                />
+                android:icon="@drawable/ic_settings_black_24dp" />
         </menu>
     </item>
 

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="196dp"
     android:orientation="vertical"
+    android:gravity="bottom"
     android:padding="12dp"
     android:theme="@style/ThemeOverlay.AppCompat.Dark">
-<!--android:layout_height="196dp"-->
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -32,7 +33,7 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/nav_header_name_id"
+        android:id="@+id/nav_header_user_name_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="8dp"
@@ -42,7 +43,7 @@
         android:textColor="@android:color/black"/>
 
     <TextView
-        android:id="@+id/nav_header_emailaddress_id"
+        android:id="@+id/nav_header_phone_nmbr_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingTop="4dp"
