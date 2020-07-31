@@ -1,10 +1,10 @@
 package dev.moutamid.earnreal;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 
-public class ForgotPasswordActivity extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
+
+public class ActivityForgotPassword extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -5,12 +5,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -25,6 +22,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+
 //import com.google.android.gms.tasks.OnCompleteListener;
 //import com.google.android.gms.tasks.Task;
 //import com.google.firebase.auth.AuthResult;
@@ -35,11 +34,9 @@ import android.widget.Toast;
 //import com.google.firebase.database.FirebaseDatabase;
 //import com.google.firebase.database.ValueEventListener;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 //import Utils.Utils;
 
-public class LoginActivity extends AppCompatActivity {
+public class ActivityLogin extends AppCompatActivity {
 
     private EditText userNameEditText, passwordEditText;
     private ImageView showPasswordBtn;
@@ -128,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, SignUpActivity.class));
+                startActivity(new Intent(ActivityLogin.this, ActivitySignUp.class));
             }
         };
     }
@@ -179,7 +176,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 } else if (!isOnline) {
 
-                    utils.showOfflineDialog(LoginActivity.this);
+                    utils.showOfflineDialog(ActivityLogin.this);
                 }
             }
         };
@@ -189,7 +186,7 @@ public class LoginActivity extends AppCompatActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, ForgotPasswordActivity.class));
+                startActivity(new Intent(ActivityLogin.this, ActivityForgotPassword.class));
             }
         };
     }
@@ -230,7 +227,7 @@ public class LoginActivity extends AppCompatActivity {
 //
 //                if (dataSnapshot.hasChild(username)) {
 //
-//                    Intent intent = new Intent(LoginActivity.this, ForgotPasswordActivity.class);
+//                    Intent intent = new Intent(ActivityLogin.this, ActivityForgotPassword.class);
 //                    intent.putExtra(USER_NAME, username);
 //
 //                    mProgressDialog.dismiss();
@@ -263,17 +260,17 @@ public class LoginActivity extends AppCompatActivity {
 //
 //                String profileImage = dataSnapshot.child(PUBLIC).child(PROFILE_IMAGE).getValue(String.class);
 //
-//                utils.storeString(LoginActivity.this, USER_NAME, username);
-//                utils.storeString(LoginActivity.this, LOG_STATUS, "true");
-//                utils.storeString(LoginActivity.this, QUESTIONS_STATUS, "no");
-//                utils.storeString(LoginActivity.this, PROFILE_IMAGE, profileImage);
+//                utils.storeString(ActivityLogin.this, USER_NAME, username);
+//                utils.storeString(ActivityLogin.this, LOG_STATUS, "true");
+//                utils.storeString(ActivityLogin.this, QUESTIONS_STATUS, "no");
+//                utils.storeString(ActivityLogin.this, PROFILE_IMAGE, profileImage);
 //
-//                Intent intent = new Intent(LoginActivity.this, BottomNavigationActivity.class);
+//                Intent intent = new Intent(ActivityLogin.this, BottomNavigationActivity.class);
 //                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //
 //                mProgressDialog.dismiss();
 //
-//                Toast.makeText(LoginActivity.this, "You are successfully logged in", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ActivityLogin.this, "You are successfully logged in", Toast.LENGTH_SHORT).show();
 //
 //                startActivity(intent);
 //                finish();
@@ -315,7 +312,7 @@ public class LoginActivity extends AppCompatActivity {
 //                        } else {
 //
 //                            mProgressDialog.dismiss();
-//                            Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(ActivityLogin.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
 //                        }
 //
 //                    }

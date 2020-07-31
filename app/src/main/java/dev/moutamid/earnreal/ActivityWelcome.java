@@ -10,7 +10,7 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 
-public class WelcomeActivity extends AppCompatActivity {
+public class ActivityWelcome extends AppCompatActivity {
 
     private Button loginBtn;
     private TextView goToSignUpBtn;
@@ -36,7 +36,7 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                startActivity(new Intent(WelcomeActivity.this, LoginActivity.class));
+                startActivity(new Intent(ActivityWelcome.this, ActivityLogin.class));
                 finish();
             }
         });
@@ -45,7 +45,7 @@ public class WelcomeActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                startActivity(new Intent(WelcomeActivity.this, SignUpActivity.class));
+                startActivity(new Intent(ActivityWelcome.this, ActivitySignUp.class));
                 finish();
             }
         });

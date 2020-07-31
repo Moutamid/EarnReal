@@ -7,16 +7,19 @@ import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
-//import android.support.annotation.NonNull;
-//import android.support.v7.app.AppCompatActivity;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import java.util.Random;
+
+//import android.support.annotation.NonNull;
+//import android.support.v7.app.AppCompatActivity;
 //import com.google.android.gms.tasks.OnCompleteListener;
 //import com.google.android.gms.tasks.Task;
 //import com.google.firebase.auth.AuthResult;
@@ -27,13 +30,9 @@ import android.widget.TextView;
 //import com.google.firebase.database.FirebaseDatabase;
 //import com.google.firebase.database.ValueEventListener;
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import java.util.Random;
-
 //import Utils.Utils;
 
-public class SignUpActivity extends AppCompatActivity {
+public class ActivitySignUp extends AppCompatActivity {
 
     private LinearLayout maleBtnLayout, femaleBtnLayout;
     private EditText userNameEditText, passwordEditText, confirmPasswordEditText;
@@ -152,7 +151,7 @@ public class SignUpActivity extends AppCompatActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(SignUpActivity.this, LoginActivity.class));
+                startActivity(new Intent(ActivitySignUp.this, ActivityLogin.class));
             }
         };
     }
@@ -165,7 +164,7 @@ public class SignUpActivity extends AppCompatActivity {
                     mDialog.show();
                     checkStatusOfEditTexts();
                 } else
-                    utils.showOfflineDialog(SignUpActivity.this);
+                    utils.showOfflineDialog(ActivitySignUp.this);
             }
         };
     }
@@ -371,7 +370,7 @@ public class SignUpActivity extends AppCompatActivity {
 //                        } else {
 //
 //                            mDialog.dismiss();
-//                            Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(ActivitySignUp.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
 //                        }
 //                    }
 //                });
@@ -379,7 +378,7 @@ public class SignUpActivity extends AppCompatActivity {
         } else {
 
             mDialog.dismiss();
-            utils.showOfflineDialog(SignUpActivity.this);
+            utils.showOfflineDialog(ActivitySignUp.this);
         }
     }
 
@@ -445,7 +444,7 @@ public class SignUpActivity extends AppCompatActivity {
 //
 //                                            if (task.isSuccessful()) {
 //
-//                                                Intent intent = new Intent(SignUpActivity.this, SecurityQuestionActivity.class);
+//                                                Intent intent = new Intent(ActivitySignUp.this, SecurityQuestionActivity.class);
 //                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //
 //                                                storeString(USER_NAME, username);
@@ -474,7 +473,7 @@ public class SignUpActivity extends AppCompatActivity {
 //
 //                                            } else {
 //                                                mDialog.dismiss();
-//                                                Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                                                Toast.makeText(ActivitySignUp.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
 //                                            }
 //                                        }
 //                                    });
@@ -483,7 +482,7 @@ public class SignUpActivity extends AppCompatActivity {
 //                        } else {
 //
 //                            mDialog.dismiss();
-//                            Toast.makeText(SignUpActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+//                            Toast.makeText(ActivitySignUp.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
 //
 //                        }
 //                    }

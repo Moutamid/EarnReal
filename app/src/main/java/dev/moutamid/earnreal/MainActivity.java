@@ -6,6 +6,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private FrameLayout frameLayout;
     private NavigationView navigationView;
     private SwitchCompat urduSwitch;
+    private TextView nav_username;
+    private TextView nav_phone_number;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,12 +54,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         urduSwitch = (SwitchCompat) navigationView.getMenu().findItem(R.id.nav_urdu_id).getActionView();
 
-        navigationView.getHeaderView(0).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "First item header", Toast.LENGTH_SHORT).show();
-            }
-        });
+        View header = navigationView.getHeaderView(0);
+
+        nav_username = (TextView) header.findViewById(R.id.nav_header_user_name_id);
+        nav_phone_number = (TextView) header.findViewById(R.id.nav_header_phone_nmbr_id);
+
+        nav_username.setText("Moutamid");
+        nav_phone_number.setText("03058853833");
+
     }
 
     /**
@@ -102,46 +107,70 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         switch (menuItem.getItemId()){
             case R.id.nav_dashboard_id:
-                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new DashboardFragment())
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new FragmentDashboard())
                         .commit();
                 toolbar.setTitle("EarnReal - Dashboard");
                 closeDrawer();
                 break;
             case R.id.nav_upgrade_id:
-                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new UpgradeFragment())
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new FragmentUpgrade())
                         .commit();
                 toolbar.setTitle("EarnReal - Upgrade");
                 closeDrawer();
                 break;
             case R.id.nav_premium_ads_id:
-                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new PremiumAdsFragment())
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new FragmentPremiumAds())
                         .commit();
                 toolbar.setTitle("EarnReal - Premium Ads");
                 closeDrawer();
                 break;
             case R.id.nav_daily_ads_id:
-                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new DailyAdsFragment())
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new FragmentDailyAds())
                         .commit();
                 toolbar.setTitle("EarnReal - Daily Ads");
                 closeDrawer();
                 break;
             case R.id.nav_team_id:
-                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new TeamFragment())
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new FragmentTeam())
                         .commit();
                 toolbar.setTitle("EarnReal - Team");
                 closeDrawer();
                 break;
             case R.id.nav_withdraw_id:
-                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new WithdrawFragment())
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new FragmentWithdraw())
                         .commit();
                 toolbar.setTitle("EarnReal - Withdraw");
                 closeDrawer();
                 break;
-            case R.id.nav_urdu_id:
-                Toast.makeText(this, "1Logout Pressed", Toast.LENGTH_SHORT).show();
+            case R.id.nav_payment_proof_id:
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new FragmentPaymentProof())
+                        .commit();
+                toolbar.setTitle("EarnReal - Payment proof");
+                closeDrawer();
                 break;
-            case R.id.nav_urdu_id:
-                Toast.makeText(this, "1Logout Pressed", Toast.LENGTH_SHORT).show();
+            case R.id.nav_privacy_policy_id:
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new FragmentPrivacyPolicy())
+                        .commit();
+                toolbar.setTitle("EarnReal - Privacy policy");
+                closeDrawer();
+                break;
+            case R.id.nav_terms_of_services_id:
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new FragmentTermsOfServices())
+                        .commit();
+                toolbar.setTitle("EarnReal - Terms of services");
+                closeDrawer();
+                break;
+            case R.id.nav_contact_us_id:
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new FragmentContactUs())
+                        .commit();
+                toolbar.setTitle("EarnReal - Contact us");
+                closeDrawer();
+                break;
+            case R.id.nav_help_id:
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new FragmentHelp())
+                        .commit();
+                toolbar.setTitle("EarnReal - Help");
+                closeDrawer();
                 break;
             case R.id.nav_logout_id:
                 Toast.makeText(this, "Logout Pressed", Toast.LENGTH_SHORT).show();
