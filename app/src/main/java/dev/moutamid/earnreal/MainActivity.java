@@ -4,7 +4,6 @@ package dev.moutamid.earnreal;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -12,7 +11,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.SwitchCompat;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -25,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private DrawerLayout drawerLayout;
     private FrameLayout frameLayout;
     private NavigationView navigationView;
-    private SwitchCompat urduSwitch;
+    //private SwitchCompat urduSwitch;
     private TextView nav_username;
     private TextView nav_phone_number;
 
@@ -37,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initializeViews();
         toggleDrawer();
         initializeDefaultFragment(savedInstanceState,0);
-        setUrduSwitchListener();
+        //setUrduSwitchListener();
 
     }
 
@@ -52,7 +50,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         frameLayout = findViewById(R.id.framelayout_id);
         navigationView = findViewById(R.id.navigationview_id);
         navigationView.setNavigationItemSelectedListener(this);
-        urduSwitch = (SwitchCompat) navigationView.getMenu().findItem(R.id.nav_urdu_id).getActionView();
+        //urduSwitch = (SwitchCompat) navigationView.getMenu().findItem(R.id.nav_urdu_id).getActionView();
 
         View header = navigationView.getHeaderView(0);
 
@@ -179,9 +177,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
-    /**
-     * Attach setOnCheckedChangeListener to the urdu switch
-     */
+    /*
+      Attach setOnCheckedChangeListener to the urdu switch
+
     private void setUrduSwitchListener(){
         urduSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
@@ -195,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         });
     }
-
+*/
     /**
      * Checks if the navigation drawer is open - if so, close it
      */

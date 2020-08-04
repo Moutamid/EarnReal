@@ -1,13 +1,162 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:background="@color/white"
     android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        android:text="Withdraw Fragment"
-        android:textSize="30sp" />
+        android:layout_margin="20dp"
+        android:text="Please fill the form correctly"
+        android:textColor="@color/black"
+        android:textSize="18sp" />
 
-</RelativeLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:padding="20dp"
+            android:orientation="horizontal">
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="18sp"
+                    android:checked="true"
+                    android:buttonTint="@color/orange"
+                    android:text="Easypaisa"/>
+
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:textSize="18sp"
+                    android:buttonTint="@color/orange"
+                    android:layout_height="wrap_content"
+                    android:text="Jazzcash"/>
+
+
+        </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="250dp"
+        android:padding="5dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/edit_text_background"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/icon_username" />
+
+        <EditText
+            android:layout_width="187dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="5dp"
+            android:background="@color/white"
+            android:hint="Account name"
+            android:inputType="textPersonName"
+            android:textColor="@color/darkBlue"
+            android:layout_marginStart="5dp"
+            android:textColorHint="@color/greyishblue"
+            android:textCursorDrawable="@color/darkBlue"
+            android:textSize="13sp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:layout_width="250dp"
+        android:padding="5dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/edit_text_background"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/icon_username" />
+
+        <EditText
+
+            android:layout_width="187dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="5dp"
+            android:background="@color/white"
+            android:hint="Account number"
+            android:inputType="number"
+            android:textColor="@color/darkBlue"
+            android:layout_marginStart="5dp"
+            android:textColorHint="@color/greyishblue"
+            android:textCursorDrawable="@color/darkBlue"
+            android:textSize="13sp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+
+        android:layout_width="250dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/edit_text_background"
+        android:padding="5dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="17dp"
+            android:layout_height="17dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="10dp"
+            android:src="@drawable/icon_password" />
+
+        <EditText
+
+            android:layout_width="187dp"
+            android:layout_height="35dp"
+            android:layout_marginEnd="5dp"
+            android:background="@color/white"
+            android:hint="Amount"
+            android:inputType="number"
+            android:textColor="@color/darkBlue"
+            android:layout_marginStart="5dp"
+            android:textColorHint="@color/greyishblue"
+            android:textCursorDrawable="@color/darkBlue"
+            android:textSize="13sp"
+            />
+
+    </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:textColor="@color/greyishblue"
+            android:text="Note: Your request will be processed in between 12 to 24 business hours."/>
+
+        <Button
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/submit_btn_background"
+            android:text="Submit"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+
+</ScrollView>
