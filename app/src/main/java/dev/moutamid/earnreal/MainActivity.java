@@ -1,6 +1,7 @@
 package dev.moutamid.earnreal;
 
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         initializeViews();
         toggleDrawer();
-        initializeDefaultFragment(savedInstanceState,0);
+        initializeDefaultFragment(savedInstanceState, 0);
         //setUrduSwitchListener();
 
     }
@@ -66,11 +67,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
      * Checks if the savedInstanceState is null - onCreate() is ran
      * If so, display fragment of navigation drawer menu at position itemIndex and
      * set checked status as true
+     *
      * @param savedInstanceState
      * @param itemIndex
      */
-    private void initializeDefaultFragment(Bundle savedInstanceState, int itemIndex){
-        if (savedInstanceState == null){
+    private void initializeDefaultFragment(Bundle savedInstanceState, int itemIndex) {
+        if (savedInstanceState == null) {
             MenuItem menuItem = navigationView.getMenu().getItem(itemIndex).setChecked(true);
             onNavigationItemSelected(menuItem);
         }
@@ -103,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        switch (menuItem.getItemId()){
+        switch (menuItem.getItemId()) {
             case R.id.nav_dashboard_id:
                 getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new FragmentDashboard())
                         .commit();
@@ -123,49 +125,49 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 closeDrawer();
                 break;
             case R.id.nav_daily_ads_id:
-                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new FragmentDailyAds())
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new FragmentDailyAds())
                         .commit();
                 toolbar.setTitle("EarnReal - Daily Ads");
                 closeDrawer();
                 break;
             case R.id.nav_team_id:
-                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new FragmentTeam())
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new FragmentTeam())
                         .commit();
                 toolbar.setTitle("EarnReal - Team");
                 closeDrawer();
                 break;
             case R.id.nav_withdraw_id:
-                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new FragmentWithdraw())
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new FragmentWithdraw())
                         .commit();
                 toolbar.setTitle("EarnReal - Withdraw");
                 closeDrawer();
                 break;
             case R.id.nav_payment_proof_id:
-                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new FragmentPaymentProof())
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new FragmentPaymentProof())
                         .commit();
                 toolbar.setTitle("EarnReal - Payment proof");
                 closeDrawer();
                 break;
             case R.id.nav_privacy_policy_id:
-                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new FragmentPrivacyPolicy())
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new FragmentPrivacyPolicy())
                         .commit();
                 toolbar.setTitle("EarnReal - Privacy policy");
                 closeDrawer();
                 break;
             case R.id.nav_terms_of_services_id:
-                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new FragmentTermsOfServices())
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new FragmentTermsOfServices())
                         .commit();
                 toolbar.setTitle("EarnReal - Terms of services");
                 closeDrawer();
                 break;
             case R.id.nav_contact_us_id:
-                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new FragmentContactUs())
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new FragmentContactUs())
                         .commit();
                 toolbar.setTitle("EarnReal - Contact us");
                 closeDrawer();
                 break;
             case R.id.nav_help_id:
-                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id,new FragmentHelp())
+                getSupportFragmentManager().beginTransaction().replace(R.id.framelayout_id, new FragmentHelp())
                         .commit();
                 toolbar.setTitle("EarnReal - Help");
                 closeDrawer();
@@ -175,6 +177,21 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
         }
         return true;
+    }
+
+    private void showLogoutDialog() {
+        new Utils().showDialog(MainActivity.this, "Are you sure!", "Do you really want to logout?", "No", "Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.dismiss();
+            }
+        }, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Toast.makeText(MainActivity.this, "Done", Toast.LENGTH_SHORT).show();
+                dialogInterface.dismiss();
+            }
+        });
     }
 
     /*
@@ -194,22 +211,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 */
+
     /**
      * Checks if the navigation drawer is open - if so, close it
      */
-    private void closeDrawer(){
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)){
+    private void closeDrawer() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
             drawerLayout.closeDrawer(GravityCompat.START);
         }
     }
-    
+
     /**
      * Iterates through all the items in the navigation menu and deselects them:
      * removes the selection color
      */
-    private void deSelectCheckedState(){
+    private void deSelectCheckedState() {
         int noOfItems = navigationView.getMenu().size();
-        for (int i=0; i<noOfItems;i++){
+        for (int i = 0; i < noOfItems; i++) {
             navigationView.getMenu().getItem(i).setChecked(false);
         }
     }

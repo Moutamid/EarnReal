@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_alignParentTop="true"
         android:gravity="center_horizontal"
+        android:id="@+id/method_selection_layout_upgrade"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
@@ -36,11 +37,13 @@
             android:orientation="horizontal">
 
             <RadioGroup
+                android:id="@+id/payment_methods_radioGroup_upgrade_layout"
                 android:layout_width="wrap_content"
                 android:layout_margin="20dp"
                 android:layout_height="wrap_content">
 
                 <RadioButton
+                    android:id="@+id/easypaisa_radioBtn_upgrade_layout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="18sp"
@@ -50,6 +53,7 @@
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_marginTop="10dp"
+                    android:id="@+id/jazzcash_radioBtn_upgrade_layout"
                     android:textSize="18sp"
                     android:buttonTint="@color/orange"
                     android:layout_height="wrap_content"
@@ -61,6 +65,7 @@
 
         <Button
             android:layout_width="250dp"
+            android:id="@+id/nextBtn_upgrade_layout"
             android:layout_height="wrap_content"
             android:background="@drawable/submit_btn_background"
             android:text="Next"
@@ -82,6 +87,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:visibility="gone"
+        android:id="@+id/easypaisa_instructions_layout_upgrade"
         android:layout_height="wrap_content">
 
     <LinearLayout
@@ -176,6 +182,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_alignParentTop="true"
+        android:id="@+id/jazzcash_instructions_layout_upgrade"
         android:visibility="gone"
         android:layout_height="wrap_content">
 

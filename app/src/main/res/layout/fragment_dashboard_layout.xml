@@ -7,7 +7,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
-        android:paddingTop="40dp"
+        android:paddingTop="20dp"
         android:paddingBottom="40dp"
         android:orientation="vertical">
 
@@ -32,7 +32,7 @@
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"
-                android:textSize="22sp"/>
+                android:textSize="20sp"/>
 
         </LinearLayout>
 
@@ -58,7 +58,7 @@
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"
-                android:textSize="22sp"/>
+                android:textSize="20sp"/>
 
         </LinearLayout>
 
@@ -84,7 +84,7 @@
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"
-                android:textSize="22sp"/>
+                android:textSize="20sp"/>
 
         </LinearLayout>
 
@@ -110,7 +110,7 @@
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"
-                android:textSize="22sp"/>
+                android:textSize="20sp"/>
 
         </LinearLayout>
 
@@ -136,7 +136,7 @@
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"
-                android:textSize="22sp"/>
+                android:textSize="20sp"/>
 
         </LinearLayout>
 
@@ -162,7 +162,7 @@
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"
-                android:textSize="22sp"/>
+                android:textSize="20sp"/>
 
         </LinearLayout>
 
@@ -188,7 +188,7 @@
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"
-                android:textSize="22sp"/>
+                android:textSize="20sp"/>
 
         </LinearLayout>
 
@@ -214,7 +214,7 @@
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"
-                android:textSize="22sp"/>
+                android:textSize="20sp"/>
 
         </LinearLayout>
 

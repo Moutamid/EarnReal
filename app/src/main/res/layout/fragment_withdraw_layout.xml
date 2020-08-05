@@ -46,6 +46,7 @@
 
         <RadioGroup
             android:layout_width="match_parent"
+            android:id="@+id/radioGroup_withdraw_layout"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:padding="20dp"
@@ -54,6 +55,7 @@
                 <RadioButton
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:id="@+id/easypaisa_radioBtn_withdraw_layout"
                     android:textSize="18sp"
                     android:checked="true"
                     android:buttonTint="@color/orange"
@@ -63,6 +65,7 @@
                     android:layout_width="wrap_content"
                     android:layout_marginStart="10dp"
                     android:textSize="18sp"
+                    android:id="@+id/jazzcash_radioBtn_withdraw_layout"
                     android:buttonTint="@color/orange"
                     android:layout_height="wrap_content"
                     android:text="Jazzcash"/>
@@ -88,6 +91,7 @@
         <EditText
             android:layout_width="187dp"
             android:layout_height="35dp"
+            android:id="@+id/accountName_et_withdraw_layout"
             android:layout_marginEnd="5dp"
             android:background="@color/white"
             android:hint="Account name"
@@ -95,7 +99,6 @@
             android:textColor="@color/darkBlue"
             android:layout_marginStart="5dp"
             android:textColorHint="@color/greyishblue"
-            android:textCursorDrawable="@color/darkBlue"
             android:textSize="13sp"
             />
 
@@ -123,12 +126,12 @@
             android:layout_height="35dp"
             android:layout_marginEnd="5dp"
             android:background="@color/white"
+            android:id="@+id/accountNmbr_et_withdraw_layout"
             android:hint="Account number"
             android:inputType="number"
             android:textColor="@color/darkBlue"
             android:layout_marginStart="5dp"
             android:textColorHint="@color/greyishblue"
-            android:textCursorDrawable="@color/darkBlue"
             android:textSize="13sp"
             />
 
@@ -155,13 +158,13 @@
             android:layout_width="187dp"
             android:layout_height="35dp"
             android:layout_marginEnd="5dp"
+            android:id="@+id/amount_et_withdraw_layout"
             android:background="@color/white"
             android:hint="Amount"
             android:inputType="number"
             android:textColor="@color/darkBlue"
             android:layout_marginStart="5dp"
             android:textColorHint="@color/greyishblue"
-            android:textCursorDrawable="@color/darkBlue"
             android:textSize="13sp"
             />
 
@@ -189,6 +192,7 @@
         <Button
             android:layout_width="250dp"
             android:layout_height="wrap_content"
+            android:id="@+id/submit_btn_upgrade_layout"
             android:background="@drawable/submit_btn_background"
             android:text="Submit"
             android:layout_marginTop="20dp"
