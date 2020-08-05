@@ -39,10 +39,10 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginStart="10dp"
-                android:src="@drawable/icon_username" />
+                android:src="@drawable/ic_phone_number" />
 
             <EditText
-                android:id="@+id/userName_login_editText"
+                android:id="@+id/phoneNmbr_login_editText"
                 android:layout_width="187dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="5dp"
@@ -51,7 +51,6 @@
                 android:inputType="number"
                 android:textColor="@color/darkBlue"
                 android:textColorHint="@color/greyishblue"
-                android:textCursorDrawable="@color/darkBlue"
                 android:textSize="13sp"
                 android:background="@color/white" />
 
@@ -88,7 +87,6 @@
                 android:background="@color/white"
                 android:textColor="@color/darkBlue"
                 android:textColorHint="@color/greyishblue"
-                android:textCursorDrawable="@color/darkBlue"
                 android:textSize="13sp"
                 />
 

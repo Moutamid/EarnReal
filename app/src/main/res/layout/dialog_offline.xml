@@ -7,15 +7,15 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/close_btn_offline_dialog"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:visibility="invisible"
         android:layout_gravity="end"
         android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="7dp"
         android:text="x"
-        android:textColor="@color/darkBlue"
+        android:textColor="@color/white"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -39,7 +39,7 @@
         android:layout_height="80dp"
         android:layout_gravity="center"
         android:layout_marginTop="5dp"
-        android:src="@drawable/icon_info_white" />
+        android:src="@drawable/ic_outline_white" />
 
     <TextView
         android:layout_width="match_parent"

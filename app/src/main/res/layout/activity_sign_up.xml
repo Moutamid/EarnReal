@@ -52,7 +52,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:src="@drawable/heart" />
+                android:src="@drawable/ic_male" />
 <!--            android:background="@color/yellow"-->
 
             <TextView
@@ -81,7 +81,7 @@
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
-                android:src="@drawable/heart" />
+                android:src="@drawable/ic_female" />
 <!--            android:background="@color/pink"-->
 
             <TextView
@@ -132,7 +132,7 @@
             android:textColor="@color/darkBlue"
             android:layout_marginStart="5dp"
             android:textColorHint="@color/greyishblue"
-            android:textCursorDrawable="@color/darkBlue"
+              
             android:textSize="13sp"
             />
 
@@ -152,7 +152,7 @@
             android:layout_height="17dp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
-            android:src="@drawable/icon_username" />
+            android:src="@drawable/ic_phone_number" />
 
         <EditText
             android:id="@+id/phoneNmbr_sign_up_editText"
@@ -165,7 +165,7 @@
             android:textColor="@color/darkBlue"
             android:layout_marginStart="5dp"
             android:textColorHint="@color/greyishblue"
-            android:textCursorDrawable="@color/darkBlue"
+              
             android:textSize="13sp"
             />
 
@@ -198,7 +198,7 @@
             android:textColor="@color/darkBlue"
             android:layout_marginStart="5dp"
             android:textColorHint="@color/greyishblue"
-            android:textCursorDrawable="@color/darkBlue"
+              
             android:textSize="13sp"
             />
 
@@ -231,7 +231,7 @@
             android:textColor="@color/darkBlue"
             android:layout_marginStart="5dp"
             android:textColorHint="@color/greyishblue"
-            android:textCursorDrawable="@color/darkBlue"
+              
             android:textSize="13sp"
             />
 
@@ -260,7 +260,7 @@
             android:layout_height="17dp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
-            android:src="@drawable/icon_username" />
+            android:src="@drawable/ic_referred_referral" />
 
         <EditText
             android:id="@+id/referralCode_sign_up_editText"
@@ -273,7 +273,7 @@
             android:textColor="@color/darkBlue"
             android:layout_marginStart="5dp"
             android:textColorHint="@color/greyishblue"
-            android:textCursorDrawable="@color/darkBlue"
+              
             android:textSize="13sp"
             />
 

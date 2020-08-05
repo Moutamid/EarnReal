@@ -118,7 +118,7 @@
             android:layout_height="17dp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
-            android:src="@drawable/icon_username" />
+            android:src="@drawable/ic_phone_number" />
 
         <EditText
 
@@ -151,7 +151,7 @@
             android:layout_height="17dp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
-            android:src="@drawable/icon_password" />
+            android:src="@drawable/ic_phone_number" />
 
         <EditText
 
@@ -177,7 +177,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginTop="20dp"
             android:textColor="@color/red"
-            android:text="A 5.5% transaction fees will be deducted."/>
+            android:text="5% transaction fees will be deducted."/>
 
         <TextView
             android:layout_width="match_parent"

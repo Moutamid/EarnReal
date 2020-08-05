@@ -173,7 +173,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 closeDrawer();
                 break;
             case R.id.nav_logout_id:
-                Toast.makeText(this, "Logout Pressed", Toast.LENGTH_SHORT).show();
+                closeDrawer();
+                showLogoutDialog();
                 break;
         }
         return true;

@@ -11,8 +11,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.text.method.HideReturnsTransformationMethod;
-import android.text.method.PasswordTransformationMethod;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -93,7 +91,7 @@ public class ActivityLogin extends AppCompatActivity {
     private void setListenersToWidgets() {
         passwordEditText.addTextChangedListener(passwordEditTextWatcher());
 
-        showPasswordBtn.setOnClickListener(showPasswordBtnListener());
+        //showPasswordBtn.setOnClickListener(showPasswordBtnListener());
 
         forgotPasswordBtn.setOnClickListener(forgotPasswordBtnListener());
 
@@ -130,28 +128,28 @@ public class ActivityLogin extends AppCompatActivity {
         };
     }
 
-    private View.OnClickListener showPasswordBtnListener() {
-        return new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (passwordShowing) {
-
-                    // Hiding password
-                    passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
-                    showPasswordBtn.setImageDrawable(getResources().getDrawable(R.drawable.icon_show_password_off));
-                    passwordShowing = false;
-
-                } else {
-
-                    // Showing password
-                    passwordEditText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-                    showPasswordBtn.setImageDrawable(getResources().getDrawable(R.drawable.icon_show_password_on));
-                    passwordShowing = true;
-
-                }
-            }
-        };
-    }
+//    private View.OnClickListener showPasswordBtnListener() {
+//        return new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if (passwordShowing) {
+//
+//                    // Hiding password
+//                    passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
+//                    showPasswordBtn.setImageDrawable(getResources().getDrawable(R.drawable.icon_show_password_off));
+//                    passwordShowing = false;
+//
+//                } else {
+//
+//                    // Showing password
+//                    passwordEditText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
+//                    showPasswordBtn.setImageDrawable(getResources().getDrawable(R.drawable.icon_show_password_on));
+//                    passwordShowing = true;
+//
+//                }
+//            }
+//        };
+//    }
 
     private View.OnClickListener loginBtnListener() {
         return new View.OnClickListener() {
@@ -327,7 +325,7 @@ public class ActivityLogin extends AppCompatActivity {
     }
 
     private void initViews() {
-        userNameEditText = findViewById(R.id.userName_login_editText);
+        //userNameEditText = findViewById(R.id.userName_login_editText);
         passwordEditText = findViewById(R.id.password_login_editText);
         forgotPasswordBtn = findViewById(R.id.forgotPassword_login_textView);
         goToSignUpActivityBtn = findViewById(R.id.goTo_signUp_activity_textView);

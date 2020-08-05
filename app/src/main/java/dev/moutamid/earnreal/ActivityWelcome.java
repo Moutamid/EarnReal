@@ -24,7 +24,7 @@ public class ActivityWelcome extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
-        loginBtn = findViewById(R.id.welcome_loginBtn);
+        loginBtn = findViewById(R.id.loginBtn_welcome);
         goToSignUpBtn = findViewById(R.id.goTo_signUp_activity_welcome);
   //      mAuth = FirebaseAuth.getInstance();
 

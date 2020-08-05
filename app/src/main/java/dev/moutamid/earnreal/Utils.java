@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -50,21 +49,12 @@ public class Utils {
 
     public void showOfflineDialog(Context context) {
 
-        TextView closeBtn;
         Button okayBtn;
 
         final Dialog dialogOffline = new Dialog(context);
         dialogOffline.setContentView(R.layout.dialog_offline);
 
-        closeBtn = dialogOffline.findViewById(R.id.close_btn_offline_dialog);
         okayBtn = dialogOffline.findViewById(R.id.okay_btn_offline_dialog);
-
-        closeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialogOffline.dismiss();
-            }
-        });
 
         okayBtn.setOnClickListener(new View.OnClickListener() {
             @Override

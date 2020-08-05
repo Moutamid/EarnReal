@@ -160,11 +160,12 @@ public class ActivitySignUp extends AppCompatActivity {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (isOnline) {
-                    mDialog.show();
-                    checkStatusOfEditTexts();
-                } else
-                    utils.showOfflineDialog(ActivitySignUp.this);
+                startActivity(new Intent(ActivitySignUp.this, ActivityVerifyNmbr.class));
+//                if (isOnline) {
+//                    mDialog.show();
+//                    checkStatusOfEditTexts();
+//                } else
+//                    utils.showOfflineDialog(ActivitySignUp.this);
             }
         };
     }

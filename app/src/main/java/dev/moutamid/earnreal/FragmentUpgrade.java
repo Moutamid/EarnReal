@@ -21,8 +21,6 @@ public class FragmentUpgrade extends Fragment {
 
         final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.payment_methods_radioGroup_upgrade_layout);
 
-        final int radioButtonId = radioGroup.getCheckedRadioButtonId();
-
         final ScrollView easypaisaLayout = (ScrollView) view.findViewById(R.id.easypaisa_instructions_layout_upgrade);
         final ScrollView jazzcashLayout = (ScrollView) view.findViewById(R.id.jazzcash_instructions_layout_upgrade);
         final LinearLayout methodSelectionLayout = (LinearLayout) view.findViewById(R.id.method_selection_layout_upgrade);
@@ -30,6 +28,7 @@ public class FragmentUpgrade extends Fragment {
         view.findViewById(R.id.nextBtn_upgrade_layout).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int radioButtonId = radioGroup.getCheckedRadioButtonId();
 
                 if (radioButtonId == R.id.easypaisa_radioBtn_upgrade_layout) {
                     methodSelectionLayout.setVisibility(View.GONE);
