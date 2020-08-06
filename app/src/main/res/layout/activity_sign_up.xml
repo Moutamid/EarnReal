@@ -43,10 +43,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="30dp"
+            android:background="@drawable/background_main"
             android:layout_marginRight="30dp"
             android:orientation="vertical"
             android:padding="7dp">
-<!--            android:background="@drawable/background_main"-->
 
             <ImageView
                 android:layout_width="50dp"
