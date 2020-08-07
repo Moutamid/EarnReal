@@ -61,8 +61,8 @@ public class ActivitySignUp extends AppCompatActivity {
         // CHECKING ONLINE STATUS
         checkOnlineStatus();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("user");
-//        mDatabaseUsers.keepSynced(true);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.keepSynced(true);
 
 //        mDatabaseChats = FirebaseDatabase.getInstance().getReference().child(CHATS);
 //        mDatabaseChats.keepSynced(true);
@@ -148,11 +148,13 @@ public class ActivitySignUp extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 //startActivity(new Intent(ActivitySignUp.this, ActivityVerifyNmbr.class));
-//                if (isOnline) {
-//                    mDialog.show();
-                checkStatusOfEditTexts();
-//                } else
-//                    utils.showOfflineDialog(ActivitySignUp.this);
+                if (isOnline) {
+                    mDialog.show();
+                    checkStatusOfEditTexts();
+                } else {
+
+                    utils.showOfflineDialog(ActivitySignUp.this);
+                }
             }
         };
     }
@@ -173,30 +175,34 @@ public class ActivitySignUp extends AppCompatActivity {
             utils.showOfflineDialog(ActivitySignUp.this);
             return;
         }
+
         // Email is Empty
         if (TextUtils.isEmpty(emailStr)) {
             mDialog.dismiss();
-            emailAddressEditText.setError("Please provide an emailStr!");
+            emailAddressEditText.setError("Please provide an email!");
             emailAddressEditText.requestFocus();
             return;
 
         }
+
         // Password is Empty
         if (TextUtils.isEmpty(passwordStr)) {
 
             mDialog.dismiss();
-            passwordEditText.setError("Please provide a passwordStr!");
+            passwordEditText.setError("Please provide a password!");
             passwordEditText.requestFocus();
             return;
         }
+
         // Confirm Password is Empty
         if (TextUtils.isEmpty(confirmPasswordStr)) {
 
             mDialog.dismiss();
-            confirmPasswordEditText.setError("Please confirm your passwordStr!");
+            confirmPasswordEditText.setError("Please confirm your password!");
             confirmPasswordEditText.requestFocus();
             return;
         }
+
         // PHONE NUMBER IS EMPTY
         if (TextUtils.isEmpty(numberStr)) {
 
@@ -205,27 +211,31 @@ public class ActivitySignUp extends AppCompatActivity {
             phoneNmbrEditText.requestFocus();
             return;
         }
+
         // EMAIL LENGTH IS LESS THAN 5
-        if (emailStr.length() < 5) {
+        if (emailStr.length() < 5 || emailStr.length() > 30) {
             mDialog.dismiss();
-            emailAddressEditText.setError("Minimum length of emailStr must be 5");
+            emailAddressEditText.setError("Email should be between 5 to 30 characters!");
             emailAddressEditText.requestFocus();
             return;
         }
+
         // PHONE NUMBER LENGTH IS LESS THAN 11
-        if (numberStr.length() < 11) {
+        if (numberStr.length() != 11) {
             mDialog.dismiss();
             phoneNmbrEditText.setError("Please enter a valid number!");
             phoneNmbrEditText.requestFocus();
             return;
         }
+
         // PASSWORD LENGTH LESS THAN 5
-        if (passwordStr.length() < 5) {
+        if (passwordStr.length() < 5 || passwordStr.length() > 25) {
             mDialog.dismiss();
-            passwordEditText.setError("Minimum length of passwordStr must be 5");
+            passwordEditText.setError("Password should be between 5 to 25 characters!");
             passwordEditText.requestFocus();
             return;
         }
+
         // PASSWORD AND CONFIRM PASSWORD IS NOT MATCHING
         if (!passwordStr.equals(confirmPasswordStr)) {
             mDialog.dismiss();
@@ -233,37 +243,48 @@ public class ActivitySignUp extends AppCompatActivity {
             confirmPasswordEditText.requestFocus();
             return;
         }
+
         // EMAIL IS INCORRECT OR INVALID
         if (!Patterns.EMAIL_ADDRESS.matcher(emailStr).matches()) {
             mDialog.dismiss();
-            emailAddressEditText.setError("Please enter a valid username with no spaces and special characters included!");
+            emailAddressEditText.setError("Please enter a valid email!");
             emailAddressEditText.requestFocus();
             return;
         }
-        /**
-         *CHECKING IF USER IS ALREADY CREATED OR ACCOUNT EXISTS
-         */
 
-        createUserWithEmailAndPassword(emailStr, passwordStr);
+        // IF REFERRAL CODE IS EMPTY
+        if (TextUtils.isEmpty(referralCodeStr))
 
+            createUserWithEmailAndPassword(emailStr, passwordStr);
 
-//
-//        mDatabaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//                // Checking if user exist
-//                if (dataSnapshot.hasChild(emailStr)) {
-//
-//                    mDialog.dismiss();
-//                    userNameEditText.setError("Username already exist");
-//                    userNameEditText.requestFocus();
-//
-//
-//                }
+        // IF REFERRAL CODE IS NOT EMPTY
+        else checkReferralAndCreateAccount();
 
-        // Signing up user
-        //signUpUserWithNameAndPassword(emailStr, passwordStr);
+    }
+
+    private void checkReferralAndCreateAccount() {
+        databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.hasChild(referralCodeStr)) {
+
+                    User user = new User(emailStr, false);
+                    databaseReference.child("users").child(referralCodeStr).child("team").push().setValue(user);
+                    createUserWithEmailAndPassword(emailStr, passwordStr);
+                } else {
+                    mDialog.dismiss();
+                    referralCodeEditText.setError("Please enter the correct referral ID!");
+                    referralCodeEditText.requestFocus();
+
+                    Log.i(TAG, "onDataChange: no referral child exist");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
     }
 
@@ -283,11 +304,20 @@ public class ActivitySignUp extends AppCompatActivity {
 
                     storeUserInformationOffline();
                     addUserDetailsToDatabase();
-                    // ADDING EMAIL AND PHONE NUMBER TO THE REFERRAL NODE OF THE OTHER USER IN THE DATABASE
+
+                    mDialog.dismiss();
+                    Toast.makeText(ActivitySignUp.this, "You are logged in", Toast.LENGTH_SHORT).show();
+
+                    //Intent intent = new Intent(ActivitySignUp.this, SecurityQuestionActivity.class);
+                    //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    //mDialog.dismiss();
+                    //startActivity(intent);
+                    //finish();
 
                 } else {
                     // SIGN IN FAILS
                     Log.w(TAG, "createUserWithEmailAndPassword onCompleteFailed: " + task.getException());
+                    mDialog.dismiss();
                     Toast.makeText(ActivitySignUp.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
@@ -301,7 +331,7 @@ public class ActivitySignUp extends AppCompatActivity {
         utils.storeString(ActivitySignUp.this, USER_REFERRAL_ID, mAuth.getCurrentUser().getUid());
 
         if (!TextUtils.isEmpty(referralCodeStr))
-        utils.storeString(ActivitySignUp.this, REFERRED_BY, referralCodeStr);
+            utils.storeString(ActivitySignUp.this, REFERRED_BY, referralCodeStr);
 
     }
 
@@ -318,46 +348,8 @@ public class ActivitySignUp extends AppCompatActivity {
                 .child("gender").setValue(userGenderStr);
 
         if (!TextUtils.isEmpty(referralCodeStr))
-        databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
-                .child("refBy").setValue(referralCodeStr);
-
-//        mDatabaseUsers.child(username).child(PUBLIC).child(GENDER).setValue(userGender)
-//                .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<Void> task) {
-//
-//                        // Sign Up Successful
-//                        if (task.isSuccessful()) {
-//                            mDatabaseUsers.child(username).child(PUBLIC).child(PROFILE_IMAGE).setValue(profileImageLink)
-//                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                        @Override
-//                                        public void onComplete(@NonNull Task<Void> task) {
-//
-//                                            if (task.isSuccessful()) {
-//
-//                                                Intent intent = new Intent(ActivitySignUp.this, SecurityQuestionActivity.class);
-//                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//
-
-//
-//                                                String chatName = username + "_" + MOUTAMID;
-//
-//                                                mDatabaseChats.child(chatName).push().setValue(new Chat(MESSAGE_1, MOUTAMID, utils.getTime()));
-//                                                mDatabaseChats.child(chatName).push().setValue(new Chat(MESSAGE_2, MOUTAMID, utils.getTime()));
-//                                                mDatabaseChats.child(chatName).push().setValue(new Chat(MESSAGE_3, MOUTAMID, utils.getTime()));
-//                                                mDatabaseChats.child(chatName).push().setValue(new Chat(MESSAGE_4, MOUTAMID, utils.getTime()));
-//
-//                                                // Uploading the last message
-//                                                mDatabaseChats.child(CHAT_STATUS).child(chatName + "_" + STATUS).child(LAST_MESSAGE).setValue(MESSAGE_1);
-//
-//                                                // Uploading last message time
-//                                                mDatabaseChats.child(CHAT_STATUS).child(chatName + "_" + STATUS).child(LAST_MESSAGE_TIME).setValue(utils.getTime());
-//
-//
-//                                                mDialog.dismiss();
-//
-//                                                startActivity(intent);
-//                                                finish();
+            databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
+                    .child("refBy").setValue(referralCodeStr);
     }
 
     private void initViews() {
@@ -374,6 +366,37 @@ public class ActivitySignUp extends AppCompatActivity {
         goToLoginActivityBtn = findViewById(R.id.goTo_login_activity_textView);
     }
 
+    private static class User {
+
+        private String email;
+        private boolean status;
+
+        User() {
+
+        }
+
+        public User(String email, boolean status) {
+            this.email = email;
+            this.status = status;
+        }
+
+        public boolean isStatus() {
+            return status;
+        }
+
+        public void setStatus(boolean status) {
+            this.status = status;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+    }
 //    private static class Chat {
 //
 //        private String msgText, msgUser, msgTime;
@@ -412,51 +435,4 @@ public class ActivitySignUp extends AppCompatActivity {
 //            this.msgTime = msgTime;
 //        }
 //    }
-
-//    private class OnlineStatus extends AsyncTask<Boolean, Void, Boolean> {
-//
-//        @Override
-//        protected Boolean doInBackground(Boolean... booleans) {
-//
-//            if (!isCancelled()) {
-//
-//                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-////                NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-////
-////                if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
-////
-////                    try {
-////
-////                        Process p1 = Runtime.getRuntime().exec("ping -c 1 www.google.com");
-////                        int returnVal = p1.waitFor();
-////                        boolean reachable = (returnVal == 0);
-////
-////                        return reachable;
-////
-////                    } catch (Exception e) {
-////                        e.printStackTrace();
-////                        return false;
-////                    }
-////
-////                } else return false;
-//            }
-//
-//            return null;
-//        }
-//
-//        @Override
-//        protected void onPostExecute(Boolean aBoolean) {
-//            super.onPostExecute(aBoolean);
-//
-//            if (!isCancelled()) {
-//                isOnline = aBoolean;
-//
-//                new OnlineStatus().execute();
-//            }
-//
-//        }
-//
-//
-//    }
-
 }
