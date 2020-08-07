@@ -32,7 +32,7 @@ public class ActivitySignUp extends AppCompatActivity {
     private static final String TAG = "ActivitySignUp";
 
     private static final String USER_EMAIL = "userEmail";
-    private static final String USER_REFERRAL_CODE = "userReferralCode";
+    private static final String USER_REFERRAL_ID = "userReferralCode";
     private static final String USER_GENDER = "userGender";
     private static final String USER_NUMBER = "userNumber";
     //private static final String PACKAGE_NAME = "dev.moutamid.earnreal";
@@ -44,7 +44,10 @@ public class ActivitySignUp extends AppCompatActivity {
     private Utils utils = new Utils();
     private String userGenderStr = "male";
     private ProgressDialog mDialog;
+
     private FirebaseAuth mAuth;
+    private DatabaseReference databaseReference;
+
     private Boolean isOnline = false;
 
     private String emailStr, numberStr, passwordStr, confirmPasswordStr;
@@ -57,7 +60,7 @@ public class ActivitySignUp extends AppCompatActivity {
         // CHECKING ONLINE STATUS
         checkOnlineStatus();
 
-//        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child(USERS);
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("user");
 //        mDatabaseUsers.keepSynced(true);
 
 //        mDatabaseChats = FirebaseDatabase.getInstance().getReference().child(CHATS);
@@ -277,6 +280,7 @@ public class ActivitySignUp extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     // CREATING USER SUCCESS
+                    // addUserDetailsToDatabase(username);
                     // ADDING USER INFORMATION LIKE EMAIL, PHONE NUMBER TO DATABASE
                     // ADDING EMAIL AND PHONE NUMBER TO THE REFERRAL NODE OF THE OTHER USER IN THE DATABASE
                     storeUserInformationOffline();
@@ -293,24 +297,20 @@ public class ActivitySignUp extends AppCompatActivity {
         utils.storeString(ActivitySignUp.this, USER_GENDER, userGenderStr);
         utils.storeString(ActivitySignUp.this, USER_EMAIL, emailStr);
         utils.storeString(ActivitySignUp.this, USER_NUMBER, numberStr);
-        utils.storeString(ActivitySignUp.this, USER_REFERRAL_CODE, mAuth.getCurrentUser().getUid());
+        utils.storeString(ActivitySignUp.this, USER_REFERRAL_ID, mAuth.getCurrentUser().getUid());
 
     }
 
-    private void signUpUserWithNameAndPassword(final String username, String password) {
+    private void addUserDetailsToDatabase() {
 
-        if (isOnline) {
+        databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
+                .child("email").setValue(emailStr);
 
-            String email = username;
+        databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
+                .child("nmbr").setValue(numberStr);
 
-//          addUserDetailsToDatabase(username);
-
-        }
-
-
-    }
-
-    private void addUserDetailsToDatabase(final String username) {
+        databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
+                .child("gender").setValue(userGenderStr);
 
 //        mDatabaseUsers.child(username).child(PUBLIC).child(GENDER).setValue(userGender)
 //                .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -319,13 +319,6 @@ public class ActivitySignUp extends AppCompatActivity {
 //
 //                        // Sign Up Successful
 //                        if (task.isSuccessful()) {
-//
-//                            if (userGender.equals("male"))
-//
-//                                setImageUrlBoy();
-//
-//                            else setImageUrlGirl();
-//
 //                            mDatabaseUsers.child(username).child(PUBLIC).child(PROFILE_IMAGE).setValue(profileImageLink)
 //                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
 //                                        @Override
@@ -356,23 +349,6 @@ public class ActivitySignUp extends AppCompatActivity {
 //
 //                                                startActivity(intent);
 //                                                finish();
-//
-//                                            } else {
-//                                                mDialog.dismiss();
-//                                                Toast.makeText(ActivitySignUp.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                                            }
-//                                        }
-//                                    });
-//
-//
-//                        } else {
-//
-//                            mDialog.dismiss();
-//                            Toast.makeText(ActivitySignUp.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//
-//                        }
-//                    }
-//                });
     }
 
     private void initViews() {
