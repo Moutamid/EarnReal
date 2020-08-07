@@ -35,6 +35,7 @@ public class ActivitySignUp extends AppCompatActivity {
     private static final String USER_REFERRAL_ID = "userReferralCode";
     private static final String USER_GENDER = "userGender";
     private static final String USER_NUMBER = "userNumber";
+    private static final String REFERRED_BY = "referredBy";
     //private static final String PACKAGE_NAME = "dev.moutamid.earnreal";
 
     private LinearLayout maleBtnLayout, femaleBtnLayout;
@@ -50,7 +51,7 @@ public class ActivitySignUp extends AppCompatActivity {
 
     private Boolean isOnline = false;
 
-    private String emailStr, numberStr, passwordStr, confirmPasswordStr;
+    private String emailStr, numberStr, passwordStr, confirmPasswordStr, referralCodeStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,6 +165,7 @@ public class ActivitySignUp extends AppCompatActivity {
         numberStr = phoneNmbrEditText.getText().toString().trim();
         passwordStr = passwordEditText.getText().toString().trim().toLowerCase();
         confirmPasswordStr = confirmPasswordEditText.getText().toString().trim().toLowerCase();
+        referralCodeStr = referralCodeEditText.getText().toString().trim();
 
         // USER IS OFFLINE
         if (!isOnline) {
@@ -244,8 +246,6 @@ public class ActivitySignUp extends AppCompatActivity {
 
         createUserWithEmailAndPassword(emailStr, passwordStr);
 
-        //String referralCode = referralCodeEditText.getText().toString().trim();
-
 
 //
 //        mDatabaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -263,7 +263,7 @@ public class ActivitySignUp extends AppCompatActivity {
 //                }
 
         // Signing up user
-        signUpUserWithNameAndPassword(emailStr, passwordStr);
+        //signUpUserWithNameAndPassword(emailStr, passwordStr);
 
     }
 
@@ -280,10 +280,11 @@ public class ActivitySignUp extends AppCompatActivity {
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
                     // CREATING USER SUCCESS
-                    // addUserDetailsToDatabase(username);
-                    // ADDING USER INFORMATION LIKE EMAIL, PHONE NUMBER TO DATABASE
-                    // ADDING EMAIL AND PHONE NUMBER TO THE REFERRAL NODE OF THE OTHER USER IN THE DATABASE
+
                     storeUserInformationOffline();
+                    addUserDetailsToDatabase();
+                    // ADDING EMAIL AND PHONE NUMBER TO THE REFERRAL NODE OF THE OTHER USER IN THE DATABASE
+
                 } else {
                     // SIGN IN FAILS
                     Log.w(TAG, "createUserWithEmailAndPassword onCompleteFailed: " + task.getException());
@@ -299,10 +300,14 @@ public class ActivitySignUp extends AppCompatActivity {
         utils.storeString(ActivitySignUp.this, USER_NUMBER, numberStr);
         utils.storeString(ActivitySignUp.this, USER_REFERRAL_ID, mAuth.getCurrentUser().getUid());
 
+        if (!TextUtils.isEmpty(referralCodeStr))
+        utils.storeString(ActivitySignUp.this, REFERRED_BY, referralCodeStr);
+
     }
 
     private void addUserDetailsToDatabase() {
 
+        // UPLOADING USER DETAILS TO THE DATABASE
         databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
                 .child("email").setValue(emailStr);
 
@@ -311,6 +316,10 @@ public class ActivitySignUp extends AppCompatActivity {
 
         databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
                 .child("gender").setValue(userGenderStr);
+
+        if (!TextUtils.isEmpty(referralCodeStr))
+        databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
+                .child("refBy").setValue(referralCodeStr);
 
 //        mDatabaseUsers.child(username).child(PUBLIC).child(GENDER).setValue(userGender)
 //                .addOnCompleteListener(new OnCompleteListener<Void>() {
