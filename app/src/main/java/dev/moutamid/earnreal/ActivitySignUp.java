@@ -31,11 +31,11 @@ import com.google.firebase.database.ValueEventListener;
 public class ActivitySignUp extends AppCompatActivity {
     private static final String TAG = "ActivitySignUp";
 
-    private static final String USER_EMAIL = "gender";
-    private static final String USER_PASSWORD = "userPassword";
+    private static final String USER_EMAIL = "userEmail";
+    private static final String USER_REFERRAL_CODE = "userReferralCode";
     private static final String USER_GENDER = "userGender";
-    private static final String USER_NUMBER = "userGender";
-    private static final String PACKAGE_NAME = "dev.moutamid.earnreal";
+    private static final String USER_NUMBER = "userNumber";
+    //private static final String PACKAGE_NAME = "dev.moutamid.earnreal";
 
     private LinearLayout maleBtnLayout, femaleBtnLayout;
     private EditText emailAddressEditText, phoneNmbrEditText, passwordEditText, confirmPasswordEditText, referralCodeEditText;
@@ -47,6 +47,7 @@ public class ActivitySignUp extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private Boolean isOnline = false;
 
+    private String emailStr, numberStr, passwordStr, confirmPasswordStr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,10 +157,10 @@ public class ActivitySignUp extends AppCompatActivity {
     private void checkStatusOfEditTexts() {
 
         // Getting strings from edit texts
-        final String email = emailAddressEditText.getText().toString().trim().toLowerCase();
-        final String phone = phoneNmbrEditText.getText().toString().trim();
-        final String password = passwordEditText.getText().toString().trim().toLowerCase();
-        final String confirmedPassword = confirmPasswordEditText.getText().toString().trim().toLowerCase();
+        emailStr = emailAddressEditText.getText().toString().trim().toLowerCase();
+        numberStr = phoneNmbrEditText.getText().toString().trim();
+        passwordStr = passwordEditText.getText().toString().trim().toLowerCase();
+        confirmPasswordStr = confirmPasswordEditText.getText().toString().trim().toLowerCase();
 
         // USER IS OFFLINE
         if (!isOnline) {
@@ -168,31 +169,31 @@ public class ActivitySignUp extends AppCompatActivity {
             return;
         }
         // Email is Empty
-        if (TextUtils.isEmpty(email)) {
+        if (TextUtils.isEmpty(emailStr)) {
             mDialog.dismiss();
-            emailAddressEditText.setError("Please provide an email!");
+            emailAddressEditText.setError("Please provide an emailStr!");
             emailAddressEditText.requestFocus();
             return;
 
         }
         // Password is Empty
-        if (TextUtils.isEmpty(password)) {
+        if (TextUtils.isEmpty(passwordStr)) {
 
             mDialog.dismiss();
-            passwordEditText.setError("Please provide a password!");
+            passwordEditText.setError("Please provide a passwordStr!");
             passwordEditText.requestFocus();
             return;
         }
         // Confirm Password is Empty
-        if (TextUtils.isEmpty(confirmedPassword)) {
+        if (TextUtils.isEmpty(confirmPasswordStr)) {
 
             mDialog.dismiss();
-            confirmPasswordEditText.setError("Please confirm your password!");
+            confirmPasswordEditText.setError("Please confirm your passwordStr!");
             confirmPasswordEditText.requestFocus();
             return;
         }
         // PHONE NUMBER IS EMPTY
-        if (TextUtils.isEmpty(phone)) {
+        if (TextUtils.isEmpty(numberStr)) {
 
             mDialog.dismiss();
             phoneNmbrEditText.setError("Please provide your number!");
@@ -200,35 +201,35 @@ public class ActivitySignUp extends AppCompatActivity {
             return;
         }
         // EMAIL LENGTH IS LESS THAN 5
-        if (email.length() < 5) {
+        if (emailStr.length() < 5) {
             mDialog.dismiss();
-            emailAddressEditText.setError("Minimum length of email must be 5");
+            emailAddressEditText.setError("Minimum length of emailStr must be 5");
             emailAddressEditText.requestFocus();
             return;
         }
         // PHONE NUMBER LENGTH IS LESS THAN 11
-        if (phone.length() < 11) {
+        if (numberStr.length() < 11) {
             mDialog.dismiss();
             phoneNmbrEditText.setError("Please enter a valid number!");
             phoneNmbrEditText.requestFocus();
             return;
         }
         // PASSWORD LENGTH LESS THAN 5
-        if (password.length() < 5) {
+        if (passwordStr.length() < 5) {
             mDialog.dismiss();
-            passwordEditText.setError("Minimum length of password must be 5");
+            passwordEditText.setError("Minimum length of passwordStr must be 5");
             passwordEditText.requestFocus();
             return;
         }
         // PASSWORD AND CONFIRM PASSWORD IS NOT MATCHING
-        if (!password.equals(confirmedPassword)) {
+        if (!passwordStr.equals(confirmPasswordStr)) {
             mDialog.dismiss();
             confirmPasswordEditText.setError("Password does not match!");
             confirmPasswordEditText.requestFocus();
             return;
         }
         // EMAIL IS INCORRECT OR INVALID
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+        if (!Patterns.EMAIL_ADDRESS.matcher(emailStr).matches()) {
             mDialog.dismiss();
             emailAddressEditText.setError("Please enter a valid username with no spaces and special characters included!");
             emailAddressEditText.requestFocus();
@@ -238,7 +239,7 @@ public class ActivitySignUp extends AppCompatActivity {
          *CHECKING IF USER IS ALREADY CREATED OR ACCOUNT EXISTS
          */
 
-        createUserWithEmailAndPassword(email, password);
+        createUserWithEmailAndPassword(emailStr, passwordStr);
 
         //String referralCode = referralCodeEditText.getText().toString().trim();
 
@@ -249,39 +250,18 @@ public class ActivitySignUp extends AppCompatActivity {
 //            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 //
 //                // Checking if user exist
-//                if (dataSnapshot.hasChild(email)) {
+//                if (dataSnapshot.hasChild(emailStr)) {
 //
 //                    mDialog.dismiss();
 //                    userNameEditText.setError("Username already exist");
 //                    userNameEditText.requestFocus();
 //
 //
-//                } else {
-//
-//                    // Checking if Fields are empty or not
-//        if (!TextUtils.isEmpty(email) &&
-//                !TextUtils.isEmpty(password) &&
-//                !TextUtils.isEmpty(confirmedPassword) && !TextUtils.isEmpty(phone)
-//
-//        ) {
+//                }
 
         // Signing up user
-        signUpUserWithNameAndPassword(email, password);
+        signUpUserWithNameAndPassword(emailStr, passwordStr);
 
-
-        //}
-//
-//                }
-//
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//
-//        });
     }
 
     private void createUserWithEmailAndPassword(String email, String password) {
@@ -299,6 +279,7 @@ public class ActivitySignUp extends AppCompatActivity {
                     // CREATING USER SUCCESS
                     // ADDING USER INFORMATION LIKE EMAIL, PHONE NUMBER TO DATABASE
                     // ADDING EMAIL AND PHONE NUMBER TO THE REFERRAL NODE OF THE OTHER USER IN THE DATABASE
+                    storeUserInformationOffline();
                 } else {
                     // SIGN IN FAILS
                     Log.w(TAG, "createUserWithEmailAndPassword onCompleteFailed: " + task.getException());
@@ -308,28 +289,22 @@ public class ActivitySignUp extends AppCompatActivity {
         });
     }
 
+    private void storeUserInformationOffline() {
+        utils.storeString(ActivitySignUp.this, USER_GENDER, userGenderStr);
+        utils.storeString(ActivitySignUp.this, USER_EMAIL, emailStr);
+        utils.storeString(ActivitySignUp.this, USER_NUMBER, numberStr);
+        utils.storeString(ActivitySignUp.this, USER_REFERRAL_CODE, mAuth.getCurrentUser().getUid());
+
+    }
+
     private void signUpUserWithNameAndPassword(final String username, String password) {
 
         if (isOnline) {
 
             String email = username;
 
+//          addUserDetailsToDatabase(username);
 
-//                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//
-//                        if (task.isSuccessful()) {
-//
-//                            addUserDetailsToDatabase(username);
-//
-//                        } else {
-//
-//                            mDialog.dismiss();
-//                            Toast.makeText(ActivitySignUp.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                        }
-//                    }
-//                });
         }
 
 
@@ -361,10 +336,7 @@ public class ActivitySignUp extends AppCompatActivity {
 //                                                Intent intent = new Intent(ActivitySignUp.this, SecurityQuestionActivity.class);
 //                                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //
-//                                                storeString(USER_NAME, username);
-//                                                storeString(USERS_GENDER, userGender);
-//                                                storeString(LOG_STATUS, "true");
-//                                                storeString(PROFILE_IMAGE, profileImageLink);
+
 //
 //                                                String chatName = username + "_" + MOUTAMID;
 //
