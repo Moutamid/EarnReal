@@ -3,19 +3,33 @@ package dev.moutamid.earnreal;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ServerValue;
+import com.google.firebase.database.ValueEventListener;
 
 
 public class ActivitySignUp extends AppCompatActivity {
+    private static final String TAG = "ActivitySignUp";
 
     private static final String USER_EMAIL = "gender";
     private static final String USER_PASSWORD = "userPassword";
@@ -38,7 +52,9 @@ public class ActivitySignUp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
-        //new OnlineStatus().execute();
+
+        // CHECKING ONLINE STATUS
+        checkOnlineStatus();
 
 //        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child(USERS);
 //        mDatabaseUsers.keepSynced(true);
@@ -56,6 +72,27 @@ public class ActivitySignUp extends AppCompatActivity {
         initViews();
 
         setListenersToWidgets();
+
+        Toast.makeText(this, String.valueOf(ServerValue.TIMESTAMP), Toast.LENGTH_SHORT).show();
+    }
+
+    private void checkOnlineStatus() {
+        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                isOnline = snapshot.getValue(Boolean.class);
+
+                if (isOnline != null)
+                    signUpBtn.setText(isOnline.toString());
+                else signUpBtn.setText("NULL");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "onCancelled: " + error.getMessage());
+            }
+        });
     }
 
     private void setListenersToWidgets() {
@@ -123,7 +160,89 @@ public class ActivitySignUp extends AppCompatActivity {
         final String phone = phoneNmbrEditText.getText().toString().trim();
         final String password = passwordEditText.getText().toString().trim().toLowerCase();
         final String confirmedPassword = confirmPasswordEditText.getText().toString().trim().toLowerCase();
-        final String referralCode = referralCodeEditText.getText().toString().trim();
+
+        // USER IS OFFLINE
+        if (!isOnline) {
+            mDialog.dismiss();
+            utils.showOfflineDialog(ActivitySignUp.this);
+            return;
+        }
+        // Email is Empty
+        if (TextUtils.isEmpty(email)) {
+            mDialog.dismiss();
+            emailAddressEditText.setError("Please provide an email!");
+            emailAddressEditText.requestFocus();
+            return;
+
+        }
+        // Password is Empty
+        if (TextUtils.isEmpty(password)) {
+
+            mDialog.dismiss();
+            passwordEditText.setError("Please provide a password!");
+            passwordEditText.requestFocus();
+            return;
+        }
+        // Confirm Password is Empty
+        if (TextUtils.isEmpty(confirmedPassword)) {
+
+            mDialog.dismiss();
+            confirmPasswordEditText.setError("Please confirm your password!");
+            confirmPasswordEditText.requestFocus();
+            return;
+        }
+        // PHONE NUMBER IS EMPTY
+        if (TextUtils.isEmpty(phone)) {
+
+            mDialog.dismiss();
+            phoneNmbrEditText.setError("Please provide your number!");
+            phoneNmbrEditText.requestFocus();
+            return;
+        }
+        // EMAIL LENGTH IS LESS THAN 5
+        if (email.length() < 5) {
+            mDialog.dismiss();
+            emailAddressEditText.setError("Minimum length of email must be 5");
+            emailAddressEditText.requestFocus();
+            return;
+        }
+        // PHONE NUMBER LENGTH IS LESS THAN 11
+        if (phone.length() < 11) {
+            mDialog.dismiss();
+            phoneNmbrEditText.setError("Please enter a valid number!");
+            phoneNmbrEditText.requestFocus();
+            return;
+        }
+        // PASSWORD LENGTH LESS THAN 5
+        if (password.length() < 5) {
+            mDialog.dismiss();
+            passwordEditText.setError("Minimum length of password must be 5");
+            passwordEditText.requestFocus();
+            return;
+        }
+        // PASSWORD AND CONFIRM PASSWORD IS NOT MATCHING
+        if (!password.equals(confirmedPassword)) {
+            mDialog.dismiss();
+            confirmPasswordEditText.setError("Password does not match!");
+            confirmPasswordEditText.requestFocus();
+            return;
+        }
+        // EMAIL IS INCORRECT OR INVALID
+        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            mDialog.dismiss();
+            emailAddressEditText.setError("Please enter a valid username with no spaces and special characters included!");
+            emailAddressEditText.requestFocus();
+            return;
+        }
+        /**
+         *CHECKING IF USER IS ALREADY CREATED OR ACCOUNT EXISTS
+         */
+
+        createUserWithEmailAndPassword(email, password);
+
+        //String referralCode = referralCodeEditText.getText().toString().trim();
+
+
 //
 //        mDatabaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
 //            @Override
@@ -140,67 +259,17 @@ public class ActivitySignUp extends AppCompatActivity {
 //                } else {
 //
 //                    // Checking if Fields are empty or not
-//                    if (!TextUtils.isEmpty(email) && !TextUtils.isEmpty(password) && !TextUtils.isEmpty(confirmedPassword)) {
+//        if (!TextUtils.isEmpty(email) &&
+//                !TextUtils.isEmpty(password) &&
+//                !TextUtils.isEmpty(confirmedPassword) && !TextUtils.isEmpty(phone)
 //
-//                        if (email.length() >= 3) {
-//
-//                            // Checking Length of password
-//                            if (password.length() >= 6) {
-//
-//                                // Checking if password is equal to confirmed Password
-//                                if (password.equals(confirmedPassword)) {
-//
-//                                    // Signing up user
-//                                    signUpUserWithNameAndPassword(email, password);
-//
-//                                } else if (!password.equals(confirmedPassword)) {
-//
-//                                    mDialog.dismiss();
-//                                    confirmPasswordEditText.setError("Password does not match!");
-//                                    confirmPasswordEditText.requestFocus();
-//
-//                                }
-//
-//                            } else {
-//
-//                                mDialog.dismiss();
-//                                passwordEditText.setError("Minimum length of password must be 6");
-//                                passwordEditText.requestFocus();
-//
-//                            }
-//
-//                        } else {
-//                            mDialog.dismiss();
-//                            userNameEditText.setError("Minimum length of email must be 3");
-//                            userNameEditText.requestFocus();
-//
-//                        }
-//
-//                        // User Name is Empty
-//                    } else if (TextUtils.isEmpty(email)) {
-//
-//                        mDialog.dismiss();
-//                        userNameEditText.setError("Please provide a email");
-//                        userNameEditText.requestFocus();
-//
-//
-//                        // Password is Empty
-//                    } else if (TextUtils.isEmpty(password)) {
-//
-//                        mDialog.dismiss();
-//                        passwordEditText.setError("Please provide a password");
-//                        passwordEditText.requestFocus();
-//
-//
-//                        // Confirm Password is Empty
-//                    } else if (TextUtils.isEmpty(confirmedPassword)) {
-//
-//                        mDialog.dismiss();
-//                        confirmPasswordEditText.setError("Please confirm your password");
-//                        confirmPasswordEditText.requestFocus();
-//
-//
-//                    }
+//        ) {
+
+        // Signing up user
+        signUpUserWithNameAndPassword(email, password);
+
+
+        //}
 //
 //                }
 //
@@ -215,19 +284,36 @@ public class ActivitySignUp extends AppCompatActivity {
 //        });
     }
 
+    private void createUserWithEmailAndPassword(String email, String password) {
+        // USER IS OFFLINE
+        if (!isOnline) {
+            mDialog.dismiss();
+            utils.showOfflineDialog(ActivitySignUp.this);
+            return;
+        }
+
+        mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    // CREATING USER SUCCESS
+                    // ADDING USER INFORMATION LIKE EMAIL, PHONE NUMBER TO DATABASE
+                    // ADDING EMAIL AND PHONE NUMBER TO THE REFERRAL NODE OF THE OTHER USER IN THE DATABASE
+                } else {
+                    // SIGN IN FAILS
+                    Log.w(TAG, "createUserWithEmailAndPassword onCompleteFailed: " + task.getException());
+                    Toast.makeText(ActivitySignUp.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
     private void signUpUserWithNameAndPassword(final String username, String password) {
 
         if (isOnline) {
 
             String email = username;
 
-            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                //if Email Address is Invalid..
-
-                mDialog.dismiss();
-                emailAddressEditText.setError("Please enter a valid username with no spaces and special characters included");
-                emailAddressEditText.requestFocus();
-            } else {
 
 //                mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
 //                    @Override
@@ -244,12 +330,9 @@ public class ActivitySignUp extends AppCompatActivity {
 //                        }
 //                    }
 //                });
-            }
-        } else {
-
-            mDialog.dismiss();
-            utils.showOfflineDialog(ActivitySignUp.this);
         }
+
+
     }
 
     private void addUserDetailsToDatabase(final String username) {
