@@ -24,7 +24,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ServerValue;
 import com.google.firebase.database.ValueEventListener;
 
 
@@ -36,7 +35,6 @@ public class ActivitySignUp extends AppCompatActivity {
     private static final String USER_GENDER = "userGender";
     private static final String USER_NUMBER = "userNumber";
     private static final String REFERRED_BY = "referredBy";
-    //private static final String PACKAGE_NAME = "dev.moutamid.earnreal";
 
     private LinearLayout maleBtnLayout, femaleBtnLayout;
     private EditText emailAddressEditText, phoneNmbrEditText, passwordEditText, confirmPasswordEditText, referralCodeEditText;
@@ -57,6 +55,7 @@ public class ActivitySignUp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sign_up);
+        Log.i(TAG, "onCreate: started");
 
         // CHECKING ONLINE STATUS
         checkOnlineStatus();
@@ -77,20 +76,21 @@ public class ActivitySignUp extends AppCompatActivity {
         initViews();
 
         setListenersToWidgets();
-
-        Toast.makeText(this, String.valueOf(ServerValue.TIMESTAMP), Toast.LENGTH_SHORT).show();
     }
 
     private void checkOnlineStatus() {
+        Log.i(TAG, "checkOnlineStatus: ");
+
         DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
         connectedRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.i(TAG, "onDataChange: online status");
                 isOnline = snapshot.getValue(Boolean.class);
 
-                if (isOnline != null)
-                    signUpBtn.setText(isOnline.toString());
-                else signUpBtn.setText("NULL");
+//                if (isOnline != null)
+//                    signUpBtn.setText(isOnline.toString());
+//                else signUpBtn.setText("NULL");
             }
 
             @Override
@@ -101,6 +101,7 @@ public class ActivitySignUp extends AppCompatActivity {
     }
 
     private void setListenersToWidgets() {
+        Log.i(TAG, "setListenersToWidgets: ");
 
         femaleBtnLayout.setOnClickListener(femaleBtnLayoutListener());
 
@@ -113,6 +114,8 @@ public class ActivitySignUp extends AppCompatActivity {
     }
 
     private View.OnClickListener maleBtnLayoutLsitener() {
+        Log.i(TAG, "maleBtnLayoutLsitener: ");
+
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,6 +127,7 @@ public class ActivitySignUp extends AppCompatActivity {
     }
 
     private View.OnClickListener femaleBtnLayoutListener() {
+        Log.i(TAG, "femaleBtnLayoutListener: ");
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -135,6 +139,7 @@ public class ActivitySignUp extends AppCompatActivity {
     }
 
     private View.OnClickListener goToLoginActivityBtnListener() {
+        Log.i(TAG, "goToLoginActivityBtnListener: ");
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -144,23 +149,23 @@ public class ActivitySignUp extends AppCompatActivity {
     }
 
     private View.OnClickListener signUpBtnListener() {
+        Log.i(TAG, "signUpBtnListener: ");
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //startActivity(new Intent(ActivitySignUp.this, ActivityVerifyNmbr.class));
+
                 if (isOnline) {
                     mDialog.show();
                     checkStatusOfEditTexts();
                 } else {
-
                     utils.showOfflineDialog(ActivitySignUp.this);
                 }
             }
         };
     }
 
-
     private void checkStatusOfEditTexts() {
+        Log.i(TAG, "checkStatusOfEditTexts: ");
 
         // Getting strings from edit texts
         emailStr = emailAddressEditText.getText().toString().trim().toLowerCase();
@@ -252,26 +257,64 @@ public class ActivitySignUp extends AppCompatActivity {
             return;
         }
 
+        // USER IS TRYING AGAIN TO ENTER REFERRAL CODE AFTER SIGNING IN
+        if (mAuth.getCurrentUser() != null && !TextUtils.isEmpty(referralCodeStr)) {
+            checkReferral(true);
+            return;
+        }
+
+        // USER IS SIMPLY SIGNED IN
+        if (mAuth.getCurrentUser() != null) {
+            mDialog.dismiss();
+            Toast.makeText(this, "You are signed in!", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
         // IF REFERRAL CODE IS EMPTY
         if (TextUtils.isEmpty(referralCodeStr))
 
             createUserWithEmailAndPassword(emailStr, passwordStr);
 
-        // IF REFERRAL CODE IS NOT EMPTY
-        else checkReferralAndCreateAccount();
+            // IF REFERRAL CODE IS NOT EMPTY
+        else {
+
+            createAccountAndCheckReferral();
+
+        }
 
     }
 
-    private void checkReferralAndCreateAccount() {
+    private void checkReferral(final boolean isTryingAgain) {
+
+        // IF REFERRAL CODE MATCHES WITH CURRENT USER CODE ID
+        if (referralCodeStr.equals(mAuth.getCurrentUser().getUid())) {
+            mDialog.dismiss();
+            referralCodeEditText.setError("Please enter the correct referral ID!");
+            referralCodeEditText.requestFocus();
+            return;
+        }
+
         databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                 if (snapshot.hasChild(referralCodeStr)) {
+                    Log.i(TAG, "onDataChange: has child");
 
                     User user = new User(emailStr, false);
                     databaseReference.child("users").child(referralCodeStr).child("team").push().setValue(user);
-                    createUserWithEmailAndPassword(emailStr, passwordStr);
+
+                    // BOOLEAN VALUE IS TO CHECK THAT IF USER TRIES AGAIN TO ENTER REFERRAL CODE
+                    // THEN ADD VALUE TO DATABASE AND UPDATE THE UI OF USER
+                    if (isTryingAgain) {
+                        mDialog.dismiss();
+                        Toast.makeText(ActivitySignUp.this, "You are signed in!", Toast.LENGTH_SHORT).show();
+                    }
+
                 } else {
+                    Log.i(TAG, "onDataChange: no child");
+
                     mDialog.dismiss();
                     referralCodeEditText.setError("Please enter the correct referral ID!");
                     referralCodeEditText.requestFocus();
@@ -282,24 +325,53 @@ public class ActivitySignUp extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "onCancelled: " + error.toException().getMessage());
+            }
+        });
+    }
 
+    private void createAccountAndCheckReferral() {
+        Log.i(TAG, "checkReferralAndCreateAccount: ");
+
+        mAuth.createUserWithEmailAndPassword(emailStr, passwordStr).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    Log.i(TAG, "onComplete: user created");
+                    // CREATING USER SUCCESS
+
+                    checkReferral(false);
+                    storeUserInformationOffline();
+                    addUserDetailsToDatabase();
+
+                    mDialog.dismiss();
+                    Toast.makeText(ActivitySignUp.this, "You are logged in", Toast.LENGTH_SHORT).show();
+
+                    //Intent intent = new Intent(ActivitySignUp.this, SecurityQuestionActivity.class);
+                    //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    //mDialog.dismiss();
+                    //startActivity(intent);
+                    //finish();
+
+                } else {
+                    // SIGN IN FAILS
+                    Log.w(TAG, "createUserWithEmailAndPassword onCompleteFailed: " + task.getException());
+                    mDialog.dismiss();
+                    Toast.makeText(ActivitySignUp.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
     }
 
     private void createUserWithEmailAndPassword(String email, String password) {
-        // USER IS OFFLINE
-        if (!isOnline) {
-            mDialog.dismiss();
-            utils.showOfflineDialog(ActivitySignUp.this);
-            return;
-        }
+        Log.i(TAG, "createUserWithEmailAndPassword: ");
 
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()) {
+                    Log.i(TAG, "onComplete: user created");
                     // CREATING USER SUCCESS
 
                     storeUserInformationOffline();
@@ -325,6 +397,8 @@ public class ActivitySignUp extends AppCompatActivity {
     }
 
     private void storeUserInformationOffline() {
+        Log.i(TAG, "storeUserInformationOffline: ");
+
         utils.storeString(ActivitySignUp.this, USER_GENDER, userGenderStr);
         utils.storeString(ActivitySignUp.this, USER_EMAIL, emailStr);
         utils.storeString(ActivitySignUp.this, USER_NUMBER, numberStr);
@@ -336,6 +410,7 @@ public class ActivitySignUp extends AppCompatActivity {
     }
 
     private void addUserDetailsToDatabase() {
+        Log.i(TAG, "addUserDetailsToDatabase: ");
 
         // UPLOADING USER DETAILS TO THE DATABASE
         databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
@@ -353,6 +428,7 @@ public class ActivitySignUp extends AppCompatActivity {
     }
 
     private void initViews() {
+        Log.i(TAG, "initViews: ");
 
         maleBtnLayout = findViewById(R.id.maleBtnLayout);
         femaleBtnLayout = findViewById(R.id.femaleBtnLayout);
@@ -397,6 +473,7 @@ public class ActivitySignUp extends AppCompatActivity {
         }
 
     }
+
 //    private static class Chat {
 //
 //        private String msgText, msgUser, msgTime;
@@ -435,4 +512,5 @@ public class ActivitySignUp extends AppCompatActivity {
 //            this.msgTime = msgTime;
 //        }
 //    }
+
 }
