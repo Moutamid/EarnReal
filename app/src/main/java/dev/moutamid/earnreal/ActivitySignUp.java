@@ -3,7 +3,9 @@ package dev.moutamid.earnreal;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
@@ -111,6 +113,43 @@ public class ActivitySignUp extends AppCompatActivity {
 
         signUpBtn.setOnClickListener(signUpBtnListener());
 
+        // IF PHONE NUMBER IS INVALID
+        phoneNmbrEditText.addTextChangedListener(phoneNmbrEditTextWatcherListener());
+
+    }
+
+    private TextWatcher phoneNmbrEditTextWatcherListener() {
+        return new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                String nmbr = charSequence.toString();
+
+                // FIRST CHARACTER OF THE NUMBER IS NOT 0
+                if (!nmbr.substring(0, 1).equals("0"))
+                    phoneNmbrEditText.setError("Number should start from 0!");
+
+                // SECOND CHARACTER OF THE NUMBER IS NOT 3
+                if (!nmbr.substring(0, 2).equals("03"))
+                    phoneNmbrEditText.setError("Number should start like 03...!");
+
+                // SECOND CHARACTER OF THE NUMBER IS NOT 3
+                if (nmbr.substring(0, 3).equals("039"))
+                    phoneNmbrEditText.setError("Number should start like 03...!");
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        };
     }
 
     private View.OnClickListener maleBtnLayoutLsitener() {
@@ -190,6 +229,39 @@ public class ActivitySignUp extends AppCompatActivity {
 
         }
 
+        // EMAIL LENGTH IS LESS THAN 5
+        if (emailStr.length() < 5 || emailStr.length() > 30) {
+            mDialog.dismiss();
+            emailAddressEditText.setError("Email should be between 5 to 30 characters!");
+            emailAddressEditText.requestFocus();
+            return;
+        }
+
+        // EMAIL IS INCORRECT OR INVALID
+        if (!Patterns.EMAIL_ADDRESS.matcher(emailStr).matches()) {
+            mDialog.dismiss();
+            emailAddressEditText.setError("Please enter a valid email!");
+            emailAddressEditText.requestFocus();
+            return;
+        }
+
+        // PHONE NUMBER IS EMPTY
+        if (TextUtils.isEmpty(numberStr)) {
+
+            mDialog.dismiss();
+            phoneNmbrEditText.setError("Please provide your number!");
+            phoneNmbrEditText.requestFocus();
+            return;
+        }
+
+        // PHONE NUMBER LENGTH IS LESS THAN 11
+        if (numberStr.length() != 11) {
+            mDialog.dismiss();
+            phoneNmbrEditText.setError("Please enter a valid number!");
+            phoneNmbrEditText.requestFocus();
+            return;
+        }
+
         // Password is Empty
         if (TextUtils.isEmpty(passwordStr)) {
 
@@ -208,31 +280,6 @@ public class ActivitySignUp extends AppCompatActivity {
             return;
         }
 
-        // PHONE NUMBER IS EMPTY
-        if (TextUtils.isEmpty(numberStr)) {
-
-            mDialog.dismiss();
-            phoneNmbrEditText.setError("Please provide your number!");
-            phoneNmbrEditText.requestFocus();
-            return;
-        }
-
-        // EMAIL LENGTH IS LESS THAN 5
-        if (emailStr.length() < 5 || emailStr.length() > 30) {
-            mDialog.dismiss();
-            emailAddressEditText.setError("Email should be between 5 to 30 characters!");
-            emailAddressEditText.requestFocus();
-            return;
-        }
-
-        // PHONE NUMBER LENGTH IS LESS THAN 11
-        if (numberStr.length() != 11) {
-            mDialog.dismiss();
-            phoneNmbrEditText.setError("Please enter a valid number!");
-            phoneNmbrEditText.requestFocus();
-            return;
-        }
-
         // PASSWORD LENGTH LESS THAN 5
         if (passwordStr.length() < 6 || passwordStr.length() > 25) {
             mDialog.dismiss();
@@ -246,14 +293,6 @@ public class ActivitySignUp extends AppCompatActivity {
             mDialog.dismiss();
             confirmPasswordEditText.setError("Password does not match!");
             confirmPasswordEditText.requestFocus();
-            return;
-        }
-
-        // EMAIL IS INCORRECT OR INVALID
-        if (!Patterns.EMAIL_ADDRESS.matcher(emailStr).matches()) {
-            mDialog.dismiss();
-            emailAddressEditText.setError("Please enter a valid email!");
-            emailAddressEditText.requestFocus();
             return;
         }
 
@@ -306,6 +345,7 @@ public class ActivitySignUp extends AppCompatActivity {
                     User user = new User(emailStr, false);
                     databaseReference.child("teams").child(referralCodeStr).push().setValue(user);
 
+                    // ADDING REFERRAL CODE TO THE USER DATABASE
                     databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
                             .child("refBy").setValue(referralCodeStr);
 
