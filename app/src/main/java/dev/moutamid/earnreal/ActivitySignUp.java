@@ -31,7 +31,7 @@ public class ActivitySignUp extends AppCompatActivity {
     private static final String TAG = "ActivitySignUp";
 
     private static final String USER_EMAIL = "userEmail";
-    private static final String USER_REFERRAL_ID = "userReferralCode";
+    private static final String USER_ID = "userReferralCode";
     private static final String USER_GENDER = "userGender";
     private static final String USER_NUMBER = "userNumber";
     private static final String REFERRED_BY = "referredBy";
@@ -234,9 +234,9 @@ public class ActivitySignUp extends AppCompatActivity {
         }
 
         // PASSWORD LENGTH LESS THAN 5
-        if (passwordStr.length() < 5 || passwordStr.length() > 25) {
+        if (passwordStr.length() < 6 || passwordStr.length() > 25) {
             mDialog.dismiss();
-            passwordEditText.setError("Password should be between 5 to 25 characters!");
+            passwordEditText.setError("Password should be between 6 to 25 characters!");
             passwordEditText.requestFocus();
             return;
         }
@@ -302,8 +302,12 @@ public class ActivitySignUp extends AppCompatActivity {
                 if (snapshot.hasChild(referralCodeStr)) {
                     Log.i(TAG, "onDataChange: has child");
 
+                    // ADDING USER INFORMATION TO THE REFERRED PERSON TEAM
                     User user = new User(emailStr, false);
-                    databaseReference.child("users").child(referralCodeStr).child("team").push().setValue(user);
+                    databaseReference.child("teams").child(referralCodeStr).push().setValue(user);
+
+                    databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
+                            .child("refBy").setValue(referralCodeStr);
 
                     // BOOLEAN VALUE IS TO CHECK THAT IF USER TRIES AGAIN TO ENTER REFERRAL CODE
                     // THEN ADD VALUE TO DATABASE AND UPDATE THE UI OF USER
@@ -402,7 +406,7 @@ public class ActivitySignUp extends AppCompatActivity {
         utils.storeString(ActivitySignUp.this, USER_GENDER, userGenderStr);
         utils.storeString(ActivitySignUp.this, USER_EMAIL, emailStr);
         utils.storeString(ActivitySignUp.this, USER_NUMBER, numberStr);
-        utils.storeString(ActivitySignUp.this, USER_REFERRAL_ID, mAuth.getCurrentUser().getUid());
+        utils.storeString(ActivitySignUp.this, USER_ID, mAuth.getCurrentUser().getUid());
 
         if (!TextUtils.isEmpty(referralCodeStr))
             utils.storeString(ActivitySignUp.this, REFERRED_BY, referralCodeStr);
@@ -422,9 +426,6 @@ public class ActivitySignUp extends AppCompatActivity {
         databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
                 .child("gender").setValue(userGenderStr);
 
-        if (!TextUtils.isEmpty(referralCodeStr))
-            databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
-                    .child("refBy").setValue(referralCodeStr);
     }
 
     private void initViews() {
