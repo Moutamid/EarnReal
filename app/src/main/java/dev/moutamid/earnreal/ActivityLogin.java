@@ -1,97 +1,108 @@
 package dev.moutamid.earnreal;
 
-import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.ConnectivityManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.TextUtils;
-import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-//import com.google.android.gms.tasks.OnCompleteListener;
-//import com.google.android.gms.tasks.Task;
-//import com.google.firebase.auth.AuthResult;
-//import com.google.firebase.auth.FirebaseAuth;
-//import com.google.firebase.database.DataSnapshot;
-//import com.google.firebase.database.DatabaseError;
-//import com.google.firebase.database.DatabaseReference;
-//import com.google.firebase.database.FirebaseDatabase;
-//import com.google.firebase.database.ValueEventListener;
-
-//import Utils.Utils;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class ActivityLogin extends AppCompatActivity {
+    private static final String TAG = "ActivityLogin";
 
-    private EditText userNameEditText, passwordEditText;
-    private ImageView showPasswordBtn;
+    private static final String USER_EMAIL = "userEmail";
+    private static final String USER_ID = "userReferralCode";
+    private static final String USER_GENDER = "userGender";
+    private static final String USER_NUMBER = "userNumber";
+    private static final String REFERRED_BY = "referredBy";
+
+    private EditText emailEditText, passwordEditText;
     private TextView forgotPasswordBtn, goToSignUpActivityBtn;
     private Button loginBtn;
-    private Boolean passwordShowing = false;
-    private Dialog mDialog;
+
     private Utils utils = new Utils();
-    private RelativeLayout progressLayout;
 
-    private ProgressDialog mProgressDialog;
+    private ProgressDialog mDialog;
 
-    private static final String PROFILE_IMAGE = "profile_image";
-    private static final String USERS = "users";
-    private static final String USER_NAME = "userName";
-    private static final String PUBLIC = "Public";
-    private static final String LOG_STATUS = "logStatus";
-    private static final String QUESTIONS_STATUS = "Questions Status";
-    private static final String DOMAIN = "@strangers.com";
-    private static final String PACKAGE_NAME = "dev.moutamid.strangers";
-
-  //  private DatabaseReference mDatabaseUsers;
     private Boolean isOnline = false;
-    private SharedPreferences sharedPreferences;
-    private EditText userNameEditText_RSD;
 
-    //private FirebaseAuth mAuth;
+    private FirebaseAuth mAuth;
+    private DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        Log.i(TAG, "onCreate: started");
 
-      //  new OnlineStatus().execute();
+        mAuth = FirebaseAuth.getInstance();
 
-//        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child(USERS);
-//        mDatabaseUsers.keepSynced(true);
-//
-//        mAuth = FirebaseAuth.getInstance();
+        // CHECKING IF USER IS ALREADY LOGGED IN
+        checkLoginStatus();
 
-        sharedPreferences = this.getSharedPreferences(PACKAGE_NAME, Context.MODE_PRIVATE);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.keepSynced(true);
 
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setMessage("Signing you in...");
+        // CHECKING ONLINE STATUS
+        checkOnlineStatus();
 
-        // Initializing Views
+        mDialog = new ProgressDialog(this);
+        mDialog.setCancelable(false);
+        mDialog.setMessage("Signing you in...");
+
         initViews();
 
         setListenersToWidgets();
 
     }
 
-    private void setListenersToWidgets() {
-        passwordEditText.addTextChangedListener(passwordEditTextWatcher());
+    private void checkLoginStatus() {
+        // IF USER IS SIGNED IN
+        if (mAuth.getCurrentUser() != null) {
+            Toast.makeText(this, "You are signed in!", Toast.LENGTH_SHORT).show();
+        }
+    }
 
-        //showPasswordBtn.setOnClickListener(showPasswordBtnListener());
+    private void checkOnlineStatus() {
+        Log.i(TAG, "checkOnlineStatus: ");
+
+        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.i(TAG, "onDataChange: online status");
+
+                isOnline = snapshot.getValue(Boolean.class);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "onCancelled: " + error.getMessage());
+            }
+        });
+
+    }
+
+    private void setListenersToWidgets() {
+        Log.i(TAG, "setListenersToWidgets: ");
 
         forgotPasswordBtn.setOnClickListener(forgotPasswordBtnListener());
 
@@ -100,169 +111,153 @@ public class ActivityLogin extends AppCompatActivity {
         goToSignUpActivityBtn.setOnClickListener(signUpBtnListener());
     }
 
-    private TextWatcher passwordEditTextWatcher() {
-        return new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                showPasswordBtn.setVisibility(View.VISIBLE);
-            }
-
-            @Override
-            public void afterTextChanged(Editable editable) {
-
-            }
-        };
-    }
-
     private View.OnClickListener signUpBtnListener() {
+        Log.i(TAG, "signUpBtnListener: ");
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i(TAG, "onClick: sign up button");
+
                 startActivity(new Intent(ActivityLogin.this, ActivitySignUp.class));
             }
         };
     }
 
-//    private View.OnClickListener showPasswordBtnListener() {
-//        return new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (passwordShowing) {
-//
-//                    // Hiding password
-//                    passwordEditText.setTransformationMethod(PasswordTransformationMethod.getInstance());
-//                    showPasswordBtn.setImageDrawable(getResources().getDrawable(R.drawable.icon_show_password_off));
-//                    passwordShowing = false;
-//
-//                } else {
-//
-//                    // Showing password
-//                    passwordEditText.setTransformationMethod(HideReturnsTransformationMethod.getInstance());
-//                    showPasswordBtn.setImageDrawable(getResources().getDrawable(R.drawable.icon_show_password_on));
-//                    passwordShowing = true;
-//
-//                }
-//            }
-//        };
-//    }
-
     private View.OnClickListener loginBtnListener() {
+        Log.i(TAG, "loginBtnListener: ");
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String username = userNameEditText.getText().toString().trim().toLowerCase();
-                String password = passwordEditText.getText().toString().trim();
+                Log.i(TAG, "onClick: login button");
 
-                if (!TextUtils.isEmpty(username) && !TextUtils.isEmpty(password) && isOnline) {
-
-                    signInUserWithNameAndPassword(username, password);
-
-                } else if (TextUtils.isEmpty(username)) {
-
-                    userNameEditText.setError("Please enter username");
-                    userNameEditText.requestFocus();
-
-                } else if (TextUtils.isEmpty(password)) {
-
-                    passwordEditText.setError("Please enter password");
-                    passwordEditText.requestFocus();
-
-                } else if (!isOnline) {
-
+                if (isOnline) {
+                    mDialog.show();
+                    checkStatusOfEditTexts();
+                } else {
                     utils.showOfflineDialog(ActivityLogin.this);
                 }
             }
         };
     }
 
+    private void checkStatusOfEditTexts() {
+        Log.i(TAG, "checkStatusOfEditTexts: ");
+
+        String emailStr = emailEditText.getText().toString().trim().toLowerCase();
+        String passwordStr = passwordEditText.getText().toString().trim().toLowerCase();
+
+        if (!isOnline) {
+            mDialog.dismiss();
+            utils.showOfflineDialog(ActivityLogin.this);
+            return;
+        }
+
+        if (TextUtils.isEmpty(emailStr)) {
+            mDialog.dismiss();
+            emailEditText.setError("Please enter an email!");
+            emailEditText.requestFocus();
+            return;
+        }
+
+        if (!Patterns.EMAIL_ADDRESS.matcher(emailStr).matches()) {
+            mDialog.dismiss();
+            emailEditText.setError("Email is invalid!");
+            emailEditText.requestFocus();
+        }
+
+        if (TextUtils.isEmpty(passwordStr)) {
+            mDialog.dismiss();
+            passwordEditText.setError("Please enter a password!");
+            passwordEditText.requestFocus();
+            return;
+        }
+
+        signInUserWithNameAndPassword(emailStr, passwordStr);
+    }
+
     private View.OnClickListener forgotPasswordBtnListener() {
         return new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Log.i(TAG, "onClick: forgot password btn");
+
                 startActivity(new Intent(ActivityLogin.this, ActivityForgotPassword.class));
             }
         };
     }
 
-    private void checkUserExist(final String username, final String userPassword) {
 
-//        mDatabaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//                if (dataSnapshot.hasChild(username)) {
-//
-                    checkPassword(username);
-//
-//                } else {
-//
-//                    mProgressDialog.dismiss();
-//                    userNameEditText.setError("Username not found");
-//                    userNameEditText.requestFocus();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
+    private void getUserDetailsFromDatabaseAndStoreOffline() {
+        Log.i(TAG, "addUserDetailsToDatabase: ");
 
-    }
+        // UPLOADING USER DETAILS TO THE DATABASE
+//        databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
+//                .child("email").setValue(emailStr);
+//
+//        databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
+//                .child("nmbr").setValue(numberStr);
+//
+//        databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
+//                .child("gender").setValue(userGenderStr);
 
-    private void checkUserExistForReset(final String username) {
+        databaseReference.child("users").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+                    User user = snapshot.getValue(User.class);
 
-        mProgressDialog.show();
+                    String email = user.getEmail();
+                    String number = user.getNmbr();
+                    String gender = user.getGender();
 
-//        mDatabaseUsers.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//                if (dataSnapshot.hasChild(username)) {
-//
-//                    Intent intent = new Intent(ActivityLogin.this, ActivityForgotPassword.class);
-//                    intent.putExtra(USER_NAME, username);
-//
-//                    mProgressDialog.dismiss();
-//                    mDialog.dismiss();
-//
-//                    startActivity(intent);
-//                    finish();
-//
-//                } else {
-//
-//                    mProgressDialog.dismiss();
-//                    userNameEditText_RSD.setError("Username not found");
-//                    userNameEditText_RSD.requestFocus();
-//                }
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
+                    storeUserInformationOffline(email, number, gender);
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "onCancelled: " + error.toException());
+            }
+        });
 
     }
 
-    private void checkPassword(final String username) {
+    private void storeUserInformationOffline(String email, String number, String gender) {
+        Log.i(TAG, "storeUserInformationOffline: ");
 
-//        mDatabaseUsers.child(username).addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-//
-//                String profileImage = dataSnapshot.child(PUBLIC).child(PROFILE_IMAGE).getValue(String.class);
-//
-//                utils.storeString(ActivityLogin.this, USER_NAME, username);
-//                utils.storeString(ActivityLogin.this, LOG_STATUS, "true");
-//                utils.storeString(ActivityLogin.this, QUESTIONS_STATUS, "no");
-//                utils.storeString(ActivityLogin.this, PROFILE_IMAGE, profileImage);
-//
+        utils.storeString(ActivityLogin.this, USER_GENDER, gender);
+        utils.storeString(ActivityLogin.this, USER_EMAIL, email);
+        utils.storeString(ActivityLogin.this, USER_NUMBER, number);
+        utils.storeString(ActivityLogin.this, USER_ID, mAuth.getCurrentUser().getUid());
+
+    }
+
+
+    private void signInUserWithNameAndPassword(String email, String password) {
+        Log.i(TAG, "signInUserWithNameAndPassword: ");
+
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    Log.i(TAG, "onComplete: user signed in");
+
+                    getUserDetailsFromDatabaseAndStoreOffline();
+
+                    Toast.makeText(ActivityLogin.this, "You are signed in!", Toast.LENGTH_SHORT).show();
+
+                } else {
+                    mDialog.dismiss();
+                    Log.w(TAG, "onComplete: task is not completed " + task.getException());
+                    Toast.makeText(ActivityLogin.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+
+                }
+
+
+            }
+        });
+
 //                Intent intent = new Intent(ActivityLogin.this, BottomNavigationActivity.class);
 //                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //
@@ -272,111 +267,56 @@ public class ActivityLogin extends AppCompatActivity {
 //
 //                startActivity(intent);
 //                finish();
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError databaseError) {
-//
-//            }
-//        });
-
     }
 
-    private void signInUserWithNameAndPassword(final String username, final String password) {
-
-        mProgressDialog.show();
-
-        if (isOnline) {
-
-            String email = username + DOMAIN;
-
-            if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-                //if Email Address is Invalid..
-
-                mProgressDialog.dismiss();
-                userNameEditText.setError("Username is not valid. Make sure no spaces and special characters are included");
-                userNameEditText.requestFocus();
-            } else {
-
-//                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-//                    @Override
-//                    public void onComplete(@NonNull Task<AuthResult> task) {
-//
-//                        if (task.isSuccessful()) {
-//
-//                            checkUserExist(username, password);
-//
-//                        } else {
-//
-//                            mProgressDialog.dismiss();
-//                            Toast.makeText(ActivityLogin.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                    }
-//                });
-
-            }
-        } else {
-
-            mProgressDialog.dismiss();
-            Toast.makeText(this, "You are not online", Toast.LENGTH_SHORT).show();
-        }
-    }
 
     private void initViews() {
-        //userNameEditText = findViewById(R.id.userName_login_editText);
+        Log.i(TAG, "initViews: ");
+
+        emailEditText = findViewById(R.id.email_login_editText);
         passwordEditText = findViewById(R.id.password_login_editText);
         forgotPasswordBtn = findViewById(R.id.forgotPassword_login_textView);
         goToSignUpActivityBtn = findViewById(R.id.goTo_signUp_activity_textView);
         loginBtn = findViewById(R.id.login_btn);
-        // For Dialog
-        mDialog = new Dialog(this);
     }
 
-    private class OnlineStatus extends AsyncTask<Boolean, Void, Boolean> {
+    private static class User {
 
-        @Override
-        protected Boolean doInBackground(Boolean... booleans) {
+        private String email, gender, nmbr;
 
-            if (!isCancelled()) {
-
-                ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-//                NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-
-//                if (activeNetworkInfo != null && activeNetworkInfo.isConnected()) {
-//
-//                    try {
-//
-//                        Process p1 = Runtime.getRuntime().exec("ping -c 1 www.google.com");
-//                        int returnVal = p1.waitFor();
-//                        boolean reachable = (returnVal == 0);
-//
-//                        return reachable;
-//
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                        return false;
-//                    }
-//
-//                } else return false;
-          }
-
-            return null;
+        public User(String email, String gender, String nmbr) {
+            this.email = email;
+            this.gender = gender;
+            this.nmbr = nmbr;
         }
 
-        @Override
-        protected void onPostExecute(Boolean aBoolean) {
-            super.onPostExecute(aBoolean);
-
-            if (!isCancelled()) {
-                isOnline = aBoolean;
-
-                new OnlineStatus().execute();
-            }
-
+        User() {
         }
 
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getGender() {
+            return gender;
+        }
+
+        public void setGender(String gender) {
+            this.gender = gender;
+        }
+
+        public String getNmbr() {
+            return nmbr;
+        }
+
+        public void setNmbr(String nmbr) {
+            this.nmbr = nmbr;
+        }
 
     }
+
 }

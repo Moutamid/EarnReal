@@ -119,7 +119,7 @@
             android:layout_height="17dp"
             android:layout_gravity="center_vertical"
             android:layout_marginStart="10dp"
-            android:src="@drawable/icon_username" />
+            android:src="@drawable/icon_email" />
 
         <EditText
             android:id="@+id/emailAddress_sign_up_editText"
@@ -132,7 +132,6 @@
             android:textColor="@color/darkBlue"
             android:layout_marginStart="5dp"
             android:textColorHint="@color/greyishblue"
-              
             android:textSize="13sp"
             />
 

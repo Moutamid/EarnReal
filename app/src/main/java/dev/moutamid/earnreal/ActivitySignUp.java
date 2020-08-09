@@ -50,6 +50,7 @@ public class ActivitySignUp extends AppCompatActivity {
     private DatabaseReference databaseReference;
 
     private Boolean isOnline = false;
+    private boolean isNmbrValid = true;
 
     private String emailStr, numberStr, passwordStr, confirmPasswordStr, referralCodeStr;
 
@@ -131,18 +132,32 @@ public class ActivitySignUp extends AppCompatActivity {
                 String nmbr = charSequence.toString();
 
                 // FIRST CHARACTER OF THE NUMBER IS NOT 0
-                if (!nmbr.substring(0, 1).equals("0"))
+                if (!nmbr.substring(0, 1).equals("0")) {
                     phoneNmbrEditText.setError("Number should start from 0!");
+                    isNmbrValid = false;
+                    return;
+                }
 
                 // SECOND CHARACTER OF THE NUMBER IS NOT 3
-                if (!nmbr.substring(0, 2).equals("03"))
+                if (!nmbr.substring(0, 2).equals("03")){
                     phoneNmbrEditText.setError("Number should start like 03...!");
+                    isNmbrValid = false;
+                    return;
+                }
 
-                // SECOND CHARACTER OF THE NUMBER IS NOT 3
-                if (nmbr.substring(0, 3).equals("039"))
-                    phoneNmbrEditText.setError("Number should start like 03...!");
+                // THIRD CHARACTER OF THE NUMBER IS 5, 6, 7, 8 OR 9 WHICH ARE INVALID
+                if (nmbr.substring(0, 3).equals("035")
+                        || nmbr.substring(0, 3).equals("036")
+                        || nmbr.substring(0, 3).equals("037")
+                        || nmbr.substring(0, 3).equals("038")
+                        || nmbr.substring(0, 3).equals("039")
+                ){
+                    phoneNmbrEditText.setError("Number is invalid!");
+                    isNmbrValid = false;
+                    return;
+                }
 
-
+                isNmbrValid = true;
             }
 
             @Override
@@ -254,6 +269,14 @@ public class ActivitySignUp extends AppCompatActivity {
             return;
         }
 
+        // PHONE NUMBER IS INVALID
+        if (!isNmbrValid){
+            mDialog.dismiss();
+            phoneNmbrEditText.setError("Please enter a valid number!");
+            phoneNmbrEditText.requestFocus();
+            return;
+        }
+
         // PHONE NUMBER LENGTH IS LESS THAN 11
         if (numberStr.length() != 11) {
             mDialog.dismiss();
@@ -271,20 +294,19 @@ public class ActivitySignUp extends AppCompatActivity {
             return;
         }
 
-        // Confirm Password is Empty
-        if (TextUtils.isEmpty(confirmPasswordStr)) {
-
-            mDialog.dismiss();
-            confirmPasswordEditText.setError("Please confirm your password!");
-            confirmPasswordEditText.requestFocus();
-            return;
-        }
-
-        // PASSWORD LENGTH LESS THAN 5
+        // PASSWORD LENGTH LESS THAN 6 OR GREATER THAN 25
         if (passwordStr.length() < 6 || passwordStr.length() > 25) {
             mDialog.dismiss();
             passwordEditText.setError("Password should be between 6 to 25 characters!");
             passwordEditText.requestFocus();
+            return;
+        }
+
+        // Confirm Password is Empty
+        if (TextUtils.isEmpty(confirmPasswordStr)) {
+            mDialog.dismiss();
+            confirmPasswordEditText.setError("Please confirm your password!");
+            confirmPasswordEditText.requestFocus();
             return;
         }
 
@@ -342,8 +364,8 @@ public class ActivitySignUp extends AppCompatActivity {
                     Log.i(TAG, "onDataChange: has child");
 
                     // ADDING USER INFORMATION TO THE REFERRED PERSON TEAM
-                    User user = new User(emailStr, false);
-                    databaseReference.child("teams").child(referralCodeStr).push().setValue(user);
+                    refUser refUser = new refUser(emailStr, false);
+                    databaseReference.child("teams").child(referralCodeStr).push().setValue(refUser);
 
                     // ADDING REFERRAL CODE TO THE USER DATABASE
                     databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
@@ -457,14 +479,17 @@ public class ActivitySignUp extends AppCompatActivity {
         Log.i(TAG, "addUserDetailsToDatabase: ");
 
         // UPLOADING USER DETAILS TO THE DATABASE
-        databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
-                .child("email").setValue(emailStr);
+//        databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
+//                .child("email").setValue(emailStr);
+//
+//        databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
+//                .child("nmbr").setValue(numberStr);
+//
+//        databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
+//                .child("gender").setValue(userGenderStr);
 
-        databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
-                .child("nmbr").setValue(numberStr);
-
-        databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
-                .child("gender").setValue(userGenderStr);
+        User user = new User(emailStr, numberStr, userGenderStr);
+        databaseReference.child("users").child(mAuth.getCurrentUser().getUid()).setValue(user);
 
     }
 
@@ -485,14 +510,52 @@ public class ActivitySignUp extends AppCompatActivity {
 
     private static class User {
 
+        private String email, gender, nmbr;
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getGender() {
+            return gender;
+        }
+
+        public void setGender(String gender) {
+            this.gender = gender;
+        }
+
+        public String getNmbr() {
+            return nmbr;
+        }
+
+        public void setNmbr(String nmbr) {
+            this.nmbr = nmbr;
+        }
+
+        public User(String email, String gender, String nmbr) {
+            this.email = email;
+            this.gender = gender;
+            this.nmbr = nmbr;
+        }
+
+        User(){}
+
+    }
+
+    private static class refUser {
+
         private String email;
         private boolean status;
 
-        User() {
+        refUser() {
 
         }
 
-        public User(String email, boolean status) {
+        public refUser(String email, boolean status) {
             this.email = email;
             this.status = status;
         }
