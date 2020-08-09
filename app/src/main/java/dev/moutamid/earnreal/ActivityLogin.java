@@ -188,7 +188,7 @@ public class ActivityLogin extends AppCompatActivity {
 
 
     private void getUserDetailsFromDatabaseAndStoreOffline() {
-        Log.i(TAG, "addUserDetailsToDatabase: ");
+        Log.i(TAG, "getUserDetailsFromDatabaseAndStoreOffline: ");
 
         // UPLOADING USER DETAILS TO THE DATABASE
 //        databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
@@ -204,13 +204,17 @@ public class ActivityLogin extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.hasChild(mAuth.getCurrentUser().getUid())) {
-                    User user = snapshot.getValue(User.class);
+                    User user = snapshot.child(mAuth.getCurrentUser().getUid()).getValue(User.class);
 
                     String email = user.getEmail();
                     String number = user.getNmbr();
                     String gender = user.getGender();
+                    String refBy = "";
 
-                    storeUserInformationOffline(email, number, gender);
+                    if (snapshot.child(mAuth.getCurrentUser().getUid()).hasChild("refBy"))
+                        refBy = snapshot.child(mAuth.getCurrentUser().getUid()).child("refBy").getValue(String.class);
+
+                    storeUserInformationOffline(email, number, gender, refBy);
 
                 }
             }
@@ -218,12 +222,15 @@ public class ActivityLogin extends AppCompatActivity {
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.w(TAG, "onCancelled: " + error.toException());
+
+                mDialog.dismiss();
+                Toast.makeText(ActivityLogin.this, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
     }
 
-    private void storeUserInformationOffline(String email, String number, String gender) {
+    private void storeUserInformationOffline(String email, String number, String gender, String refBy) {
         Log.i(TAG, "storeUserInformationOffline: ");
 
         utils.storeString(ActivityLogin.this, USER_GENDER, gender);
@@ -231,6 +238,12 @@ public class ActivityLogin extends AppCompatActivity {
         utils.storeString(ActivityLogin.this, USER_NUMBER, number);
         utils.storeString(ActivityLogin.this, USER_ID, mAuth.getCurrentUser().getUid());
 
+        if (!TextUtils.isEmpty(refBy)){
+            utils.storeString(ActivityLogin.this, REFERRED_BY, refBy);
+        }
+
+        mDialog.dismiss();
+        Toast.makeText(this, "You are logged in!", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -244,8 +257,6 @@ public class ActivityLogin extends AppCompatActivity {
                     Log.i(TAG, "onComplete: user signed in");
 
                     getUserDetailsFromDatabaseAndStoreOffline();
-
-                    Toast.makeText(ActivityLogin.this, "You are signed in!", Toast.LENGTH_SHORT).show();
 
                 } else {
                     mDialog.dismiss();

@@ -22,6 +22,11 @@ import java.util.Random;
 
 public class Utils {
 
+    private static final String USER_EMAIL = "userEmail";
+    private static final String USER_ID = "userReferralCode";
+    private static final String USER_GENDER = "userGender";
+    private static final String USER_NUMBER = "userNumber";
+    private static final String REFERRED_BY = "referredBy";
     private static final String PACKAGE_NAME = "dev.moutamid.earnreal";
 
 //    private DatabaseReference mDatabase;
