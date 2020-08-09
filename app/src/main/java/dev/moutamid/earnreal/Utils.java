@@ -6,8 +6,10 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AlertDialog;
 
@@ -16,9 +18,6 @@ import com.google.android.material.snackbar.Snackbar;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
-
-//import com.google.firebase.database.DatabaseReference;
-//import com.google.firebase.database.FirebaseDatabase;
 
 public class Utils {
 
@@ -29,7 +28,7 @@ public class Utils {
     private static final String REFERRED_BY = "referredBy";
     private static final String PACKAGE_NAME = "dev.moutamid.earnreal";
 
-//    private DatabaseReference mDatabase;
+    //    private DatabaseReference mDatabase;
     private SharedPreferences sharedPreferences;
 
     public String getStoredString(Context context, String name) {
@@ -73,6 +72,33 @@ public class Utils {
 
     }
 
+    public void showWorkDoneDialog(Context context, String title, String desc) {
+
+        final Dialog dialog = new Dialog(context);
+        dialog.setContentView(R.layout.dialog_work_done);
+
+        Button okayBtn = dialog.findViewById(R.id.okay_btn_work_done_dialog);
+        TextView titleTv = dialog.findViewById(R.id.title_work_done_dialog);
+        TextView descTv = dialog.findViewById(R.id.desc_work_done_dialog);
+
+        if (!TextUtils.isEmpty(title))
+            titleTv.setText(title);
+
+        if (!TextUtils.isEmpty(desc))
+            descTv.setText(desc);
+
+        okayBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.show();
+
+    }
+
     public String getTime() {
 
         Date date = new Date();
@@ -81,7 +107,7 @@ public class Utils {
 
     }
 
-    public void showSnackBar(View view, String msg){
+    public void showSnackBar(View view, String msg) {
         Snackbar.make(view, msg, Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show();
     }
