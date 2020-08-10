@@ -55,7 +55,7 @@ public class ActivityLogin extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
 
-        // CHECKING IF USER IS ALREADY LOGGED IN
+        // CHECKING LOGIN STATUS
         checkLoginStatus();
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
@@ -74,10 +74,17 @@ public class ActivityLogin extends AppCompatActivity {
 
     }
 
-    private void checkLoginStatus() {
+    private void checkLoginStatus(){
+
         // IF USER IS SIGNED IN
         if (mAuth.getCurrentUser() != null) {
-            Toast.makeText(this, "You are signed in!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ActivityLogin.this, "Sign in successful", Toast.LENGTH_SHORT).show();
+
+            // REMOVING ALL ACTIVITIES AND STARTING MAIN ACTIVITY
+            Intent intent = new Intent(ActivityLogin.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
         }
     }
 
@@ -243,7 +250,13 @@ public class ActivityLogin extends AppCompatActivity {
         }
 
         mDialog.dismiss();
-        Toast.makeText(this, "You are logged in!", Toast.LENGTH_SHORT).show();
+        Toast.makeText(ActivityLogin.this, "Sign in successful", Toast.LENGTH_SHORT).show();
+
+        // REMOVING ALL ACTIVITIES AND STARTING MAIN ACTIVITY
+        Intent intent = new Intent(ActivityLogin.this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        finish();
+        startActivity(intent);
     }
 
 

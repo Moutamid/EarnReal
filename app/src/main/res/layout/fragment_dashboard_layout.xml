@@ -26,14 +26,30 @@
                 android:textColor="@color/white"
                 android:textSize="18sp"/>
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_marginTop="10dp"
                 android:layout_height="wrap_content"
-                android:text="Rs : 0.00"
+                android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rs : "
                 android:textColor="@color/white"
                 android:textStyle="bold"
-                android:layout_marginTop="10dp"
                 android:textSize="20sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.00"
+                    android:id="@+id/total_balance_tv_dashboard"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -52,14 +68,30 @@
                 android:textColor="@color/white"
                 android:textSize="18sp"/>
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Rs : 0.00"
-                android:textColor="@color/white"
-                android:textStyle="bold"
                 android:layout_marginTop="10dp"
-                android:textSize="20sp"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rs : "
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.00"
+                    android:id="@+id/total_withdraw_tv_dashboard"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -78,14 +110,30 @@
                 android:textColor="@color/white"
                 android:textSize="18sp"/>
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Rs : 0.00"
-                android:textColor="@color/white"
-                android:textStyle="bold"
                 android:layout_marginTop="10dp"
-                android:textSize="20sp"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Rs : "
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="0.00"
+                    android:id="@+id/current_balance_tv_dashboard"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -104,14 +152,39 @@
                 android:textColor="@color/white"
                 android:textSize="18sp"/>
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Unpaid or Paid until 02/07/2020"
-                android:textColor="@color/white"
-                android:textStyle="bold"
                 android:layout_marginTop="10dp"
-                android:textSize="20sp"/>
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PAID"
+                    android:textColor="@color/white"
+                    android:id="@+id/paid_status_tv_dashboard"
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=" UNTIL "
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="02/06/20"
+                    android:id="@+id/paid_status_date_tv_dashboard"
+                    android:textColor="@color/white"
+                    android:textStyle="bold"
+                    android:textSize="20sp"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -134,6 +207,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="5"
+                android:id="@+id/team_members_tv_dashboard"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"
@@ -161,6 +235,7 @@
                 android:layout_height="wrap_content"
                 android:text="2"
                 android:textColor="@color/white"
+                android:id="@+id/paid_members_tv_dashboard"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"
                 android:textSize="20sp"/>
@@ -188,6 +263,7 @@
                 android:text="12"
                 android:textColor="@color/white"
                 android:textStyle="bold"
+                android:id="@+id/premium_ads_tv_dashboard"
                 android:layout_marginTop="10dp"
                 android:textSize="20sp"/>
 
@@ -212,6 +288,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="20"
+                android:id="@+id/daily_ads_tv_dashboard"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 android:layout_marginTop="10dp"

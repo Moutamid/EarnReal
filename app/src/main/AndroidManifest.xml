@@ -12,16 +12,14 @@
         <activity
             android:name=".MainActivity"
             android:label="EarnReal">
-
-        </activity>
-        <activity android:name=".ActivityForgotPassword" />
-        <activity android:name=".ActivityWelcome">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".ActivityForgotPassword" />
+        <activity android:name=".ActivityWelcome"/>
         <activity android:name=".ActivityLogin" />
         <activity android:name=".ActivitySignUp" />
         <activity android:name=".ActivityVerifyNmbr" />

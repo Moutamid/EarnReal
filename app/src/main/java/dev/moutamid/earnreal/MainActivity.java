@@ -2,6 +2,7 @@ package dev.moutamid.earnreal;
 
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -17,6 +18,7 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -47,6 +49,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        // USER IS NOT SIGNED IN
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+
+            // REMOVING ALL ACTIVITIES AND STARTING WELCOME ACTIVITY
+            Intent intent = new Intent(MainActivity.this, ActivityWelcome.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
+        }
+    }
+
+
+
     /**
      * Initialize all widgets
      */
@@ -59,6 +78,11 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         navigationView.setNavigationItemSelectedListener(this);
         //urduSwitch = (SwitchCompat) navigationView.getMenu().findItem(R.id.nav_urdu_id).getActionView();
 
+        // SETTING EMAIL AND PHONE NUMBER IN THE HEADER
+        setHeaderDetails();
+    }
+
+    private void setHeaderDetails() {
         View header = navigationView.getHeaderView(0);
 
         nav_email = (TextView) header.findViewById(R.id.nav_header_user_name_id);

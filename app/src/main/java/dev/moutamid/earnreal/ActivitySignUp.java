@@ -327,7 +327,13 @@ public class ActivitySignUp extends AppCompatActivity {
         // USER IS SIMPLY SIGNED IN
         if (mAuth.getCurrentUser() != null) {
             mDialog.dismiss();
-            Toast.makeText(this, "You are signed in!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ActivitySignUp.this, "You are already signed in", Toast.LENGTH_SHORT).show();
+
+            // REMOVING ALL ACTIVITIES AND STARTING MAIN ACTIVITY
+            Intent intent = new Intent(ActivitySignUp.this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            finish();
+            startActivity(intent);
             return;
         }
 
@@ -375,7 +381,13 @@ public class ActivitySignUp extends AppCompatActivity {
                     // THEN ADD VALUE TO DATABASE AND UPDATE THE UI OF USER
                     if (isTryingAgain) {
                         mDialog.dismiss();
-                        Toast.makeText(ActivitySignUp.this, "You are signed in!", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ActivitySignUp.this, "Sign up successful", Toast.LENGTH_SHORT).show();
+
+                        // REMOVING ALL ACTIVITIES AND STARTING MAIN ACTIVITY
+                        Intent intent = new Intent(ActivitySignUp.this, MainActivity.class);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        finish();
+                        startActivity(intent);
                     }
 
                 } else {
@@ -411,13 +423,13 @@ public class ActivitySignUp extends AppCompatActivity {
                     addUserDetailsToDatabase();
 
                     mDialog.dismiss();
-                    Toast.makeText(ActivitySignUp.this, "You are logged in", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivitySignUp.this, "Sign up successful", Toast.LENGTH_SHORT).show();
 
-                    //Intent intent = new Intent(ActivitySignUp.this, SecurityQuestionActivity.class);
-                    //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    //mDialog.dismiss();
-                    //startActivity(intent);
-                    //finish();
+                    // REMOVING ALL ACTIVITIES AND STARTING MAIN ACTIVITY
+                    Intent intent = new Intent(ActivitySignUp.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    finish();
+                    startActivity(intent);
 
                 } else {
                     // SIGN IN FAILS
@@ -444,13 +456,14 @@ public class ActivitySignUp extends AppCompatActivity {
                     addUserDetailsToDatabase();
 
                     mDialog.dismiss();
-                    Toast.makeText(ActivitySignUp.this, "You are logged in", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(ActivitySignUp.this, "Sign up successful", Toast.LENGTH_SHORT).show();
 
-                    //Intent intent = new Intent(ActivitySignUp.this, SecurityQuestionActivity.class);
-                    //intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    //mDialog.dismiss();
-                    //startActivity(intent);
-                    //finish();
+                    // REMOVING ALL ACTIVITIES AND STARTING MAIN ACTIVITY
+                    Intent intent = new Intent(ActivitySignUp.this, MainActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    finish();
+                    startActivity(intent);
+
 
                 } else {
                     // SIGN IN FAILS
