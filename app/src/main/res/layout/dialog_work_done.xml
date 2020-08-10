@@ -53,7 +53,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginTop="10dp"
         android:gravity="center"
-        android:text="Open Gmail and follow the instructions given through the link."
+        android:text="Open your email account and follow the instructions given through the link."
         android:textColor="@color/greyishblue"
         android:textSize="15sp" />
 

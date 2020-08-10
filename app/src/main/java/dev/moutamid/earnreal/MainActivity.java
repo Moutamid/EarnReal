@@ -20,13 +20,20 @@ import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
+    private static final String USER_EMAIL = "userEmail";
+    private static final String USER_ID = "userReferralCode";
+    private static final String USER_GENDER = "userGender";
+    private static final String USER_NUMBER = "userNumber";
+    private static final String REFERRED_BY = "referredBy";
+
     private Toolbar toolbar;
     private DrawerLayout drawerLayout;
     private FrameLayout frameLayout;
     private NavigationView navigationView;
     //private SwitchCompat urduSwitch;
-    private TextView nav_username;
+    private TextView nav_email;
     private TextView nav_phone_number;
+    private Utils utils = new Utils();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +53,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     private void initializeViews() {
         toolbar = findViewById(R.id.toolbar_id);
         toolbar.setTitle("EarnReal - Dashboard");
-//        setSupportActionBar(toolbar);
         drawerLayout = findViewById(R.id.drawer_layout_id);
         frameLayout = findViewById(R.id.framelayout_id);
         navigationView = findViewById(R.id.navigationview_id);
@@ -55,11 +61,14 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         View header = navigationView.getHeaderView(0);
 
-        nav_username = (TextView) header.findViewById(R.id.nav_header_user_name_id);
+        nav_email = (TextView) header.findViewById(R.id.nav_header_user_name_id);
         nav_phone_number = (TextView) header.findViewById(R.id.nav_header_phone_nmbr_id);
 
-        nav_username.setText("Moutamid");
-        nav_phone_number.setText("03058853833");
+        String email = utils.getStoredString(MainActivity.this, USER_EMAIL);
+        String number = utils.getStoredString(MainActivity.this, USER_NUMBER);
+
+        nav_email.setText(email);
+        nav_phone_number.setText(number);
 
     }
 
