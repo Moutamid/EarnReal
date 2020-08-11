@@ -562,23 +562,23 @@ public class ActivitySignUp extends AppCompatActivity {
     private static class refUser {
 
         private String email;
-        private boolean status;
+        private boolean paid;
 
         refUser() {
 
         }
 
-        public refUser(String email, boolean status) {
+        public refUser(String email, boolean paid) {
             this.email = email;
-            this.status = status;
+            this.paid = paid;
         }
 
-        public boolean isStatus() {
-            return status;
+        public boolean isPaid() {
+            return paid;
         }
 
-        public void setStatus(boolean status) {
-            this.status = status;
+        public void setPaid(boolean paid) {
+            this.paid = paid;
         }
 
         public String getEmail() {

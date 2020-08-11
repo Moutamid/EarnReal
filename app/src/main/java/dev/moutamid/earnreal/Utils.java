@@ -32,22 +32,36 @@ public class Utils {
     private SharedPreferences sharedPreferences;
 
     public String getStoredString(Context context, String name) {
-
         sharedPreferences = context.getSharedPreferences(PACKAGE_NAME, Context.MODE_PRIVATE);
         return sharedPreferences.getString(name, "Error");
-
     }
 
     public void storeString(Context context, String name, String object) {
-        //SharedPreferences sharedPreferences = this.getSharedPreferences("dev.moutamid.strangers", Context.MODE_PRIVATE);
-
         sharedPreferences = context.getSharedPreferences(PACKAGE_NAME, Context.MODE_PRIVATE);
         sharedPreferences.edit().putString(name, object).apply();
+    }
 
+    public void storeBoolean(Context context1, String name, boolean value) {
+        sharedPreferences = context1.getSharedPreferences(PACKAGE_NAME, Context.MODE_PRIVATE);
+        sharedPreferences.edit().putBoolean(name, value).apply();
+    }
+
+    public boolean getStoredBoolean(Context context1, String name) {
+        sharedPreferences = context1.getSharedPreferences(PACKAGE_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(name, false);
+    }
+
+    public void storeInteger(Context context1, String name, int value) {
+        sharedPreferences = context1.getSharedPreferences(PACKAGE_NAME, Context.MODE_PRIVATE);
+        sharedPreferences.edit().putInt(name, value).apply();
+    }
+
+    public int getStoredInteger(Context context1, String name) {
+        sharedPreferences = context1.getSharedPreferences(PACKAGE_NAME, Context.MODE_PRIVATE);
+        return sharedPreferences.getInt(name, 0);
     }
 
     public String getRandomNmbr(int length) {
-
         return String.valueOf(new Random().nextInt(length) + 1);
     }
 
@@ -100,7 +114,6 @@ public class Utils {
     }
 
     public String getTime() {
-
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
         return sdf.format(date);
@@ -113,13 +126,11 @@ public class Utils {
     }
 
     public void showDialog(Context context, String title, String message, String positiveBtnName, String negativeBtnName, DialogInterface.OnClickListener positiveListener, DialogInterface.OnClickListener negativeListener) {
-
         new AlertDialog.Builder(context)
                 .setTitle(title)
                 .setMessage(message)
                 .setPositiveButton(positiveBtnName, positiveListener)
                 .setNegativeButton(negativeBtnName, negativeListener)
                 .show();
-
     }
 }
