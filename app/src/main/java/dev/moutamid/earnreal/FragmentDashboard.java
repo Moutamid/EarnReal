@@ -45,17 +45,38 @@ public class FragmentDashboard extends Fragment {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.keepSynced(true);
 
+        // GETTING totalBalance, totalWithdraw, currentBalance, paidStatus, paidExpireDate
         getDetailsFromDatabase();
 
+        // GETTING teamMembers, paidMembers
         getTeamFromDatabase();
 
+        // GETTING PREMIUM ADS 
+        getPremiumAdsQuantity();
+
 //        premiumAds.setText("15");
+
+        // GETTING DAILY ADS
 //        dailyAds.setText("20");
 
         // CONFIGURE THE PREMIUM ADS STRUCTURE
         // CONFIGURE THE DAILY ADS STRUCTURE
 
         return view;
+    }
+
+    private void getPremiumAdsQuantity() {
+        databaseReference.child("teams").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     private void getDetailsFromDatabase() {
@@ -92,9 +113,11 @@ public class FragmentDashboard extends Fragment {
 
                     // CLEARING ALL THE ITEMS
                     refUsersList.clear();
+                    paid_membersList.clear();
+
 
                     // LOOPING THROUGH ALL THE CHILDREN OF TEAM
-                    for (DataSnapshot dataSnapshot : snapshot.child(mAuth.getCurrentUser().getUid()).getChildren()) {
+                    for (DataSnapshot dataSnapshot : snapshot.child(mAuth.getCurrentUser().getUid()).child("users").getChildren()) {
 
                         refUsersList.add(dataSnapshot.getValue(refUser.class));
 
@@ -102,8 +125,8 @@ public class FragmentDashboard extends Fragment {
                     teamMembers.setText(refUsersList.size());
 
                     // LOOPING THROUGH THE TEAM LIST AND EXTRACTING OUT PAID MEMBERS
-                    for (int i = 1; i <= refUsersList.size(); i++){
-                        if (refUsersList.get(i).isPaid()){
+                    for (int i = 1; i <= refUsersList.size(); i++) {
+                        if (refUsersList.get(i).isPaid()) {
                             paid_membersList.add(1);
                         }
                     }// COUNTING THE PAID MEMBERS LIST AND SETTING THE SIZE TO TEXT VIEW

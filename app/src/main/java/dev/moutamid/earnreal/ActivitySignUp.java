@@ -371,7 +371,7 @@ public class ActivitySignUp extends AppCompatActivity {
 
                     // ADDING USER INFORMATION TO THE REFERRED PERSON TEAM
                     refUser refUser = new refUser(emailStr, false);
-                    databaseReference.child("teams").child(referralCodeStr).push().setValue(refUser);
+                    databaseReference.child("teams").child(referralCodeStr).child("users").push().setValue(refUser);
 
                     // ADDING REFERRAL CODE TO THE USER DATABASE
                     databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
