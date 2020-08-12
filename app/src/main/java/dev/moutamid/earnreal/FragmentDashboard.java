@@ -21,12 +21,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FragmentDashboard extends Fragment {
     private static final String TAG = "FragmentDashboard";
 
     private ArrayList<refUser> refUsersList = new ArrayList<>();
-    private ArrayList<Integer> paid_membersList = new ArrayList<>();
+    private ArrayList<String> paid_membersList = new ArrayList<>();
+    private ArrayList<String> adsShownEmailList = new ArrayList<>();
 
     private TextView totalBalance, totalWithdraw, currentBalance, paidStatus, paidExpireDate, teamMembers, paidMembers, premiumAds, dailyAds;
 
@@ -54,12 +56,9 @@ public class FragmentDashboard extends Fragment {
         // GETTING PREMIUM ADS 
         getPremiumAdsQuantity();
 
-//        premiumAds.setText("15");
-
         // GETTING DAILY ADS
-//        dailyAds.setText("20");
+        dailyAds.setText("0");
 
-        // CONFIGURE THE PREMIUM ADS STRUCTURE
         // CONFIGURE THE DAILY ADS STRUCTURE
 
         return view;
@@ -70,6 +69,43 @@ public class FragmentDashboard extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
+                // IF USER NAME IS IN THE TEAMS CHILD
+                if (snapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+
+                    // IF USER HAS SOME PEOPLE WHOM ADS ARE SHOWN THEN THEY WILL DISPLAY HERE
+                    if (snapshot.child(mAuth.getCurrentUser().getUid()).hasChild("AdsShown")) {
+
+                        for (DataSnapshot dataSnapshot : snapshot.child(mAuth.getCurrentUser().getUid())
+                                .child("AdsShown").getChildren()) {
+
+                            // PEOPLE WHOSE PREMIUM ADS ARE ALREADY SHOWN TO USER
+                            adsShownEmailList.add(dataSnapshot.getValue(String.class));
+
+                        }
+
+                        // EXTRACTION OUT PEOPLE WHOSE ADS ARE ALREADY SHOWN
+                        List<String> union = new ArrayList<>(paid_membersList);
+                        union.addAll(adsShownEmailList);
+
+                        List<String> intersection = new ArrayList<>(paid_membersList);
+                        union.retainAll(adsShownEmailList);
+
+                        union.removeAll(intersection);
+
+                        // COUNTING AND SETTING THE NUMBER OF PREMIUM ADS WHICH SHOULD BE SHOWN
+                        premiumAds.setText(union.size() * 12);
+
+                    } else {
+                        // IF NO PEOPLE EXISTS WHOSE PREMIUM ADS ARE SHOWN
+
+                        premiumAds.setText(paid_membersList.size() * 12);
+                    }
+
+                } else {
+                    Log.i(TAG, "onDataChange: no child exists");
+
+                    premiumAds.setText("0");
+                }
             }
 
             @Override
@@ -127,11 +163,16 @@ public class FragmentDashboard extends Fragment {
                     // LOOPING THROUGH THE TEAM LIST AND EXTRACTING OUT PAID MEMBERS
                     for (int i = 1; i <= refUsersList.size(); i++) {
                         if (refUsersList.get(i).isPaid()) {
-                            paid_membersList.add(1);
+                            paid_membersList.add(refUsersList.get(i).getEmail());
                         }
                     }// COUNTING THE PAID MEMBERS LIST AND SETTING THE SIZE TO TEXT VIEW
                     paidMembers.setText(paid_membersList.size());
 
+                } else {
+                    Log.i(TAG, "onDataChange: No child exists");
+
+                    teamMembers.setText("0");
+                    paidMembers.setText("0");
                 }
             }
 
