@@ -151,14 +151,18 @@ public class FragmentDashboard extends Fragment {
                     refUsersList.clear();
                     paid_membersList.clear();
 
-
                     // LOOPING THROUGH ALL THE CHILDREN OF TEAM
                     for (DataSnapshot dataSnapshot : snapshot.child(mAuth.getCurrentUser().getUid()).child("users").getChildren()) {
 
                         refUsersList.add(dataSnapshot.getValue(refUser.class));
 
                     }// COUNTING AMOUNT OF TEAM MEMBERS AND SETTING TO TEXT VIEW
-                    teamMembers.setText(refUsersList.size());
+                    if (refUsersList == null) {
+                        teamMembers.setText("0");
+                        paidMembers.setText("0");
+                        return;
+                    }
+                    else teamMembers.setText(refUsersList.size());
 
                     // LOOPING THROUGH THE TEAM LIST AND EXTRACTING OUT PAID MEMBERS
                     for (int i = 1; i <= refUsersList.size(); i++) {
