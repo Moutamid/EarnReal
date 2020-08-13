@@ -26,6 +26,7 @@ import java.util.List;
 public class FragmentDashboard extends Fragment {
     private static final String TAG = "FragmentDashboard";
     private static final String PREMIUM_ADS_QUANTITY = "premium_ads_quantity";
+    private static final String PAID_STATUS = "paidStatus";
     private static final String FIRST_TIME_PREMIUM_ADS_QUANTITY = "first_time_premium_ads_quantity";
 
     private ArrayList<refUser> refUsersList = new ArrayList<>();
@@ -55,6 +56,8 @@ public class FragmentDashboard extends Fragment {
         // GETTING totalBalance, totalWithdraw, currentBalance, paidStatus, paidExpireDate
         getDetailsFromDatabase();
 
+        getPaidStatus();
+
         // GETTING teamMembers, paidMembers
         getTeamFromDatabase();
 
@@ -66,6 +69,28 @@ public class FragmentDashboard extends Fragment {
         dailyAds_tv.setText("0");
 
         return view;
+    }
+
+    private void getPaidStatus() {
+        databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
+                .child("paid").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                boolean is_paid = snapshot.getValue(Boolean.class);
+
+                utils.storeBoolean(getActivity(), PAID_STATUS, is_paid);
+
+                if (is_paid) paidStatus_tv.setText("PAID" + " UNTIL ");
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+
+            }
+        });
     }
 
     private void getPremiumAdsQuantity() {
@@ -90,20 +115,18 @@ public class FragmentDashboard extends Fragment {
                         // EXTRACTION OUT PEOPLE WHOSE ADS ARE ALREADY SHOWN
                         List<String> union = new ArrayList<>(paid_membersList);
                         union.addAll(adsShownEmailList);
-
                         List<String> intersection = new ArrayList<>(paid_membersList);
                         union.retainAll(adsShownEmailList);
-
                         union.removeAll(intersection);
 
-                        // COUNTING AND SETTING THE NUMBER OF PREMIUM ADS WHICH SHOULD BE SHOWN
-                        // AND MERGING THE FIRST TIME GIVEN PREMIUM ADS
-
+                        // RESETTING THE VALUES OF PREMIUM ADS IN THE PREFERENCES
                         utils.storeInteger(getActivity(), PREMIUM_ADS_QUANTITY, 0);
                         utils.storeInteger(getActivity(), PREMIUM_ADS_QUANTITY, union.size() * 12);
 
                         int first_time = utils.getStoredInteger(getActivity(), FIRST_TIME_PREMIUM_ADS_QUANTITY);
 
+                        // COUNTING AND SETTING THE NUMBER OF PREMIUM ADS WHICH SHOULD BE SHOWN
+                        // AND MERGING THE FIRST TIME GIVEN PREMIUM ADS
                         premiumAds_tv.setText(String.valueOf(union.size() * 12 + first_time));
 
                     } else {
@@ -125,7 +148,8 @@ public class FragmentDashboard extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Log.i(TAG, "onCancelled: " + error.toException());
+                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -138,10 +162,10 @@ public class FragmentDashboard extends Fragment {
                 if (snapshot.hasChild("details")) {
 
                     Details details = snapshot.child("details").getValue(Details.class);
-                    setValuesToTextViews(details.getTotalBlnc(), details.gettWithdrw(), details.getCvBlnce(), details.getPaidExpireDate(), details.isPaid());
+                    setValuesToTextViews(details.getTotalBlnc(), details.gettWithdrw(), details.getCvBlnce(), details.getPaidExpireDate());
 
                 } else
-                    setValuesToTextViews("0.00", "0.00", "0.00", "", false);
+                    setValuesToTextViews("0.00", "0.00", "0.00", "");
 
             }
 
@@ -199,13 +223,12 @@ public class FragmentDashboard extends Fragment {
         });
     }
 
-    private void setValuesToTextViews(String total_balance, String total_withdraw, String current_balance, String paid_expireDate, boolean is_paid) {
+    private void setValuesToTextViews(String total_balance, String total_withdraw, String current_balance, String paid_expireDate) {
         Log.i(TAG, "setValuesToTextViews: ");
 
         totalBalance_tv.setText(total_balance);
         totalWithdraw_tv.setText(total_withdraw);
         currentBalance_tv.setText(current_balance);
-        if (is_paid) paidStatus_tv.setText("PAID" + " UNTIL ");
 
         if (!TextUtils.isEmpty(paid_expireDate)) {
             paidExpireDate_tv.setVisibility(View.VISIBLE);
@@ -232,14 +255,12 @@ public class FragmentDashboard extends Fragment {
 
         private String paidExpireDate;
         private String totalBlnc, tWithdrw, cvBlnce;
-        private boolean paid;
 
-        public Details(String paidExpireDate, String totalBlnc, String tWithdrw, String cvBlnce, boolean paid) {
+        public Details(String paidExpireDate, String totalBlnc, String tWithdrw, String cvBlnce) {
             this.paidExpireDate = paidExpireDate;
             this.totalBlnc = totalBlnc;
             this.tWithdrw = tWithdrw;
             this.cvBlnce = cvBlnce;
-            this.paid = paid;
         }
 
         Details() {
@@ -277,13 +298,6 @@ public class FragmentDashboard extends Fragment {
             this.cvBlnce = cvBlnce;
         }
 
-        public boolean isPaid() {
-            return paid;
-        }
-
-        public void setPaid(boolean paid) {
-            this.paid = paid;
-        }
     }
 
     private static class refUser {

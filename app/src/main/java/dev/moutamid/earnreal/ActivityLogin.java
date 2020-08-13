@@ -32,6 +32,7 @@ public class ActivityLogin extends AppCompatActivity {
     private static final String USER_ID = "userReferralCode";
     private static final String USER_GENDER = "userGender";
     private static final String USER_NUMBER = "userNumber";
+    private static final String PAID_STATUS = "paidStatus";
     private static final String REFERRED_BY = "referredBy";
 
     private EditText emailEditText, passwordEditText;
@@ -216,12 +217,13 @@ public class ActivityLogin extends AppCompatActivity {
                     String email = user.getEmail();
                     String number = user.getNmbr();
                     String gender = user.getGender();
+                    boolean paidStatus = user.isPaid();
                     String refBy = "";
 
                     if (snapshot.child(mAuth.getCurrentUser().getUid()).hasChild("refBy"))
                         refBy = snapshot.child(mAuth.getCurrentUser().getUid()).child("refBy").getValue(String.class);
 
-                    storeUserInformationOffline(email, number, gender, refBy);
+                    storeUserInformationOffline(email, number, gender, refBy, paidStatus);
 
                 }
             }
@@ -237,12 +239,13 @@ public class ActivityLogin extends AppCompatActivity {
 
     }
 
-    private void storeUserInformationOffline(String email, String number, String gender, String refBy) {
+    private void storeUserInformationOffline(String email, String number, String gender, String refBy, boolean paidStatus) {
         Log.i(TAG, "storeUserInformationOffline: ");
 
         utils.storeString(ActivityLogin.this, USER_GENDER, gender);
         utils.storeString(ActivityLogin.this, USER_EMAIL, email);
         utils.storeString(ActivityLogin.this, USER_NUMBER, number);
+        utils.storeBoolean(ActivityLogin.this, PAID_STATUS, paidStatus);
         utils.storeString(ActivityLogin.this, USER_ID, mAuth.getCurrentUser().getUid());
 
         if (!TextUtils.isEmpty(refBy)){
@@ -307,14 +310,24 @@ public class ActivityLogin extends AppCompatActivity {
     private static class User {
 
         private String email, gender, nmbr;
+        private boolean paid;
 
-        public User(String email, String gender, String nmbr) {
+        public User(String email, String gender, String nmbr, boolean paid) {
             this.email = email;
             this.gender = gender;
             this.nmbr = nmbr;
+            this.paid = paid;
         }
 
         User() {
+        }
+
+        public boolean isPaid() {
+            return paid;
+        }
+
+        public void setPaid(boolean paid) {
+            this.paid = paid;
         }
 
         public String getEmail() {

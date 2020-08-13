@@ -37,6 +37,7 @@ public class ActivitySignUp extends AppCompatActivity {
     private static final String USER_GENDER = "userGender";
     private static final String USER_NUMBER = "userNumber";
     private static final String REFERRED_BY = "referredBy";
+    private static final String PAID_STATUS = "paidStatus";
     private static final String FIRST_TIME_PREMIUM_ADS_QUANTITY = "first_time_premium_ads_quantity";
 
     private LinearLayout maleBtnLayout, femaleBtnLayout;
@@ -520,7 +521,7 @@ public class ActivitySignUp extends AppCompatActivity {
 //        databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
 //                .child("gender").setValue(userGenderStr);
 
-        User user = new User(emailStr, numberStr, userGenderStr);
+        User user = new User(emailStr, numberStr, userGenderStr, false);
         databaseReference.child("users").child(mAuth.getCurrentUser().getUid()).setValue(user);
 
     }
@@ -543,14 +544,24 @@ public class ActivitySignUp extends AppCompatActivity {
     private static class User {
 
         private String email, gender, nmbr;
+        private boolean paid;
 
-        public User(String email, String gender, String nmbr) {
+        public User(String email, String gender, String nmbr, boolean paid) {
             this.email = email;
             this.gender = gender;
             this.nmbr = nmbr;
+            this.paid = paid;
         }
 
         User() {
+        }
+
+        public boolean isPaid() {
+            return paid;
+        }
+
+        public void setPaid(boolean paid) {
+            this.paid = paid;
         }
 
         public String getEmail() {
