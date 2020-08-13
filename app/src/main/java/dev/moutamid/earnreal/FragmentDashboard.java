@@ -53,12 +53,13 @@ public class FragmentDashboard extends Fragment {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.keepSynced(true);
 
-        // GETTING totalBalance, totalWithdraw, currentBalance, paidStatus, paidExpireDate
+        // GETTING TOTAL BALANCE, TOTAL WITHDRAW, CURRENT BALANCE, PAID EXPIRY DATE
         getDetailsFromDatabase();
 
+        // GETTING PAID STATUS
         getPaidStatus();
 
-        // GETTING teamMembers, paidMembers
+        // GETTING TEAM MEMBERS, PAID MEMBERS
         getTeamFromDatabase();
 
         // GETTING PREMIUM ADS 
@@ -87,13 +88,21 @@ public class FragmentDashboard extends Fragment {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                Log.i(TAG, "onCancelled: " +error.toException());
 
+                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
 
             }
         });
     }
 
     private void getPremiumAdsQuantity() {
+
+        if (!utils.getStoredBoolean(getActivity(), PAID_STATUS)) {
+            premiumAds_tv.setText(
+                    String.valueOf(utils.getStoredInteger(getActivity(), FIRST_TIME_PREMIUM_ADS_QUANTITY)));
+            return;
+        }
         databaseReference.child("teams").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
