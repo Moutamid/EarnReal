@@ -42,6 +42,9 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        if (checkLoginStatus())
+            return;
+
         initializeViews();
         toggleDrawer();
         initializeDefaultFragment(savedInstanceState, 0);
@@ -49,10 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
+    private boolean checkLoginStatus(){
         // USER IS NOT SIGNED IN
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
 
@@ -61,7 +61,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             finish();
             startActivity(intent);
+
+            return true;
         }
+        return false;
     }
 
 
@@ -222,6 +225,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
+
+                FirebaseAuth.getInstance().signOut();
+
+                // REMOVING ALL ACTIVITIES AND STARTING WELCOME ACTIVITY
+                Intent intent = new Intent(MainActivity.this, ActivityWelcome.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                finish();
+                startActivity(intent);
+
                 Toast.makeText(MainActivity.this, "Done", Toast.LENGTH_SHORT).show();
                 dialogInterface.dismiss();
             }

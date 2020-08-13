@@ -1,5 +1,6 @@
 package dev.moutamid.earnreal;
 
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -30,7 +31,8 @@ public class FragmentDashboard extends Fragment {
     private ArrayList<String> paid_membersList = new ArrayList<>();
     private ArrayList<String> adsShownEmailList = new ArrayList<>();
 
-    private TextView totalBalance, totalWithdraw, currentBalance, paidStatus, paidExpireDate, teamMembers, paidMembers, premiumAds, dailyAds;
+    private TextView totalBalance_tv, totalWithdraw_tv, currentBalance_tv, paidMembers_tv;
+    private TextView paidStatus_tv, paidExpireDate_tv, teamMembers_tv, premiumAds_tv, dailyAds_tv;
 
     private DatabaseReference databaseReference;
     private FirebaseAuth mAuth;
@@ -57,7 +59,7 @@ public class FragmentDashboard extends Fragment {
         getPremiumAdsQuantity();
 
         // GETTING DAILY ADS
-        dailyAds.setText("0");
+        dailyAds_tv.setText("0");
 
         // CONFIGURE THE DAILY ADS STRUCTURE
 
@@ -93,18 +95,18 @@ public class FragmentDashboard extends Fragment {
                         union.removeAll(intersection);
 
                         // COUNTING AND SETTING THE NUMBER OF PREMIUM ADS WHICH SHOULD BE SHOWN
-                        premiumAds.setText(union.size() * 12);
+                        premiumAds_tv.setText(union.size() * 12);
 
                     } else {
                         // IF NO PEOPLE EXISTS WHOSE PREMIUM ADS ARE SHOWN
 
-                        premiumAds.setText(paid_membersList.size() * 12);
+                        premiumAds_tv.setText(String.valueOf(paid_membersList.size() * 12));
                     }
 
                 } else {
                     Log.i(TAG, "onDataChange: no child exists");
 
-                    premiumAds.setText("0");
+                    premiumAds_tv.setText("0");
                 }
             }
 
@@ -157,26 +159,21 @@ public class FragmentDashboard extends Fragment {
                         refUsersList.add(dataSnapshot.getValue(refUser.class));
 
                     }// COUNTING AMOUNT OF TEAM MEMBERS AND SETTING TO TEXT VIEW
-                    if (refUsersList == null) {
-                        teamMembers.setText("0");
-                        paidMembers.setText("0");
-                        return;
-                    }
-                    else teamMembers.setText(refUsersList.size());
+                    teamMembers_tv.setText(String.valueOf(refUsersList.size()));
 
                     // LOOPING THROUGH THE TEAM LIST AND EXTRACTING OUT PAID MEMBERS
-                    for (int i = 1; i <= refUsersList.size(); i++) {
+                    for (int i = 0; i <= refUsersList.size() - 1; i++) {
                         if (refUsersList.get(i).isPaid()) {
                             paid_membersList.add(refUsersList.get(i).getEmail());
                         }
                     }// COUNTING THE PAID MEMBERS LIST AND SETTING THE SIZE TO TEXT VIEW
-                    paidMembers.setText(paid_membersList.size());
+                    paidMembers_tv.setText(String.valueOf(paid_membersList.size()));
 
                 } else {
                     Log.i(TAG, "onDataChange: No child exists");
 
-                    teamMembers.setText("0");
-                    paidMembers.setText("0");
+                    teamMembers_tv.setText("0");
+                    paidMembers_tv.setText("0");
                 }
             }
 
@@ -192,29 +189,29 @@ public class FragmentDashboard extends Fragment {
     private void setValuesToTextViews(String total_balance, String total_withdraw, String current_balance, String paid_expireDate, boolean is_paid) {
         Log.i(TAG, "setValuesToTextViews: ");
 
-        totalBalance.setText(total_balance);
-        totalWithdraw.setText(total_withdraw);
-        currentBalance.setText(current_balance);
-        if (is_paid) paidStatus.setText("PAID" + " UNTIL ");
+        totalBalance_tv.setText(total_balance);
+        totalWithdraw_tv.setText(total_withdraw);
+        currentBalance_tv.setText(current_balance);
+        if (is_paid) paidStatus_tv.setText("PAID" + " UNTIL ");
 
         if (!TextUtils.isEmpty(paid_expireDate)) {
-            paidExpireDate.setVisibility(View.VISIBLE);
-            paidExpireDate.setText(paid_expireDate);
+            paidExpireDate_tv.setVisibility(View.VISIBLE);
+            paidExpireDate_tv.setText(paid_expireDate);
         }
     }
 
     private void initViews(View v) {
         Log.i(TAG, "initViews: ");
 
-        totalBalance = v.findViewById(R.id.total_balance_tv_dashboard);
-        totalWithdraw = v.findViewById(R.id.total_withdraw_tv_dashboard);
-        currentBalance = v.findViewById(R.id.current_balance_tv_dashboard);
-        paidStatus = v.findViewById(R.id.paid_status_tv_dashboard);
-        paidExpireDate = v.findViewById(R.id.paid_status_date_tv_dashboard);
-        teamMembers = v.findViewById(R.id.team_members_tv_dashboard);
-        paidMembers = v.findViewById(R.id.paid_members_tv_dashboard);
-        premiumAds = v.findViewById(R.id.premium_ads_tv_dashboard);
-        dailyAds = v.findViewById(R.id.daily_ads_tv_dashboard);
+        totalBalance_tv = v.findViewById(R.id.total_balance_tv_dashboard);
+        totalWithdraw_tv = v.findViewById(R.id.total_withdraw_tv_dashboard);
+        currentBalance_tv = v.findViewById(R.id.current_balance_tv_dashboard);
+        paidStatus_tv = v.findViewById(R.id.paid_status_tv_dashboard);
+        paidExpireDate_tv = v.findViewById(R.id.paid_status_date_tv_dashboard);
+        teamMembers_tv = v.findViewById(R.id.team_members_tv_dashboard);
+        paidMembers_tv = v.findViewById(R.id.paid_members_tv_dashboard);
+        premiumAds_tv = v.findViewById(R.id.premium_ads_tv_dashboard);
+        dailyAds_tv = v.findViewById(R.id.daily_ads_tv_dashboard);
 
     }
 

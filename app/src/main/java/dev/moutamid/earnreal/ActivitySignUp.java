@@ -131,27 +131,33 @@ public class ActivitySignUp extends AppCompatActivity {
 
                 String nmbr = charSequence.toString();
 
-                // FIRST CHARACTER OF THE NUMBER IS NOT 0
-                if (!nmbr.substring(0, 1).equals("0")) {
-                    phoneNmbrEditText.setError("Number should start from 0!");
-                    isNmbrValid = false;
+                if (nmbr.length() == 0)
                     return;
-                }
 
+                // FIRST CHARACTER OF THE NUMBER IS NOT 0
+                if (nmbr.length() == 1)
+                    if (!nmbr.substring(0, 1).equals("0")) {
+                        phoneNmbrEditText.setError("Number should start from 0!");
+                        isNmbrValid = false;
+                        return;
+                    }
                 // SECOND CHARACTER OF THE NUMBER IS NOT 3
-                if (!nmbr.substring(0, 2).equals("03")){
-                    phoneNmbrEditText.setError("Number should start like 03...!");
-                    isNmbrValid = false;
-                    return;
-                }
+                if (nmbr.length() == 2)
+                    if (!nmbr.substring(0, 2).equals("03")) {
+                        phoneNmbrEditText.setError("Number should start like 03...!");
+                        isNmbrValid = false;
+                        return;
+                    }
 
                 // THIRD CHARACTER OF THE NUMBER IS 5, 6, 7, 8 OR 9 WHICH ARE INVALID
+                if(nmbr.length() >= 3)
                 if (nmbr.substring(0, 3).equals("035")
                         || nmbr.substring(0, 3).equals("036")
                         || nmbr.substring(0, 3).equals("037")
                         || nmbr.substring(0, 3).equals("038")
                         || nmbr.substring(0, 3).equals("039")
-                ){
+
+                ) {
                     phoneNmbrEditText.setError("Number is invalid!");
                     isNmbrValid = false;
                     return;
@@ -270,7 +276,7 @@ public class ActivitySignUp extends AppCompatActivity {
         }
 
         // PHONE NUMBER IS INVALID
-        if (!isNmbrValid){
+        if (!isNmbrValid) {
             mDialog.dismiss();
             phoneNmbrEditText.setError("Please enter a valid number!");
             phoneNmbrEditText.requestFocus();
@@ -525,6 +531,15 @@ public class ActivitySignUp extends AppCompatActivity {
 
         private String email, gender, nmbr;
 
+        public User(String email, String gender, String nmbr) {
+            this.email = email;
+            this.gender = gender;
+            this.nmbr = nmbr;
+        }
+
+        User() {
+        }
+
         public String getEmail() {
             return email;
         }
@@ -548,14 +563,6 @@ public class ActivitySignUp extends AppCompatActivity {
         public void setNmbr(String nmbr) {
             this.nmbr = nmbr;
         }
-
-        public User(String email, String gender, String nmbr) {
-            this.email = email;
-            this.gender = gender;
-            this.nmbr = nmbr;
-        }
-
-        User(){}
 
     }
 
