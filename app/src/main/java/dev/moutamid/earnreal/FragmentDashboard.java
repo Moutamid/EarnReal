@@ -1,6 +1,5 @@
 package dev.moutamid.earnreal;
 
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -26,6 +25,7 @@ import java.util.List;
 
 public class FragmentDashboard extends Fragment {
     private static final String TAG = "FragmentDashboard";
+    private static final String PREMIUM_ADS_QUANTITY = "premium_ads_quantity";
 
     private ArrayList<refUser> refUsersList = new ArrayList<>();
     private ArrayList<String> paid_membersList = new ArrayList<>();
@@ -36,6 +36,8 @@ public class FragmentDashboard extends Fragment {
 
     private DatabaseReference databaseReference;
     private FirebaseAuth mAuth;
+
+    private Utils utils = new Utils();
 
     @Nullable
     @Override
@@ -58,10 +60,9 @@ public class FragmentDashboard extends Fragment {
         // GETTING PREMIUM ADS 
         getPremiumAdsQuantity();
 
+        // CONFIGURE THE DAILY ADS STRUCTURE
         // GETTING DAILY ADS
         dailyAds_tv.setText("0");
-
-        // CONFIGURE THE DAILY ADS STRUCTURE
 
         return view;
     }
@@ -95,18 +96,22 @@ public class FragmentDashboard extends Fragment {
                         union.removeAll(intersection);
 
                         // COUNTING AND SETTING THE NUMBER OF PREMIUM ADS WHICH SHOULD BE SHOWN
-                        premiumAds_tv.setText(union.size() * 12);
+                        // AND MERGING THE FIRST TIME GIVEN PREMIUM ADS
+
+                        int first_time = utils.getStoredInteger(getActivity(), PREMIUM_ADS_QUANTITY);
+                        premiumAds_tv.setText(String.valueOf(union.size() * 12 + first_time));
 
                     } else {
                         // IF NO PEOPLE EXISTS WHOSE PREMIUM ADS ARE SHOWN
 
-                        premiumAds_tv.setText(String.valueOf(paid_membersList.size() * 12));
+                        int first_time = utils.getStoredInteger(getActivity(), PREMIUM_ADS_QUANTITY);
+                        premiumAds_tv.setText(String.valueOf(paid_membersList.size() * 12 + first_time));
                     }
 
                 } else {
                     Log.i(TAG, "onDataChange: no child exists");
 
-                    premiumAds_tv.setText("0");
+                    premiumAds_tv.setText(String.valueOf(utils.getStoredInteger(getActivity(), PREMIUM_ADS_QUANTITY)));
                 }
             }
 
