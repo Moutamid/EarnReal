@@ -75,6 +75,7 @@ public class FragmentDashboard extends Fragment {
     private void getDailyAdsQuantity() {
         if (!utils.getStoredBoolean(getActivity(), PAID_STATUS)){
             dailyAds_tv.setText("0");
+            return;
         }
     }
 
