@@ -67,9 +67,15 @@ public class FragmentDashboard extends Fragment {
 
         // CONFIGURE THE DAILY ADS STRUCTURE
         // GETTING DAILY ADS
-        dailyAds_tv.setText("0");
+        getDailyAdsQuantity();
 
         return view;
+    }
+
+    private void getDailyAdsQuantity() {
+        if (!utils.getStoredBoolean(getActivity(), PAID_STATUS)){
+            dailyAds_tv.setText("0");
+        }
     }
 
     private void getPaidStatus() {
@@ -97,15 +103,15 @@ public class FragmentDashboard extends Fragment {
     }
 
     private void getPremiumAdsQuantity() {
-
-        if (!utils.getStoredBoolean(getActivity(), PAID_STATUS)) {
-            premiumAds_tv.setText(
-                    String.valueOf(utils.getStoredInteger(getActivity(), FIRST_TIME_PREMIUM_ADS_QUANTITY)));
-            return;
-        }
         databaseReference.child("teams").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                if (!utils.getStoredBoolean(getActivity(), PAID_STATUS)) {
+                    premiumAds_tv.setText(
+                            String.valueOf(utils.getStoredInteger(getActivity(), FIRST_TIME_PREMIUM_ADS_QUANTITY)));
+                    return;
+                }
 
                 // IF USER NAME IS IN THE TEAMS CHILD
                 if (snapshot.hasChild(mAuth.getCurrentUser().getUid())) {
