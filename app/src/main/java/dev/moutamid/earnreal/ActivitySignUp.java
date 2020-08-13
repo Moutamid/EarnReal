@@ -37,7 +37,7 @@ public class ActivitySignUp extends AppCompatActivity {
     private static final String USER_GENDER = "userGender";
     private static final String USER_NUMBER = "userNumber";
     private static final String REFERRED_BY = "referredBy";
-    private static final String PREMIUM_ADS_QUANTITY = "premium_ads_quantity";
+    private static final String FIRST_TIME_PREMIUM_ADS_QUANTITY = "first_time_premium_ads_quantity";
 
     private LinearLayout maleBtnLayout, femaleBtnLayout;
     private EditText emailAddressEditText, phoneNmbrEditText, passwordEditText, confirmPasswordEditText, referralCodeEditText;
@@ -337,7 +337,7 @@ public class ActivitySignUp extends AppCompatActivity {
             Toast.makeText(ActivitySignUp.this, "You are already signed in", Toast.LENGTH_SHORT).show();
 
             // ADDING PREMIUM ADS QUANTITY TO SHARED PREFERENCES
-            utils.storeInteger(ActivitySignUp.this, PREMIUM_ADS_QUANTITY, 12);
+            utils.storeInteger(ActivitySignUp.this, FIRST_TIME_PREMIUM_ADS_QUANTITY, 12);
 
             // REMOVING ALL ACTIVITIES AND STARTING MAIN ACTIVITY
             Intent intent = new Intent(ActivitySignUp.this, MainActivity.class);
@@ -394,7 +394,7 @@ public class ActivitySignUp extends AppCompatActivity {
                         Toast.makeText(ActivitySignUp.this, "Sign up successful", Toast.LENGTH_SHORT).show();
 
                         // ADDING PREMIUM ADS QUANTITY TO SHARED PREFERENCES
-                        utils.storeInteger(ActivitySignUp.this, PREMIUM_ADS_QUANTITY, 12);
+                        utils.storeInteger(ActivitySignUp.this, FIRST_TIME_PREMIUM_ADS_QUANTITY, 12);
 
                         // REMOVING ALL ACTIVITIES AND STARTING MAIN ACTIVITY
                         Intent intent = new Intent(ActivitySignUp.this, MainActivity.class);
@@ -439,7 +439,7 @@ public class ActivitySignUp extends AppCompatActivity {
                     Toast.makeText(ActivitySignUp.this, "Sign up successful", Toast.LENGTH_SHORT).show();
 
                     // ADDING PREMIUM ADS QUANTITY TO SHARED PREFERENCES
-                    utils.storeInteger(ActivitySignUp.this, PREMIUM_ADS_QUANTITY, 12);
+                    utils.storeInteger(ActivitySignUp.this, FIRST_TIME_PREMIUM_ADS_QUANTITY, 12);
 
                     // REMOVING ALL ACTIVITIES AND STARTING MAIN ACTIVITY
                     Intent intent = new Intent(ActivitySignUp.this, MainActivity.class);
@@ -475,7 +475,7 @@ public class ActivitySignUp extends AppCompatActivity {
                     Toast.makeText(ActivitySignUp.this, "Sign up successful", Toast.LENGTH_SHORT).show();
 
                     // ADDING PREMIUM ADS QUANTITY TO SHARED PREFERENCES
-                    utils.storeInteger(ActivitySignUp.this, PREMIUM_ADS_QUANTITY, 12);
+                    utils.storeInteger(ActivitySignUp.this, FIRST_TIME_PREMIUM_ADS_QUANTITY, 12);
 
                     // REMOVING ALL ACTIVITIES AND STARTING MAIN ACTIVITY
                     Intent intent = new Intent(ActivitySignUp.this, MainActivity.class);

@@ -26,6 +26,7 @@ import java.util.List;
 public class FragmentDashboard extends Fragment {
     private static final String TAG = "FragmentDashboard";
     private static final String PREMIUM_ADS_QUANTITY = "premium_ads_quantity";
+    private static final String FIRST_TIME_PREMIUM_ADS_QUANTITY = "first_time_premium_ads_quantity";
 
     private ArrayList<refUser> refUsersList = new ArrayList<>();
     private ArrayList<String> paid_membersList = new ArrayList<>();
@@ -98,20 +99,27 @@ public class FragmentDashboard extends Fragment {
                         // COUNTING AND SETTING THE NUMBER OF PREMIUM ADS WHICH SHOULD BE SHOWN
                         // AND MERGING THE FIRST TIME GIVEN PREMIUM ADS
 
-                        int first_time = utils.getStoredInteger(getActivity(), PREMIUM_ADS_QUANTITY);
+                        utils.storeInteger(getActivity(), PREMIUM_ADS_QUANTITY, 0);
+                        utils.storeInteger(getActivity(), PREMIUM_ADS_QUANTITY, union.size() * 12);
+
+                        int first_time = utils.getStoredInteger(getActivity(), FIRST_TIME_PREMIUM_ADS_QUANTITY);
+
                         premiumAds_tv.setText(String.valueOf(union.size() * 12 + first_time));
 
                     } else {
                         // IF NO PEOPLE EXISTS WHOSE PREMIUM ADS ARE SHOWN
 
-                        int first_time = utils.getStoredInteger(getActivity(), PREMIUM_ADS_QUANTITY);
+                        utils.storeInteger(getActivity(), PREMIUM_ADS_QUANTITY, 0);
+                        utils.storeInteger(getActivity(), PREMIUM_ADS_QUANTITY, paid_membersList.size() * 12);
+
+                        int first_time = utils.getStoredInteger(getActivity(), FIRST_TIME_PREMIUM_ADS_QUANTITY);
                         premiumAds_tv.setText(String.valueOf(paid_membersList.size() * 12 + first_time));
                     }
 
                 } else {
                     Log.i(TAG, "onDataChange: no child exists");
 
-                    premiumAds_tv.setText(String.valueOf(utils.getStoredInteger(getActivity(), PREMIUM_ADS_QUANTITY)));
+                    premiumAds_tv.setText(String.valueOf(utils.getStoredInteger(getActivity(), FIRST_TIME_PREMIUM_ADS_QUANTITY)));
                 }
             }
 
