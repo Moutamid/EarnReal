@@ -19,13 +19,16 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.instacart.library.truetime.TrueTime;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class FragmentDashboard extends Fragment {
     private static final String TAG = "FragmentDashboard";
     private static final String PREMIUM_ADS_QUANTITY = "premium_ads_quantity";
+    private static final String DAILY_ADS_QUANTITY = "premium_ads_quantity";
     private static final String PAID_STATUS = "paidStatus";
     private static final String FIRST_TIME_PREMIUM_ADS_QUANTITY = "first_time_premium_ads_quantity";
 
@@ -73,29 +76,48 @@ public class FragmentDashboard extends Fragment {
     }
 
     private void getDailyAdsQuantity() {
-        if (!utils.getStoredBoolean(getActivity(), PAID_STATUS)){
-            dailyAds_tv.setText("0");
-            return;
+
+        if (TrueTime.isInitialized()){
+            Date dateTime = TrueTime.now();
+            Toast.makeText(getActivity(), dateTime.toString(), Toast.LENGTH_SHORT).show();
         }
+
+        //        if (!utils.getStoredBoolean(getActivity(), PAID_STATUS)){
+//            dailyAds_tv.setText("0");
+//            return;
+//        }
+//
+//        boolean certainTimeHasPassed = true;
+//
+//        if (certainTimeHasPassed){
+//
+//            utils.storeInteger(getActivity(), DAILY_ADS_QUANTITY, 20);
+//
+//        }
+
     }
 
     private void getPaidStatus() {
         databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
-                .child("paid").addListenerForSingleValueEvent(new ValueEventListener() {
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                boolean is_paid = snapshot.getValue(Boolean.class);
+                if (snapshot.hasChild("paid")) {
 
-                utils.storeBoolean(getActivity(), PAID_STATUS, is_paid);
+                    boolean is_paid = snapshot.child("paid").getValue(Boolean.class);
 
-                if (is_paid) paidStatus_tv.setText("PAID" + " UNTIL ");
+                    utils.storeBoolean(getActivity(), PAID_STATUS, is_paid);
+
+                    if (is_paid) paidStatus_tv.setText("PAID" + " UNTIL ");
+
+                }
 
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Log.i(TAG, "onCancelled: " +error.toException());
+                Log.i(TAG, "onCancelled: " + error.toException());
 
                 Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
 

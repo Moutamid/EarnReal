@@ -3,6 +3,7 @@ package dev.moutamid.earnreal;
 
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,6 +20,9 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.instacart.library.truetime.TrueTime;
+
+import java.io.IOException;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -50,6 +54,23 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initializeDefaultFragment(savedInstanceState, 0);
         //setUrduSwitchListener();
 
+
+        new GetTimeBuilder();
+    }
+
+    private class GetTimeBuilder extends AsyncTask<Void, Void, Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            try {
+                TrueTime.build().initialize();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return null;
+        }
     }
 
     private boolean checkLoginStatus(){
