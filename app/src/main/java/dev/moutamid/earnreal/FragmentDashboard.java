@@ -1,5 +1,6 @@
 package dev.moutamid.earnreal;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -86,6 +87,151 @@ public class FragmentDashboard extends Fragment {
         LinearLayout paidmemberlayout = getActivity().findViewById(R.id.paid_members_layout_dashboard);
         LinearLayout premiumlayout = getActivity().findViewById(R.id.premium_ads_layout_dashboard);
         LinearLayout dailylayout = getActivity().findViewById(R.id.daily_ads_layout_dashboard);
+
+        totalbalancelayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                utils.showDialog(getActivity(), "", "This field will show you all the money you have earned so far.", "Ok", "", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+            }
+        });
+        totalwithdrawlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                utils.showDialog(getActivity(), "", "This field will show you all the money you have received so far.", "Ok", "", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+            }
+        });
+        currentbalancelayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                utils.showDialog(getActivity(), "", "This field will show you the money you have right now in your account. \nYou can withdraw this money at any time.", "Ok", "", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+            }
+        });
+        accountstatuslayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                utils.showDialog(getActivity(), "", "This field will show you your account premium status. \nUpgrade now to get daily ads and earn even more.", "Ok", "", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+            }
+        });
+        teamlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                utils.showDialog(getActivity(), "", "This field will show you all the members you have invited using your referral code.", "Ok", "", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+            }
+        });
+        paidmemberlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                utils.showDialog(getActivity(), "", "This field will show you all the members you have invited and who have paid and upgraded their accounts.", "Ok", "", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+            }
+        });
+        premiumlayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                utils.showDialog(getActivity(), "", "This field will show you the amount of premium ads you can watch. \nYou will get 15 ads on every paid member of your team. \nEvery single ad will give you Rs: 5.00 \nThe more you invite people to get a paid account, the more you earn.", "Ok", "", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+            }
+        });
+        dailylayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (utils.getStoredBoolean(getActivity(), PAID_STATUS)) {
+                    utils.showDialog(getActivity(), "", "This field will show you the amount of daily ads you get. \nOn everyday you will get 20 ads. \nYou will get Rs: 0.20 (20 paisa) on every single ad you watch.", "Ok", "", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    }, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            dialogInterface.dismiss();
+                        }
+                    });
+                    return;
+                }
+
+                utils.showDialog(getActivity(), "", "This field will show you the amount of daily ads you will. \nYou have to be a paid member to unlock daily ads. \nYou can earn a lot of money monthly through this.", "Ok", "", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                }, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+            }
+        });
+
     }
 
     private void getDailyAdsQuantity() {
@@ -96,7 +242,7 @@ public class FragmentDashboard extends Fragment {
         }
 
         // USER IS PAID AND SHOWING ADD FOR THE FIRST TIME
-        if (!utils.getStoredBoolean(getActivity(), "firstTime")){
+        if (!utils.getStoredBoolean(getActivity(), "firstTime")) {
 
             utils.storeInteger(getActivity(), DAILY_ADS_QUANTITY, 20);
             dailyAds_tv.setText("20");
@@ -108,7 +254,7 @@ public class FragmentDashboard extends Fragment {
         }
 
         // IF TODAY'S DATE MATCHES THE NEXT DATE SAVED IN PREFERENCES
-        if (utils.getDate(getActivity()).equals(utils.getStoredString(getActivity(), NEXT_DATE))){
+        if (utils.getDate(getActivity()).equals(utils.getStoredString(getActivity(), NEXT_DATE))) {
 
             utils.storeInteger(getActivity(), DAILY_ADS_QUANTITY, 20);
             dailyAds_tv.setText("20");
