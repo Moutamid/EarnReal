@@ -29,6 +29,7 @@ public class FragmentDashboard extends Fragment {
     private static final String DAILY_ADS_QUANTITY = "premium_ads_quantity";
     private static final String PAID_STATUS = "paidStatus";
     private static final String FIRST_TIME_PREMIUM_ADS_QUANTITY = "first_time_premium_ads_quantity";
+    private static final String NEXT_DATE = "nextDate";
 
     private ArrayList<refUser> refUsersList = new ArrayList<>();
     private ArrayList<String> paid_membersList = new ArrayList<>();
@@ -75,20 +76,33 @@ public class FragmentDashboard extends Fragment {
 
     private void getDailyAdsQuantity() {
 
+        boolean ispaid =utils.getStoredBoolean(getActivity(), PAID_STATUS);
 
+        // USER IS NOT PAID
+        if (!ispaid) {
+            return;
+        }
 
-        //        if (!utils.getStoredBoolean(getActivity(), PAID_STATUS)){
-//            dailyAds_tv.setText("0");
-//            return;
-//        }
-//
-//        boolean certainTimeHasPassed = true;
-//
-//        if (certainTimeHasPassed){
-//
-//            utils.storeInteger(getActivity(), DAILY_ADS_QUANTITY, 20);
-//
-//        }
+        // USER IS PAID AND SHOWING ADD FOR THE FIRST TIME
+        if (!utils.getStoredBoolean(getActivity(), "firstTime")){
+
+            utils.storeInteger(getActivity(), DAILY_ADS_QUANTITY, 20);
+            dailyAds_tv.setText("20");
+
+            utils.storeString(getActivity(), NEXT_DATE, utils.getNextDate(getActivity()));
+
+            return;
+        }
+
+        // IF TODAY"S DATE MATCHES THE NEXT DATE SAVED IN PREFERENCES
+        if (utils.getDate(getActivity()).equals(utils.getStoredString(getActivity(), NEXT_DATE))){
+
+            utils.storeInteger(getActivity(), DAILY_ADS_QUANTITY, 20);
+            dailyAds_tv.setText("20");
+
+            utils.storeString(getActivity(), NEXT_DATE, utils.getNextDate(getActivity()));
+
+        }
 
     }
 

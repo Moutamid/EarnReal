@@ -117,19 +117,29 @@ public class Utils {
     }
 
     public String getDate(Context context) {
-        Date date = SecureTimer.with(context).getCurrentDate();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        return sdf.format(date);
+
+        try {
+
+            Date date = SecureTimer.with(context).getCurrentDate();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            return sdf.format(date);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "Error";
 
     }
 
     public String getNextDate(Context context){
 
-        Date date = SecureTimer.with(context).getCurrentDate();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-
-        Calendar c = Calendar.getInstance();
         try {
+            Date date = SecureTimer.with(context).getCurrentDate();
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
+            Calendar c = Calendar.getInstance();
+
             c.setTime(sdf.parse(sdf.format(date)));
             c.add(Calendar.DATE, 1);
             return sdf.format(c.getTime());
