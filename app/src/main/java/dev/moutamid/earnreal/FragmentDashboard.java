@@ -69,17 +69,17 @@ public class FragmentDashboard extends Fragment {
 
         // CONFIGURE THE DAILY ADS STRUCTURE
         // GETTING DAILY ADS
-        getDailyAdsQuantity();
+        //getDailyAdsQuantity();
+        dailyAds_tv.setText(utils.getDate(getActivity()));
+        dailyAds_tv.setText(dailyAds_tv.getText().toString()+ " \n \n " + utils.getNextDate(getActivity()));
 
         return view;
     }
 
     private void getDailyAdsQuantity() {
 
-        boolean ispaid =utils.getStoredBoolean(getActivity(), PAID_STATUS);
-
         // USER IS NOT PAID
-        if (!ispaid) {
+        if (!utils.getStoredBoolean(getActivity(), PAID_STATUS)) {
             return;
         }
 
@@ -91,10 +91,11 @@ public class FragmentDashboard extends Fragment {
 
             utils.storeString(getActivity(), NEXT_DATE, utils.getNextDate(getActivity()));
 
+            utils.storeBoolean(getActivity(), "firstTime", true);
             return;
         }
 
-        // IF TODAY"S DATE MATCHES THE NEXT DATE SAVED IN PREFERENCES
+        // IF TODAY'S DATE MATCHES THE NEXT DATE SAVED IN PREFERENCES
         if (utils.getDate(getActivity()).equals(utils.getStoredString(getActivity(), NEXT_DATE))){
 
             utils.storeInteger(getActivity(), DAILY_ADS_QUANTITY, 20);
@@ -102,8 +103,11 @@ public class FragmentDashboard extends Fragment {
 
             utils.storeString(getActivity(), NEXT_DATE, utils.getNextDate(getActivity()));
 
+            return;
         }
 
+        // IF DATE IS'NT CHANGING THEN SHOW THE REAL QUANTITY OF ADS
+        dailyAds_tv.setText(utils.getStoredInteger(getActivity(), DAILY_ADS_QUANTITY));
     }
 
     private void getPaidStatus() {
