@@ -14,8 +14,11 @@ import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.krishna.securetimer.SecureTimer;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Random;
 
@@ -113,11 +116,27 @@ public class Utils {
 
     }
 
-    public String getTime() {
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("hh:mm a");
+    public String getDate(Context context) {
+        Date date = SecureTimer.with(context).getCurrentDate();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         return sdf.format(date);
 
+    }
+
+    public String getNextDate(Context context){
+
+        Date date = SecureTimer.with(context).getCurrentDate();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(sdf.parse(sdf.format(date)));
+            c.add(Calendar.DATE, 1);
+            return sdf.format(c.getTime());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return "Error";
     }
 
     public void showSnackBar(View view, String msg) {

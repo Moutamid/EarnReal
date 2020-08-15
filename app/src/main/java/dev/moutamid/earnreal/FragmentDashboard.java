@@ -19,12 +19,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.krishna.securetimer.SecureTimer;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 
 public class FragmentDashboard extends Fragment {
@@ -79,25 +75,7 @@ public class FragmentDashboard extends Fragment {
 
     private void getDailyAdsQuantity() {
 
-        try {
 
-            Date date = SecureTimer.with(getActivity()).getCurrentDate();
-            //DATE.TO STRING
-            totalBalance_tv.setText(date.toString() + " date.toString \n");
-            // DATE
-            totalBalance_tv.setText(totalBalance_tv.getText().toString() +date.getDate()+ " date.getDate \n");
-
-            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-            totalBalance_tv.setText(totalBalance_tv.getText().toString() +sdf.format(date) + " SimpleDateFormat \n");
-
-            Calendar c = Calendar.getInstance();
-            c.setTime(sdf.parse(sdf.format(date)));
-            c.add(Calendar.DATE, 1);
-            totalBalance_tv.setText(totalBalance_tv.getText().toString() +sdf.format(c.getTime()) + " next date");
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
         //        if (!utils.getStoredBoolean(getActivity(), PAID_STATUS)){
 //            dailyAds_tv.setText("0");
