@@ -521,7 +521,7 @@ public class ActivitySignUp extends AppCompatActivity {
 //        databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
 //                .child("gender").setValue(userGenderStr);
 
-        User user = new User(emailStr, numberStr, userGenderStr, false);
+        User user = new User(emailStr, userGenderStr, numberStr, false);
         databaseReference.child("users").child(mAuth.getCurrentUser().getUid()).setValue(user);
 
     }

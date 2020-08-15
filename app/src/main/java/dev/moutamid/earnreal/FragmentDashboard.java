@@ -73,20 +73,20 @@ public class FragmentDashboard extends Fragment {
         getDailyAdsQuantity();
 
         // SETTING INFORMATION DIALOGS ON ALL THE LAYOUTS
-        setDialogsOnAllLayouts();
+        setDialogsOnAllLayouts(view);
 
         return view;
     }
 
-    private void setDialogsOnAllLayouts() {
-        LinearLayout totalbalancelayout = getActivity().findViewById(R.id.total_balance_layout_dashboard);
-        LinearLayout totalwithdrawlayout = getActivity().findViewById(R.id.total_withdraw_layout_dashboard);
-        LinearLayout currentbalancelayout = getActivity().findViewById(R.id.current_balance_layout_dashboard);
-        LinearLayout accountstatuslayout = getActivity().findViewById(R.id.account_status_layout_dashboard);
-        LinearLayout teamlayout = getActivity().findViewById(R.id.team_members_layout_dashboard);
-        LinearLayout paidmemberlayout = getActivity().findViewById(R.id.paid_members_layout_dashboard);
-        LinearLayout premiumlayout = getActivity().findViewById(R.id.premium_ads_layout_dashboard);
-        LinearLayout dailylayout = getActivity().findViewById(R.id.daily_ads_layout_dashboard);
+    private void setDialogsOnAllLayouts(View v) {
+        LinearLayout totalbalancelayout = v.findViewById(R.id.total_balance_layout_dashboard);
+        LinearLayout totalwithdrawlayout = v.findViewById(R.id.total_withdraw_layout_dashboard);
+        LinearLayout currentbalancelayout = v.findViewById(R.id.current_balance_layout_dashboard);
+        LinearLayout accountstatuslayout = v.findViewById(R.id.account_status_layout_dashboard);
+        LinearLayout teamlayout = v.findViewById(R.id.team_members_layout_dashboard);
+        LinearLayout paidmemberlayout = v.findViewById(R.id.paid_members_layout_dashboard);
+        LinearLayout premiumlayout = v.findViewById(R.id.premium_ads_layout_dashboard);
+        LinearLayout dailylayout = v.findViewById(R.id.daily_ads_layout_dashboard);
 
         totalbalancelayout.setOnClickListener(new View.OnClickListener() {
             @Override
