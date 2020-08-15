@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -67,13 +68,24 @@ public class FragmentDashboard extends Fragment {
         // GETTING PREMIUM ADS 
         getPremiumAdsQuantity();
 
-        // CONFIGURE THE DAILY ADS STRUCTURE
         // GETTING DAILY ADS
-        //getDailyAdsQuantity();
-        dailyAds_tv.setText(utils.getDate(getActivity()));
-        dailyAds_tv.setText(dailyAds_tv.getText().toString()+ " \n \n " + utils.getNextDate(getActivity()));
+        getDailyAdsQuantity();
+
+        // SETTING INFORMATION DIALOGS ON ALL THE LAYOUTS
+        setDialogsOnAllLayouts();
 
         return view;
+    }
+
+    private void setDialogsOnAllLayouts() {
+        LinearLayout totalbalancelayout = getActivity().findViewById(R.id.total_balance_layout_dashboard);
+        LinearLayout totalwithdrawlayout = getActivity().findViewById(R.id.total_withdraw_layout_dashboard);
+        LinearLayout currentbalancelayout = getActivity().findViewById(R.id.current_balance_layout_dashboard);
+        LinearLayout accountstatuslayout = getActivity().findViewById(R.id.account_status_layout_dashboard);
+        LinearLayout teamlayout = getActivity().findViewById(R.id.team_members_layout_dashboard);
+        LinearLayout paidmemberlayout = getActivity().findViewById(R.id.paid_members_layout_dashboard);
+        LinearLayout premiumlayout = getActivity().findViewById(R.id.premium_ads_layout_dashboard);
+        LinearLayout dailylayout = getActivity().findViewById(R.id.daily_ads_layout_dashboard);
     }
 
     private void getDailyAdsQuantity() {

@@ -13,6 +13,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/total_balance_layout_dashboard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="15dp"
@@ -54,6 +55,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/total_withdraw_layout_dashboard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="15dp"
@@ -96,6 +98,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/current_balance_layout_dashboard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="15dp"
@@ -138,6 +141,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/account_status_layout_dashboard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="15dp"
@@ -182,6 +186,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/team_members_layout_dashboard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="15dp"
@@ -209,6 +214,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/paid_members_layout_dashboard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="15dp"
@@ -236,6 +242,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/premium_ads_layout_dashboard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="15dp"
@@ -263,6 +270,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/daily_ads_layout_dashboard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="15dp"
