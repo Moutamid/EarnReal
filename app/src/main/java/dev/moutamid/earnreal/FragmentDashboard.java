@@ -19,9 +19,11 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.instacart.library.truetime.TrueTime;
+import com.krishna.securetimer.SecureTimer;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -77,9 +79,24 @@ public class FragmentDashboard extends Fragment {
 
     private void getDailyAdsQuantity() {
 
-        if (TrueTime.isInitialized()){
-            Date dateTime = TrueTime.now();
-            Toast.makeText(getActivity(), dateTime.toString(), Toast.LENGTH_SHORT).show();
+        try {
+
+            Date date = SecureTimer.with(getActivity()).getCurrentDate();
+            //DATE.TO STRING
+            totalBalance_tv.setText(date.toString() + " date.toString \n");
+            // DATE
+            totalBalance_tv.setText(totalBalance_tv.getText().toString() +date.getDate()+ " date.getDate \n");
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            totalBalance_tv.setText(totalBalance_tv.getText().toString() +sdf.format(date) + " SimpleDateFormat \n");
+
+            Calendar c = Calendar.getInstance();
+            c.setTime(sdf.parse(sdf.format(date)));
+            c.add(Calendar.DATE, 1);
+            totalBalance_tv.setText(totalBalance_tv.getText().toString() +sdf.format(c.getTime()) + " next date");
+
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         //        if (!utils.getStoredBoolean(getActivity(), PAID_STATUS)){
@@ -100,29 +117,29 @@ public class FragmentDashboard extends Fragment {
     private void getPaidStatus() {
         databaseReference.child("users").child(mAuth.getCurrentUser().getUid())
                 .addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                if (snapshot.hasChild("paid")) {
+                        if (snapshot.hasChild("paid")) {
 
-                    boolean is_paid = snapshot.child("paid").getValue(Boolean.class);
+                            boolean is_paid = snapshot.child("paid").getValue(Boolean.class);
 
-                    utils.storeBoolean(getActivity(), PAID_STATUS, is_paid);
+                            utils.storeBoolean(getActivity(), PAID_STATUS, is_paid);
 
-                    if (is_paid) paidStatus_tv.setText("PAID" + " UNTIL ");
+                            if (is_paid) paidStatus_tv.setText("PAID" + " UNTIL ");
 
-                }
+                        }
 
-            }
+                    }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.i(TAG, "onCancelled: " + error.toException());
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.i(TAG, "onCancelled: " + error.toException());
 
-                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
 
-            }
-        });
+                    }
+                });
     }
 
     private void getPremiumAdsQuantity() {
@@ -369,4 +386,5 @@ public class FragmentDashboard extends Fragment {
         }
 
     }
+
 }

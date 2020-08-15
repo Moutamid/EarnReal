@@ -3,7 +3,6 @@ package dev.moutamid.earnreal;
 
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -20,9 +19,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.instacart.library.truetime.TrueTime;
-
-import java.io.IOException;
+import com.krishna.securetimer.SecureTimer;
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
@@ -54,26 +51,10 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         initializeDefaultFragment(savedInstanceState, 0);
         //setUrduSwitchListener();
 
-
-        new GetTimeBuilder();
+        SecureTimer.with(getApplicationContext()).initialize();
     }
 
-    private class GetTimeBuilder extends AsyncTask<Void, Void, Void>{
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            try {
-                TrueTime.build().initialize();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-            return null;
-        }
-    }
-
-    private boolean checkLoginStatus(){
+    private boolean checkLoginStatus() {
         // USER IS NOT SIGNED IN
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
 
@@ -87,8 +68,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         }
         return false;
     }
-
-
 
     /**
      * Initialize all widgets
@@ -261,6 +240,15 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+    /**
+     * Checks if the navigation drawer is open - if so, close it
+     */
+    private void closeDrawer() {
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            drawerLayout.closeDrawer(GravityCompat.START);
+        }
+    }
+
     /*
       Attach setOnCheckedChangeListener to the urdu switch
 
@@ -280,15 +268,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 */
 
     /**
-     * Checks if the navigation drawer is open - if so, close it
-     */
-    private void closeDrawer() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        }
-    }
-
-    /**
      * Iterates through all the items in the navigation menu and deselects them:
      * removes the selection color
      */
@@ -298,4 +277,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             navigationView.getMenu().getItem(i).setChecked(false);
         }
     }
+
+
 }

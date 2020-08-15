@@ -44,5 +44,6 @@ dependencies {
     implementation 'com.google.firebase:firebase-database:19.3.1'
 
     // TRUE TIME LIBRARY
-    implementation 'com.github.instacart.truetime-android:library:3.4'
+    //implementation 'com.github.instacart.truetime-android:library:3.4'
+    compile 'com.github.kk121:SecureTimer:v1.0'
 }
