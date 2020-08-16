@@ -218,7 +218,7 @@ public class FragmentDashboard extends Fragment {
                     return;
                 }
 
-                utils.showDialog(getActivity(), "", "This field will show you the amount of daily ads you will. \nYou have to be a paid member to unlock daily ads. \nYou can earn a lot of money monthly through this.", "Ok", "", new DialogInterface.OnClickListener() {
+                utils.showDialog(getActivity(), "", "This field will show you the amount of daily ads you will get. \nYou have to be a paid member to unlock daily ads. \nYou can earn a lot of money monthly through this.", "Ok", "", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                         dialogInterface.dismiss();
@@ -328,6 +328,8 @@ public class FragmentDashboard extends Fragment {
                         union.retainAll(adsShownEmailList);
                         union.removeAll(intersection);
 
+                        // THIS FIELD WILL UPDATE EVERY SINGLE TIME FRAGMENT OPEN SO DO SOMETING ABOUT THIS
+
                         // RESETTING THE VALUES OF PREMIUM ADS IN THE PREFERENCES
                         utils.storeInteger(getActivity(), PREMIUM_ADS_QUANTITY, 0);
                         utils.storeInteger(getActivity(), PREMIUM_ADS_QUANTITY, union.size() * 12);
@@ -346,6 +348,13 @@ public class FragmentDashboard extends Fragment {
 
                         int first_time = utils.getStoredInteger(getActivity(), FIRST_TIME_PREMIUM_ADS_QUANTITY);
                         premiumAds_tv.setText(String.valueOf(paid_membersList.size() * 12 + first_time));
+
+                        for (int i = 1; i <= paid_membersList.size(); i++) {
+
+                            snapshot.child(mAuth.getCurrentUser().getUid()).child("AdsShown")
+
+
+                        }
                     }
 
                 } else {
