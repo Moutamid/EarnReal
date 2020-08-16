@@ -151,6 +151,8 @@ public class FragmentUpgrade extends Fragment {
 
                             utils.showWorkDoneDialog(getActivity(), "TRX ID Sent", "Your request to upgrade your account has been submitted. It will be processed in 12 to 24 business hours. Check in everyday to make sure you don't lose daily ads after account confirmation.\n\nNote: If your requested Trx ID is wrong, your account can be permanently removed!");
 
+                            utils.storeInteger(getActivity(), REQUESTS_QUANTITY, utils.getStoredInteger(getActivity(), REQUESTS_QUANTITY) + 1);
+                            utils.storeString(getActivity(), REQUEST_DATE, utils.getDate(getActivity()));
 
                         } else {
                             Log.i(TAG, "onComplete: " + task.getException());
@@ -214,6 +216,15 @@ public class FragmentUpgrade extends Fragment {
 
         private String email, trx;
 
+        public upgradeRequestDetails(String trx, String email) {
+            this.email = email;
+            this.trx = trx;
+        }
+
+        upgradeRequestDetails() {
+
+        }
+
         public String getEmail() {
             return email;
         }
@@ -228,15 +239,6 @@ public class FragmentUpgrade extends Fragment {
 
         public void setTrx(String trx) {
             this.trx = trx;
-        }
-
-        public upgradeRequestDetails(String trx, String email) {
-            this.email = email;
-            this.trx = trx;
-        }
-
-        upgradeRequestDetails() {
-
         }
 
     }
