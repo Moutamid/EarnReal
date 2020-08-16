@@ -29,6 +29,7 @@ public class FragmentUpgrade extends Fragment {
 
     private static final String PAID_STATUS = "paidStatus";
     private static final String REQUESTS_QUANTITY = "requestQuantity";
+    private static final String USER_EMAIL = "userEmail";
     private static final String REQUEST_DATE = "requestDate";
 
     private DatabaseReference databaseReference;
@@ -89,8 +90,11 @@ public class FragmentUpgrade extends Fragment {
                 }
 
                 String trxID = jazzCashEt.getText().toString().trim();
+                String email = utils.getStoredString(getActivity(), USER_EMAIL);
 
-                databaseReference.child("upgrade_requests").push().setValue(trxID).addOnCompleteListener(new OnCompleteListener<Void>() {
+                upgradeRequestDetails details = new upgradeRequestDetails(trxID, email);
+
+                databaseReference.child("upgrade_requests").push().setValue(details).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
@@ -135,8 +139,11 @@ public class FragmentUpgrade extends Fragment {
                 }
 
                 String trxID = easyPaisaEt.getText().toString().trim();
+                String email = utils.getStoredString(getActivity(), USER_EMAIL);
 
-                databaseReference.child("upgrade_requests").push().setValue(trxID).addOnCompleteListener(new OnCompleteListener<Void>() {
+                upgradeRequestDetails details = new upgradeRequestDetails(trxID, email);
+
+                databaseReference.child("upgrade_requests").push().setValue(details).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
@@ -200,6 +207,37 @@ public class FragmentUpgrade extends Fragment {
                 Log.w(TAG, "onCancelled: " + error.getMessage());
             }
         });
+
+    }
+
+    private static class upgradeRequestDetails {
+
+        private String email, trx;
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+        public String getTrx() {
+            return trx;
+        }
+
+        public void setTrx(String trx) {
+            this.trx = trx;
+        }
+
+        public upgradeRequestDetails(String trx, String email) {
+            this.email = email;
+            this.trx = trx;
+        }
+
+        upgradeRequestDetails() {
+
+        }
 
     }
 }
