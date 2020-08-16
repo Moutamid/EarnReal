@@ -1,6 +1,8 @@
 package dev.moutamid.earnreal;
 
+import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -45,6 +47,8 @@ public class FragmentDashboard extends Fragment {
 
     private Utils utils = new Utils();
 
+    private boolean isDone_getDetailsFromDatabase, isDone_getPaidStatus, isDone_getTeamFromDatabase, isDone_getPremiumAdsQuantity, isDone_getDailyAdsQuantity = false;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -52,10 +56,10 @@ public class FragmentDashboard extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
 
-        initViews(view);
-
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.keepSynced(true);
+
+        initViews(view);
 
         // GETTING TOTAL BALANCE, TOTAL WITHDRAW, CURRENT BALANCE, PAID EXPIRY DATE
         getDetailsFromDatabase();
@@ -238,6 +242,8 @@ public class FragmentDashboard extends Fragment {
 
         // USER IS NOT PAID
         if (!utils.getStoredBoolean(getActivity(), PAID_STATUS)) {
+
+            isDone_getDailyAdsQuantity = true;
             return;
         }
 
@@ -250,6 +256,8 @@ public class FragmentDashboard extends Fragment {
             utils.storeString(getActivity(), NEXT_DATE, utils.getNextDate(getActivity()));
 
             utils.storeBoolean(getActivity(), "firstTime", true);
+
+            isDone_getDailyAdsQuantity = true;
             return;
         }
 
@@ -261,11 +269,14 @@ public class FragmentDashboard extends Fragment {
 
             utils.storeString(getActivity(), NEXT_DATE, utils.getNextDate(getActivity()));
 
+            isDone_getDailyAdsQuantity = true;
             return;
         }
 
         // IF DATE IS'NT CHANGING THEN SHOW THE REAL QUANTITY OF ADS
         dailyAds_tv.setText(utils.getStoredInteger(getActivity(), DAILY_ADS_QUANTITY));
+
+        isDone_getDailyAdsQuantity = true;
     }
 
     private void getPaidStatus() {
@@ -284,6 +295,7 @@ public class FragmentDashboard extends Fragment {
 
                         }
 
+                        isDone_getPaidStatus = true;
                     }
 
                     @Override
@@ -292,6 +304,7 @@ public class FragmentDashboard extends Fragment {
 
                         Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
 
+                        isDone_getPaidStatus = true;
                     }
                 });
     }
@@ -301,9 +314,11 @@ public class FragmentDashboard extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
-                if (!utils.getStoredBoolean(getActivity(), PAID_STATUS)) {
+                if (!utils.getStoredBoolean(getActivity(), PAID_STATUS) || totalBalance_tv.getText().toString().equals("0.00")) {
                     premiumAds_tv.setText(
                             String.valueOf(utils.getStoredInteger(getActivity(), FIRST_TIME_PREMIUM_ADS_QUANTITY)));
+
+                    isDone_getPremiumAdsQuantity = true;
                     return;
                 }
 
@@ -377,12 +392,16 @@ public class FragmentDashboard extends Fragment {
 
                     premiumAds_tv.setText(String.valueOf(utils.getStoredInteger(getActivity(), FIRST_TIME_PREMIUM_ADS_QUANTITY)));
                 }
+
+                isDone_getPremiumAdsQuantity = true;
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
                 Log.i(TAG, "onCancelled: " + error.toException());
                 Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+
+                isDone_getPremiumAdsQuantity = true;
             }
         });
     }
@@ -400,6 +419,7 @@ public class FragmentDashboard extends Fragment {
                 } else
                     setValuesToTextViews("0.00", "0.00", "0.00", "");
 
+                isDone_getDetailsFromDatabase = true;
             }
 
             @Override
@@ -407,6 +427,8 @@ public class FragmentDashboard extends Fragment {
                 Log.w(TAG, "onCancelled: " + error.toException());
 
                 Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+
+                isDone_getDetailsFromDatabase = true;
             }
         });
 
@@ -445,6 +467,8 @@ public class FragmentDashboard extends Fragment {
                     teamMembers_tv.setText("0");
                     paidMembers_tv.setText("0");
                 }
+
+                isDone_getTeamFromDatabase = true;
             }
 
             @Override
@@ -452,6 +476,8 @@ public class FragmentDashboard extends Fragment {
                 Log.w(TAG, "onCancelled: " + error.toException());
 
                 Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+
+                isDone_getTeamFromDatabase = true;
             }
         });
     }
@@ -563,6 +589,47 @@ public class FragmentDashboard extends Fragment {
             this.email = email;
         }
 
+    }
+
+    private class showLoader extends AsyncTask<Void, Void, Void> {
+        ProgressDialog dialog = new ProgressDialog(getActivity());
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            dialog.setMessage("Loading details...");
+            dialog.show();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            checkBoolean();
+
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+
+            dialog.dismiss();
+        }
+
+        private void checkBoolean() {
+
+            if (isDone_getDailyAdsQuantity
+                    && isDone_getDetailsFromDatabase
+                    && isDone_getPaidStatus
+                    && isDone_getPremiumAdsQuantity
+                    && isDone_getTeamFromDatabase) {
+                return;
+            }
+
+            checkBoolean();
+
+        }
     }
 
 }
