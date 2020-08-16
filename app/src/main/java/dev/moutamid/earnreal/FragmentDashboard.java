@@ -2,8 +2,8 @@ package dev.moutamid.earnreal;
 
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
-import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -38,16 +38,16 @@ public class FragmentDashboard extends Fragment {
     private ArrayList<refUser> refUsersList = new ArrayList<>();
     private ArrayList<String> paid_membersList = new ArrayList<>();
     private ArrayList<String> adsShownEmailList = new ArrayList<>();
-
     private TextView totalBalance_tv, totalWithdraw_tv, currentBalance_tv, paidMembers_tv;
     private TextView paidStatus_tv, paidExpireDate_tv, teamMembers_tv, premiumAds_tv, dailyAds_tv;
-
     private DatabaseReference databaseReference;
-    private FirebaseAuth mAuth;
 
+    private FirebaseAuth mAuth;
     private Utils utils = new Utils();
 
     private boolean isDone_getDetailsFromDatabase, isDone_getPaidStatus, isDone_getTeamFromDatabase, isDone_getPremiumAdsQuantity, isDone_getDailyAdsQuantity = false;
+    private ProgressDialog dialog;
+    private Handler handler;
 
     @Nullable
     @Override
@@ -60,6 +60,13 @@ public class FragmentDashboard extends Fragment {
         databaseReference.keepSynced(true);
 
         initViews(view);
+
+        // CHECKING FOR ALL THE METHODS TO COMPLETE AND THEN DISMISSING THE DIALOG
+        dialog = new ProgressDialog(getActivity());
+        dialog.setMessage("Loading details...");
+        dialog.show();
+        handler = new Handler();
+        startCheckingBooleanValues();
 
         // GETTING TOTAL BALANCE, TOTAL WITHDRAW, CURRENT BALANCE, PAID EXPIRY DATE
         getDetailsFromDatabase();
@@ -80,6 +87,41 @@ public class FragmentDashboard extends Fragment {
         setDialogsOnAllLayouts(view);
 
         return view;
+    }
+
+    Runnable booleanCheckerRunnable = new Runnable() {
+        @Override
+        public void run() {
+            try {
+                checkBoolean();
+            } finally {
+                handler.postDelayed(booleanCheckerRunnable, 1000);
+            }
+        }
+    };
+
+    private void startCheckingBooleanValues() {
+        booleanCheckerRunnable.run();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        handler.removeCallbacks(booleanCheckerRunnable);
+    }
+
+    private void checkBoolean() {
+
+        if (isDone_getDailyAdsQuantity
+                && isDone_getDetailsFromDatabase
+                && isDone_getPaidStatus
+                && isDone_getPremiumAdsQuantity
+                && isDone_getTeamFromDatabase) {
+
+            handler.removeCallbacks(booleanCheckerRunnable);
+            dialog.dismiss();
+        }
     }
 
     private void setDialogsOnAllLayouts(View v) {
@@ -589,47 +631,6 @@ public class FragmentDashboard extends Fragment {
             this.email = email;
         }
 
-    }
-
-    private class showLoader extends AsyncTask<Void, Void, Void> {
-        ProgressDialog dialog = new ProgressDialog(getActivity());
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-
-            dialog.setMessage("Loading details...");
-            dialog.show();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            checkBoolean();
-
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-
-            dialog.dismiss();
-        }
-
-        private void checkBoolean() {
-
-            if (isDone_getDailyAdsQuantity
-                    && isDone_getDetailsFromDatabase
-                    && isDone_getPaidStatus
-                    && isDone_getPremiumAdsQuantity
-                    && isDone_getTeamFromDatabase) {
-                return;
-            }
-
-            checkBoolean();
-
-        }
     }
 
 }
