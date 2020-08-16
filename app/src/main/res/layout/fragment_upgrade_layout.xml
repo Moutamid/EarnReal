@@ -4,9 +4,12 @@
     android:background="@color/white"
     android:layout_height="match_parent">
 
+<!--    PAID METHOD LAYOUT-->
     <LinearLayout
         android:layout_width="match_parent"
+        android:id="@+id/paid_layout_fragment_upgrade"
         android:layout_height="wrap_content"
+        android:visibility="gone"
         android:layout_margin="20dp"
         android:gravity="center"
         android:orientation="vertical">
@@ -30,6 +33,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
+            android:textAlignment="center"
             android:textSize="18sp"
             android:text="You are a paid member until 02/06/2020"/>
 
@@ -39,7 +43,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_alignParentTop="true"
-        android:visibility="gone"
         android:gravity="center_horizontal"
         android:id="@+id/method_selection_layout_upgrade"
         android:layout_height="wrap_content"
@@ -118,8 +121,8 @@
 <!--    EASYPAISA INSTRUCTIONS LAYOUT-->
     <ScrollView
         android:layout_width="match_parent"
-        android:visibility="gone"
         android:id="@+id/easypaisa_instructions_layout_upgrade"
+        android:visibility="gone"
         android:layout_height="wrap_content">
 
     <LinearLayout
@@ -147,12 +150,13 @@
             android:textColor="@color/red"
             android:textSize="20sp" />
 
+<!--                    android:text="Please send PKR 500 and so on package dev.moutamid.earnreal;import android.os.Bundle;import android.view.LayoutInflater;import android.view.View;import android.view.ViewGroup;imort androidx.annotation.NonNull;imort androidx.annotation.Nullable;imort androidx.fragment.app.Fragment;pulic class FragmentUpgrade extends Fragment {   @Nullable   @Override   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {       return inflater.inflate(R.layout.fragment_upgrade_layout, container, false);   }}Please send PKR 500 and so on package dev.moutamid.earnreal;import android.os.Bundle;import android.view.LayoutInflater;import android.view.View;import android.view.ViewGroup;imort androidx.annotation.NonNull;imort androidx.annotation.Nullable;imort androidx.fragment.app.Fragment;pulic class FragmentUpgrade extends Fragment {   @Nullable   @Override   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {       return inflater.inflate(R.layout.fragment_upgrade_layout, container, false);   }}"-->
         <TextView
+            android:text="SOME TEXT HERE"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
             android:gravity="center"
-            android:text="Please send PKR 500 and so on package dev.moutamid.earnreal;import android.os.Bundle;import android.view.LayoutInflater;import android.view.View;import android.view.ViewGroup;imort androidx.annotation.NonNull;imort androidx.annotation.Nullable;imort androidx.fragment.app.Fragment;pulic class FragmentUpgrade extends Fragment {   @Nullable   @Override   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {       return inflater.inflate(R.layout.fragment_upgrade_layout, container, false);   }}Please send PKR 500 and so on package dev.moutamid.earnreal;import android.os.Bundle;import android.view.LayoutInflater;import android.view.View;import android.view.ViewGroup;imort androidx.annotation.NonNull;imort androidx.annotation.Nullable;imort androidx.fragment.app.Fragment;pulic class FragmentUpgrade extends Fragment {   @Nullable   @Override   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {       return inflater.inflate(R.layout.fragment_upgrade_layout, container, false);   }}"
             android:textColor="@color/red"
             android:textSize="17sp" />
 
@@ -185,10 +189,11 @@
             <EditText
                 android:layout_width="187dp"
                 android:layout_height="40dp"
-                android:layout_marginEnd="5dp"
+                android:layout_marginStart="5dp"
                 android:hint="Enter the TID code here"
-                android:inputType="textPersonName"
+                android:inputType="number"
                 android:textColor="@color/darkBlue"
+                android:id="@+id/easypaisa_edittext_layout_upgrade"
                 android:textColorHint="@color/greyishblue"
                 android:textSize="13sp"
                 android:background="@color/white" />
@@ -200,6 +205,7 @@
             android:layout_height="40dp"
             android:layout_gravity="center"
             android:layout_marginTop="20dp"
+            android:id="@+id/easypaisa_submitBtn_layout_upgrade"
             android:background="@drawable/submit_btn_background"
             android:text="Verify"
             android:textColor="@color/white"
@@ -213,8 +219,8 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_alignParentTop="true"
-        android:id="@+id/jazzcash_instructions_layout_upgrade"
         android:visibility="gone"
+        android:id="@+id/jazzcash_instructions_layout_upgrade"
         android:layout_height="wrap_content">
 
         <LinearLayout
@@ -241,12 +247,13 @@
                 android:textColor="@color/red"
                 android:textSize="20sp" />
 
+<!--            android:text="Please send PKR 500 and so on package dev.moutamid.earnreal;import android.os.Bundle;import android.view.LayoutInflater;import android.view.View;import android.view.ViewGroup;imort androidx.annotation.NonNull;imort androidx.annotation.Nullable;imort androidx.fragment.app.Fragment;pulic class FragmentUpgrade extends Fragment {   @Nullable   @Override   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {       return inflater.inflate(R.layout.fragment_upgrade_layout, container, false);   }}Please send PKR 500 and so on package dev.moutamid.earnreal;import android.os.Bundle;import android.view.LayoutInflater;import android.view.View;import android.view.ViewGroup;imort androidx.annotation.NonNull;imort androidx.annotation.Nullable;imort androidx.fragment.app.Fragment;pulic class FragmentUpgrade extends Fragment {   @Nullable   @Override   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {       return inflater.inflate(R.layout.fragment_upgrade_layout, container, false);   }}"-->
             <TextView
+                android:text="SOME TEXT HERE"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_margin="20dp"
                 android:gravity="center"
-                android:text="Please send PKR 500 and so on package dev.moutamid.earnreal;import android.os.Bundle;import android.view.LayoutInflater;import android.view.View;import android.view.ViewGroup;imort androidx.annotation.NonNull;imort androidx.annotation.Nullable;imort androidx.fragment.app.Fragment;pulic class FragmentUpgrade extends Fragment {   @Nullable   @Override   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {       return inflater.inflate(R.layout.fragment_upgrade_layout, container, false);   }}Please send PKR 500 and so on package dev.moutamid.earnreal;import android.os.Bundle;import android.view.LayoutInflater;import android.view.View;import android.view.ViewGroup;imort androidx.annotation.NonNull;imort androidx.annotation.Nullable;imort androidx.fragment.app.Fragment;pulic class FragmentUpgrade extends Fragment {   @Nullable   @Override   public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {       return inflater.inflate(R.layout.fragment_upgrade_layout, container, false);   }}"
                 android:textColor="@color/red"
                 android:textSize="17sp" />
 
@@ -279,9 +286,10 @@
                 <EditText
                     android:layout_width="187dp"
                     android:layout_height="40dp"
-                    android:layout_marginEnd="5dp"
+                    android:id="@+id/jazzcash_edittext_layout_upgrade"
+                    android:layout_marginStart="5dp"
                     android:hint="Enter the TID code here"
-                    android:inputType="textPersonName"
+                    android:inputType="number"
                     android:textColor="@color/darkBlue"
                     android:textColorHint="@color/greyishblue"
                     android:textSize="13sp"
@@ -294,6 +302,7 @@
                 android:layout_height="40dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
+                android:id="@+id/jazzcash_submitBtn_layout_upgrade"
                 android:background="@drawable/submit_btn_background"
                 android:text="Verify"
                 android:textColor="@color/white"

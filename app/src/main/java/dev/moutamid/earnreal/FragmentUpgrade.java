@@ -1,9 +1,12 @@
 package dev.moutamid.earnreal;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -13,35 +16,113 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 public class FragmentUpgrade extends Fragment {
+    private static final String TAG = "FragmentUpgrade";
+
+    private static final String PAID_STATUS = "paidStatus";
+    private DatabaseReference databaseReference;
+
+    private Boolean isOnline = false;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_upgrade_layout, container, false);
 
-        final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.payment_methods_radioGroup_upgrade_layout);
+        databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        final ScrollView easypaisaLayout = (ScrollView) view.findViewById(R.id.easypaisa_instructions_layout_upgrade);
-        final ScrollView jazzcashLayout = (ScrollView) view.findViewById(R.id.jazzcash_instructions_layout_upgrade);
+        checkOnlineStatus();
+
+        LinearLayout paidAccountLayout = (LinearLayout) view.findViewById(R.id.paid_layout_fragment_upgrade);
         final LinearLayout methodSelectionLayout = (LinearLayout) view.findViewById(R.id.method_selection_layout_upgrade);
 
-        view.findViewById(R.id.nextBtn_upgrade_layout).setOnClickListener(new View.OnClickListener() {
+        if (new Utils().getStoredBoolean(getActivity(), PAID_STATUS)) {
+
+            methodSelectionLayout.setVisibility(View.GONE);
+            paidAccountLayout.setVisibility(View.VISIBLE);
+
+        } else {
+
+            final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.payment_methods_radioGroup_upgrade_layout);
+
+            final ScrollView easypaisaLayout = (ScrollView) view.findViewById(R.id.easypaisa_instructions_layout_upgrade);
+            final ScrollView jazzcashLayout = (ScrollView) view.findViewById(R.id.jazzcash_instructions_layout_upgrade);
+
+            view.findViewById(R.id.nextBtn_upgrade_layout).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int radioButtonId = radioGroup.getCheckedRadioButtonId();
+
+                    if (radioButtonId == R.id.easypaisa_radioBtn_upgrade_layout) {
+                        methodSelectionLayout.setVisibility(View.GONE);
+                        easypaisaLayout.setVisibility(View.VISIBLE);
+
+                    } else if (radioButtonId == R.id.jazzcash_radioBtn_upgrade_layout) {
+                        methodSelectionLayout.setVisibility(View.GONE);
+                        jazzcashLayout.setVisibility(View.VISIBLE);
+
+                    } else
+                        Toast.makeText(getActivity(), "Error occurred", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            final EditText easyPaisaEt = view.findViewById(R.id.easypaisa_edittext_layout_upgrade);
+            final EditText jazzCashEt = view.findViewById(R.id.jazzcash_edittext_layout_upgrade);
+            Button easypaisaBtn = view.findViewById(R.id.easypaisa_submitBtn_layout_upgrade);
+            Button jazzcashBtn = view.findViewById(R.id.jazzcash_submitBtn_layout_upgrade);
+
+            easypaisaBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (!isOnline){
+                        new Utils().showOfflineDialog(getActivity());
+                        return;
+                    }
+
+                    String trxID = easyPaisaEt.getText().toString().trim();
+
+                    databaseReference.child("upgrade_requests").push().setValue(trxID).addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                // TASK SUCCESSFUL
+                            }
+                        }
+                    });
+                }
+            });
+
+        }
+
+        return view;
+    }
+
+    private void checkOnlineStatus() {
+        Log.i(TAG, "checkOnlineStatus: ");
+
+        DatabaseReference connectedRef = FirebaseDatabase.getInstance().getReference(".info/connected");
+        connectedRef.addValueEventListener(new ValueEventListener() {
             @Override
-            public void onClick(View view) {
-                int radioButtonId = radioGroup.getCheckedRadioButtonId();
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.i(TAG, "onDataChange: online status");
 
-                if (radioButtonId == R.id.easypaisa_radioBtn_upgrade_layout) {
-                    methodSelectionLayout.setVisibility(View.GONE);
-                    easypaisaLayout.setVisibility(View.VISIBLE);
+                isOnline = snapshot.getValue(Boolean.class);
+            }
 
-                } else if (radioButtonId == R.id.jazzcash_radioBtn_upgrade_layout) {
-                    methodSelectionLayout.setVisibility(View.GONE);
-                    jazzcashLayout.setVisibility(View.VISIBLE);
-
-                } else Toast.makeText(getActivity(), "Error occurred", Toast.LENGTH_SHORT).show();
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w(TAG, "onCancelled: " + error.getMessage());
             }
         });
 
-        return view;
     }
 }

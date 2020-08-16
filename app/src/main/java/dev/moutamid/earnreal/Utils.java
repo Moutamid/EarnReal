@@ -30,6 +30,7 @@ public class Utils {
     private static final String USER_NUMBER = "userNumber";
     private static final String REFERRED_BY = "referredBy";
     private static final String PACKAGE_NAME = "dev.moutamid.earnreal";
+    private static final String PAID_STATUS = "paidStatus";
 
     //    private DatabaseReference mDatabase;
     private SharedPreferences sharedPreferences;
