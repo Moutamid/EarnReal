@@ -30,6 +30,8 @@ public class FragmentUpgrade extends Fragment {
     private static final String PAID_STATUS = "paidStatus";
     private DatabaseReference databaseReference;
 
+    private LinearLayout methodSelectionLayout;
+
     private Boolean isOnline = false;
 
     @Nullable
@@ -42,7 +44,7 @@ public class FragmentUpgrade extends Fragment {
         checkOnlineStatus();
 
         LinearLayout paidAccountLayout = (LinearLayout) view.findViewById(R.id.paid_layout_fragment_upgrade);
-        final LinearLayout methodSelectionLayout = (LinearLayout) view.findViewById(R.id.method_selection_layout_upgrade);
+        methodSelectionLayout = (LinearLayout) view.findViewById(R.id.method_selection_layout_upgrade);
 
         if (new Utils().getStoredBoolean(getActivity(), PAID_STATUS)) {
 
@@ -51,59 +53,100 @@ public class FragmentUpgrade extends Fragment {
 
         } else {
 
-            final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.payment_methods_radioGroup_upgrade_layout);
+            setNextBtnMethods(view);
 
-            final ScrollView easypaisaLayout = (ScrollView) view.findViewById(R.id.easypaisa_instructions_layout_upgrade);
-            final ScrollView jazzcashLayout = (ScrollView) view.findViewById(R.id.jazzcash_instructions_layout_upgrade);
+            setEasyPaisaBtnMethod(view);
 
-            view.findViewById(R.id.nextBtn_upgrade_layout).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    int radioButtonId = radioGroup.getCheckedRadioButtonId();
-
-                    if (radioButtonId == R.id.easypaisa_radioBtn_upgrade_layout) {
-                        methodSelectionLayout.setVisibility(View.GONE);
-                        easypaisaLayout.setVisibility(View.VISIBLE);
-
-                    } else if (radioButtonId == R.id.jazzcash_radioBtn_upgrade_layout) {
-                        methodSelectionLayout.setVisibility(View.GONE);
-                        jazzcashLayout.setVisibility(View.VISIBLE);
-
-                    } else
-                        Toast.makeText(getActivity(), "Error occurred", Toast.LENGTH_SHORT).show();
-                }
-            });
-
-            final EditText easyPaisaEt = view.findViewById(R.id.easypaisa_edittext_layout_upgrade);
-            final EditText jazzCashEt = view.findViewById(R.id.jazzcash_edittext_layout_upgrade);
-            Button easypaisaBtn = view.findViewById(R.id.easypaisa_submitBtn_layout_upgrade);
-            Button jazzcashBtn = view.findViewById(R.id.jazzcash_submitBtn_layout_upgrade);
-
-            easypaisaBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    if (!isOnline){
-                        new Utils().showOfflineDialog(getActivity());
-                        return;
-                    }
-
-                    String trxID = easyPaisaEt.getText().toString().trim();
-
-                    databaseReference.child("upgrade_requests").push().setValue(trxID).addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
-                                // TASK SUCCESSFUL
-                            }
-                        }
-                    });
-                }
-            });
-
+            setJazzcashBtnMethod(view);
         }
 
         return view;
+    }
+
+    private void setJazzcashBtnMethod(View view) {
+        final EditText jazzCashEt = view.findViewById(R.id.jazzcash_edittext_layout_upgrade);
+        Button jazzcashBtn = view.findViewById(R.id.jazzcash_submitBtn_layout_upgrade);
+        jazzcashBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (!isOnline){
+                    new Utils().showOfflineDialog(getActivity());
+                    return;
+                }
+
+                String trxID = jazzCashEt.getText().toString().trim();
+
+                databaseReference.child("upgrade_requests").push().setValue(trxID).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()){
+                            // TASK SUCCESSFUL
+
+                            new Utils().showWorkDoneDialog(getActivity(), "TRX ID Sent", "Your request to upgrade your account has been submitted. It will be processed in 12 to 24 business hours. Check in everyday to make sure you don't lose daily ads after account confirmation.\n\nNote: If your requested Trx ID is wrong, your account can be permanently removed!");
+                        }
+                    }
+                });
+            }
+        });
+
+
+    }
+
+    private void setEasyPaisaBtnMethod(View view) {
+        final EditText easyPaisaEt = view.findViewById(R.id.easypaisa_edittext_layout_upgrade);
+        Button easypaisaBtn = view.findViewById(R.id.easypaisa_submitBtn_layout_upgrade);
+        easypaisaBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                if (!isOnline){
+                    new Utils().showOfflineDialog(getActivity());
+                    return;
+                }
+
+                String trxID = easyPaisaEt.getText().toString().trim();
+
+                databaseReference.child("upgrade_requests").push().setValue(trxID).addOnCompleteListener(new OnCompleteListener<Void>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        if (task.isSuccessful()){
+                            // TASK SUCCESSFUL
+
+                            new Utils().showWorkDoneDialog(getActivity(), "TRX ID Sent", "Your request to upgrade your account has been submitted. It will be processed in 12 to 24 business hours. Check in everyday to make sure you don't lose daily ads after account confirmation.\n\nNote: If your requested Trx ID is wrong, your account can be permanently removed!");
+                        }
+                    }
+                });
+            }
+        });
+
+    }
+
+    private void setNextBtnMethods(View view) {
+
+        final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.payment_methods_radioGroup_upgrade_layout);
+
+        final ScrollView easypaisaLayout = (ScrollView) view.findViewById(R.id.easypaisa_instructions_layout_upgrade);
+        final ScrollView jazzcashLayout = (ScrollView) view.findViewById(R.id.jazzcash_instructions_layout_upgrade);
+
+        view.findViewById(R.id.nextBtn_upgrade_layout).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int radioButtonId = radioGroup.getCheckedRadioButtonId();
+
+                if (radioButtonId == R.id.easypaisa_radioBtn_upgrade_layout) {
+                    methodSelectionLayout.setVisibility(View.GONE);
+                    easypaisaLayout.setVisibility(View.VISIBLE);
+
+                } else if (radioButtonId == R.id.jazzcash_radioBtn_upgrade_layout) {
+                    methodSelectionLayout.setVisibility(View.GONE);
+                    jazzcashLayout.setVisibility(View.VISIBLE);
+
+                } else
+                    Toast.makeText(getActivity(), "Error occurred", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     private void checkOnlineStatus() {
