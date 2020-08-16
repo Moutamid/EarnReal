@@ -322,28 +322,38 @@ public class FragmentDashboard extends Fragment {
                         }
 
                         // EXTRACTION OUT PEOPLE WHOSE ADS ARE ALREADY SHOWN
-                        List<String> union = new ArrayList<>(paid_membersList);
-                        union.addAll(adsShownEmailList);
+                        List<String> newPaidMembersList = new ArrayList<>(paid_membersList);
+                        newPaidMembersList.addAll(adsShownEmailList);
                         List<String> intersection = new ArrayList<>(paid_membersList);
-                        union.retainAll(adsShownEmailList);
-                        union.removeAll(intersection);
+                        newPaidMembersList.retainAll(adsShownEmailList);
+                        newPaidMembersList.removeAll(intersection);
 
                         // THIS FIELD WILL UPDATE EVERY SINGLE TIME FRAGMENT OPEN SO DO SOMETING ABOUT THIS
 
                         // RESETTING THE VALUES OF PREMIUM ADS IN THE PREFERENCES
-                        utils.storeInteger(getActivity(), PREMIUM_ADS_QUANTITY, 0);
-                        utils.storeInteger(getActivity(), PREMIUM_ADS_QUANTITY, union.size() * 12);
+                        int oldAdsQuantity = utils.getStoredInteger(getActivity(), PREMIUM_ADS_QUANTITY);
+                        utils.storeInteger(getActivity(), PREMIUM_ADS_QUANTITY, newPaidMembersList.size() * 12 + oldAdsQuantity);
 
                         int first_time = utils.getStoredInteger(getActivity(), FIRST_TIME_PREMIUM_ADS_QUANTITY);
 
                         // COUNTING AND SETTING THE NUMBER OF PREMIUM ADS WHICH SHOULD BE SHOWN
                         // AND MERGING THE FIRST TIME GIVEN PREMIUM ADS
-                        premiumAds_tv.setText(String.valueOf(union.size() * 12 + first_time));
+                        premiumAds_tv.setText(String.valueOf(newPaidMembersList.size() * 12 + first_time + oldAdsQuantity));
+
+                        for (int i = 1; i <= newPaidMembersList.size(); i++) {
+
+                            databaseReference
+                                    .child("teams")
+                                    .child(mAuth.getCurrentUser().getUid())
+                                    .child("AdsShown")
+                                    .push()
+                                    .setValue(newPaidMembersList.get(i));
+                        }
 
                     } else {
                         // IF NO PEOPLE EXISTS WHOSE PREMIUM ADS ARE SHOWN
 
-                        utils.storeInteger(getActivity(), PREMIUM_ADS_QUANTITY, 0);
+                        //utils.storeInteger(getActivity(), PREMIUM_ADS_QUANTITY, 0);
                         utils.storeInteger(getActivity(), PREMIUM_ADS_QUANTITY, paid_membersList.size() * 12);
 
                         int first_time = utils.getStoredInteger(getActivity(), FIRST_TIME_PREMIUM_ADS_QUANTITY);
@@ -351,7 +361,12 @@ public class FragmentDashboard extends Fragment {
 
                         for (int i = 1; i <= paid_membersList.size(); i++) {
 
-                            snapshot.child(mAuth.getCurrentUser().getUid()).child("AdsShown")
+                            databaseReference
+                                    .child("teams")
+                                    .child(mAuth.getCurrentUser().getUid())
+                                    .child("AdsShown")
+                                    .push()
+                                    .setValue(paid_membersList.get(i));
 
 
                         }
