@@ -32,6 +32,7 @@
         android:layout_marginEnd="12dp"
         android:layout_marginLeft="12dp"
         android:layout_marginRight="12dp"
+        android:id="@+id/title_offline_dialog"
         android:layout_marginStart="12dp"
         android:gravity="center"
         android:maxLines="1"
@@ -53,6 +54,7 @@
         android:gravity="center"
         android:text="You are not connected to Internet. Please make sure you have a working connection"
         android:textColor="@color/greyishblue"
+        android:id="@+id/desc_offline_dialog"
         android:textSize="15sp" />
 
     <Button

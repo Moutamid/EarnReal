@@ -28,11 +28,15 @@ public class FragmentUpgrade extends Fragment {
     private static final String TAG = "FragmentUpgrade";
 
     private static final String PAID_STATUS = "paidStatus";
+    private static final String REQUESTS_QUANTITY = "requestQuantity";
+    private static final String REQUEST_DATE = "requestDate";
+
     private DatabaseReference databaseReference;
 
     private LinearLayout methodSelectionLayout;
 
     private Boolean isOnline = false;
+    private Utils utils = new Utils();
 
     @Nullable
     @Override
@@ -46,7 +50,7 @@ public class FragmentUpgrade extends Fragment {
         LinearLayout paidAccountLayout = (LinearLayout) view.findViewById(R.id.paid_layout_fragment_upgrade);
         methodSelectionLayout = (LinearLayout) view.findViewById(R.id.method_selection_layout_upgrade);
 
-        if (new Utils().getStoredBoolean(getActivity(), PAID_STATUS)) {
+        if (utils.getStoredBoolean(getActivity(), PAID_STATUS)) {
 
             methodSelectionLayout.setVisibility(View.GONE);
             paidAccountLayout.setVisibility(View.VISIBLE);
@@ -70,8 +74,17 @@ public class FragmentUpgrade extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if (!isOnline){
-                    new Utils().showOfflineDialog(getActivity());
+                if (!isOnline) {
+                    utils.showOfflineDialog(getActivity(), "", "");
+                    return;
+                }
+
+                if (utils.getStoredInteger(getActivity(), REQUESTS_QUANTITY) == 3
+                        && utils.getDate(getActivity())
+                        .equals(utils.getStoredString(getActivity(), REQUEST_DATE))) {
+
+                    utils.showOfflineDialog(getActivity(), "NOTICE!", "You have already submitted many requests. Your account can be permanently banned if we found you spamming ID's!");
+
                     return;
                 }
 
@@ -80,10 +93,17 @@ public class FragmentUpgrade extends Fragment {
                 databaseReference.child("upgrade_requests").push().setValue(trxID).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             // TASK SUCCESSFUL
 
-                            new Utils().showWorkDoneDialog(getActivity(), "TRX ID Sent", "Your request to upgrade your account has been submitted. It will be processed in 12 to 24 business hours. Check in everyday to make sure you don't lose daily ads after account confirmation.\n\nNote: If your requested Trx ID is wrong, your account can be permanently removed!");
+                            utils.showWorkDoneDialog(getActivity(), "TRX ID Sent", "Your request to upgrade your account has been submitted. It will be processed in 12 to 24 business hours. Check in everyday to make sure you don't lose daily ads after account confirmation.\n\nNote: If your requested Trx ID is wrong, your account can be permanently removed!");
+
+                            utils.storeInteger(getActivity(), REQUESTS_QUANTITY, utils.getStoredInteger(getActivity(), REQUESTS_QUANTITY) + 1);
+                            utils.storeString(getActivity(), REQUEST_DATE, utils.getDate(getActivity()));
+
+                        } else {
+                            Log.i(TAG, "onComplete: " + task.getException());
+                            Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
@@ -100,8 +120,17 @@ public class FragmentUpgrade extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if (!isOnline){
-                    new Utils().showOfflineDialog(getActivity());
+                if (!isOnline) {
+                    utils.showOfflineDialog(getActivity(), "", "");
+                    return;
+                }
+
+                if (utils.getStoredInteger(getActivity(), REQUESTS_QUANTITY) == 3
+                        && utils.getDate(getActivity())
+                        .equals(utils.getStoredString(getActivity(), REQUEST_DATE))) {
+
+                    utils.showOfflineDialog(getActivity(), "NOTICE!", "You have already submitted many requests. Your account can be permanently banned if we found you spamming ID's!");
+
                     return;
                 }
 
@@ -110,10 +139,15 @@ public class FragmentUpgrade extends Fragment {
                 databaseReference.child("upgrade_requests").push().setValue(trxID).addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()){
+                        if (task.isSuccessful()) {
                             // TASK SUCCESSFUL
 
-                            new Utils().showWorkDoneDialog(getActivity(), "TRX ID Sent", "Your request to upgrade your account has been submitted. It will be processed in 12 to 24 business hours. Check in everyday to make sure you don't lose daily ads after account confirmation.\n\nNote: If your requested Trx ID is wrong, your account can be permanently removed!");
+                            utils.showWorkDoneDialog(getActivity(), "TRX ID Sent", "Your request to upgrade your account has been submitted. It will be processed in 12 to 24 business hours. Check in everyday to make sure you don't lose daily ads after account confirmation.\n\nNote: If your requested Trx ID is wrong, your account can be permanently removed!");
+
+
+                        } else {
+                            Log.i(TAG, "onComplete: " + task.getException());
+                            Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });

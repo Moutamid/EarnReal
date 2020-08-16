@@ -142,7 +142,7 @@ public class ActivityLogin extends AppCompatActivity {
                     mDialog.show();
                     checkStatusOfEditTexts();
                 } else {
-                    utils.showOfflineDialog(ActivityLogin.this);
+                    utils.showOfflineDialog(ActivityLogin.this, "", "");
                 }
             }
         };
@@ -156,7 +156,7 @@ public class ActivityLogin extends AppCompatActivity {
 
         if (!isOnline) {
             mDialog.dismiss();
-            utils.showOfflineDialog(ActivityLogin.this);
+            utils.showOfflineDialog(ActivityLogin.this, "", "");
             return;
         }
 

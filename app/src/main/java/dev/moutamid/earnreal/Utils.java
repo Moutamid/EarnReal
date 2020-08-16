@@ -69,7 +69,7 @@ public class Utils {
         return String.valueOf(new Random().nextInt(length) + 1);
     }
 
-    public void showOfflineDialog(Context context) {
+    public void showOfflineDialog(Context context, String title, String desc) {
 
         Button okayBtn;
 
@@ -77,6 +77,14 @@ public class Utils {
         dialogOffline.setContentView(R.layout.dialog_offline);
 
         okayBtn = dialogOffline.findViewById(R.id.okay_btn_offline_dialog);
+        TextView titleTv = dialogOffline.findViewById(R.id.title_offline_dialog);
+        TextView descTv = dialogOffline.findViewById(R.id.desc_offline_dialog);
+
+        if (!TextUtils.isEmpty(title))
+            titleTv.setText(title);
+
+        if (!TextUtils.isEmpty(desc))
+            descTv.setText(desc);
 
         okayBtn.setOnClickListener(new View.OnClickListener() {
             @Override
