@@ -33,6 +33,7 @@ public class FragmentDashboard extends Fragment {
     private static final String DAILY_ADS_QUANTITY = "premium_ads_quantity";
     private static final String PAID_STATUS = "paidStatus";
     private static final String PAID_EXPIRE_DATE = "paidExpireDate";
+    private static final String CURRENT_BALANCE = "currentBalance";
     private static final String FIRST_TIME_PREMIUM_ADS_QUANTITY = "first_time_premium_ads_quantity";
     private static final String NEXT_DATE = "nextDate";
 
@@ -459,10 +460,18 @@ public class FragmentDashboard extends Fragment {
                     Details details = snapshot.child("details").getValue(Details.class);
                     setValuesToTextViews(details.getTotalBlnc(), details.gettWithdrw(), details.getCvBlnce(), details.getPaidExpireDate());
                     utils.storeString(getActivity(), PAID_EXPIRE_DATE, details.getPaidExpireDate());
+                    utils.storeString(getActivity(), CURRENT_BALANCE, details.getCvBlnce());
 
-                } else
+                } else {
+                    Details details1 = new Details("error", "0.00", "0.00", "0.00");
+                    databaseReference
+                            .child("users")
+                            .child(mAuth.getCurrentUser().getUid())
+                            .child("details")
+                            .setValue(details1);
                     setValuesToTextViews("0.00", "0.00", "0.00", "");
-
+                    utils.storeString(getActivity(), CURRENT_BALANCE, "0.00");
+                }
                 isDone_getDetailsFromDatabase = true;
             }
 

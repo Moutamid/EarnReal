@@ -32,7 +32,6 @@ public class Utils {
     private static final String PACKAGE_NAME = "dev.moutamid.earnreal";
     private static final String PAID_STATUS = "paidStatus";
 
-    //    private DatabaseReference mDatabase;
     private SharedPreferences sharedPreferences;
 
     public String getStoredString(Context context, String name) {
