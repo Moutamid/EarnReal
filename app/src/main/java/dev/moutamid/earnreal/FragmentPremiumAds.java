@@ -3,6 +3,7 @@ package dev.moutamid.earnreal;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -83,6 +84,8 @@ public class FragmentPremiumAds extends Fragment {
             public void onClick(View view) {
                 // IF PREMIUM ADS ARE GREATER OR EQUAL THAN 1
                 if (quantity >= 1) {
+                    dialog.setMessage("Verifying...");
+                    dialog.show();
 
                     databaseReference
                             .child("users")
@@ -91,6 +94,7 @@ public class FragmentPremiumAds extends Fragment {
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    // UPDATING TOTAL BALANCE FIELD BY ADDING Rs: 5
                                     int totalBalance = Integer.parseInt(snapshot.child("totalBlnc").getValue(String.class));
                                     databaseReference
                                             .child("users")
@@ -98,6 +102,7 @@ public class FragmentPremiumAds extends Fragment {
                                             .child("details")
                                             .child("totalBlnc").setValue(String.valueOf(totalBalance + 5));
 
+                                    // UPDATING CURRENT BALANCE FIELD BY ADDING Rs: 5
                                     int currentBalance = Integer.parseInt(snapshot.child("cvBlnce").getValue(String.class));
                                     databaseReference
                                             .child("users")
@@ -105,20 +110,26 @@ public class FragmentPremiumAds extends Fragment {
                                             .child("details")
                                             .child("cvBlnce").setValue(String.valueOf(currentBalance + 5));
 
+                                    // ADDING Rs: 5 IN CURRENT BALANCE IN PREFERENCES
                                     utils.storeInteger(getActivity(), CURRENT_BALANCE, utils.getStoredInteger(getActivity(), CURRENT_BALANCE) + 5);
 
+                                    // IF FIRST TIME ADS QUANTITY IS NOT 0
                                     if (utils.getStoredInteger(getActivity(), FIRST_TIME_PREMIUM_ADS_QUANTITY) != 0) {
 
+                                        // REMOVING 1 IN FIRST TIME ADS QUANTITY
                                         utils.storeInteger(getActivity(), FIRST_TIME_PREMIUM_ADS_QUANTITY, utils.getStoredInteger(getActivity(), FIRST_TIME_PREMIUM_ADS_QUANTITY) - 1);
                                         adsQuantityTxt.setText(String.valueOf(quantity - 1));
                                         return;
                                     }
 
+                                    // REMOVING 1 IN THE PREMIUM ADS QUANTITY
                                     utils.storeInteger(getActivity(), PREMIUM_ADS_QUANTITY, utils.getStoredInteger(getActivity(), PREMIUM_ADS_QUANTITY) - 1);
                                     adsQuantityTxt.setText(String.valueOf(quantity - 1));
 
                                     verifyBtn.setVisibility(View.GONE);
                                     showAdBtn.setVisibility(View.VISIBLE);
+
+                                    dialog.dismiss();
 
                                     Toast.makeText(getActivity(), "Your ad is verified!", Toast.LENGTH_LONG).show();
 
@@ -126,6 +137,10 @@ public class FragmentPremiumAds extends Fragment {
 
                                 @Override
                                 public void onCancelled(@NonNull DatabaseError error) {
+                                    dialog.dismiss();
+
+                                    Log.i(TAG, "onCancelled: " + error.toException());
+                                    Toast.makeText(getActivity(), error.toException().getMessage(), Toast.LENGTH_SHORT).show();
 
                                 }
                             });
