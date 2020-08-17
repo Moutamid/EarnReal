@@ -487,7 +487,7 @@ public class FragmentDashboard extends Fragment {
                     setValuesToTextViews(details.getTotalBlnc(), details.gettWithdrw(), details.getCvBlnce(), details.getPaidExpireDate());
 
                     utils.storeString(getActivity(), PAID_EXPIRE_DATE, details.getPaidExpireDate());
-                    utils.storeInteger(getActivity(), CURRENT_BALANCE, Integer.parseInt(details.getCvBlnce()));
+                    utils.storeFloat(getActivity(), CURRENT_BALANCE, Integer.parseInt(details.getCvBlnce()));
 
                 } else {
                     Details details1 = new Details("error", "0", "0", "0");
@@ -497,7 +497,7 @@ public class FragmentDashboard extends Fragment {
                             .child("details")
                             .setValue(details1);
                     setValuesToTextViews("0.00", "0.00", "0.00", "");
-                    utils.storeInteger(getActivity(), CURRENT_BALANCE, 0);
+                    utils.storeFloat(getActivity(), CURRENT_BALANCE, 0);
                 }
                 isDone_getDetailsFromDatabase = true;
             }

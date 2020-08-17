@@ -25,7 +25,7 @@ import com.google.firebase.database.ValueEventListener;
 public class FragmentDailyAds extends Fragment {
     private static final String TAG = "FragmentDailyAds";
 
-
+    private static final String PAID_STATUS = "paidStatus";
     private static final String CURRENT_BALANCE = "currentBalance";
     private static final String DAILY_ADS_QUANTITY = "daily_ads_quantity";
 
@@ -62,17 +62,33 @@ public class FragmentDailyAds extends Fragment {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
 
-        adsQuantityTxt = view.findViewById(R.id.daily_ads_textView_fragment_daily_ads);
-        verifyBtn = view.findViewById(R.id.verify_btn_fragment_daily_ads);
         showAdBtn = view.findViewById(R.id.show_ad_btn_fragment_daily_ads);
+        if (utils.getStoredBoolean(getActivity(), PAID_STATUS)) {
 
-        quantity = utils.getStoredInteger(getActivity(), DAILY_ADS_QUANTITY);
+            TextView textView = view.findViewById(R.id.not_paid_textView_fragment_daily_ads);
+            textView.setVisibility(View.GONE);
 
-        adsQuantityTxt.setText(String.valueOf(quantity));
+            adsQuantityTxt = view.findViewById(R.id.daily_ads_textView_fragment_daily_ads);
+            verifyBtn = view.findViewById(R.id.verify_btn_fragment_daily_ads);
 
-        setShowBtnClickListener();
+            quantity = utils.getStoredInteger(getActivity(), DAILY_ADS_QUANTITY);
 
-        setVerifyBtnClickListener();
+            adsQuantityTxt.setText(String.valueOf(quantity));
+
+            setShowBtnClickListener();
+
+            setVerifyBtnClickListener();
+
+        }else {
+
+            showAdBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(getActivity(), "Advertisement has been shown!", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
 
         return view;
 
@@ -96,35 +112,26 @@ public class FragmentDailyAds extends Fragment {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     // UPDATING TOTAL BALANCE FIELD BY ADDING Rs: 0.20
-                                    int totalBalance = Integer.parseInt(snapshot.child("totalBlnc").getValue(String.class));
+                                    float totalBalance = Float.parseFloat(snapshot.child("totalBlnc").getValue(String.class));
                                     databaseReference
                                             .child("users")
                                             .child(mAuth.getCurrentUser().getUid())
                                             .child("details")
-                                            .child("totalBlnc").setValue(String.valueOf(totalBalance + 0.20));
+                                            .child("totalBlnc").setValue(Float.toString(totalBalance + 0.20f));
 
                                     // UPDATING CURRENT BALANCE FIELD BY ADDING Rs: 0.20
-                                    int currentBalance = Integer.parseInt(snapshot.child("cvBlnce").getValue(String.class));
+                                    float currentBalance = Float.parseFloat(snapshot.child("cvBlnce").getValue(String.class));
                                     databaseReference
                                             .child("users")
                                             .child(mAuth.getCurrentUser().getUid())
                                             .child("details")
-                                            .child("cvBlnce").setValue(String.valueOf(currentBalance + 0.20));
+                                            .child("cvBlnce").setValue(Float.toString(currentBalance + 0.20f));
 
                                     // ADDING Rs: 0.20 IN CURRENT BALANCE IN PREFERENCES
-                                    utils.storeInteger(getActivity(), CURRENT_BALANCE, utils.getStoredInteger(getActivity(), CURRENT_BALANCE) + 0.20);
-
-                                    // IF FIRST TIME ADS QUANTITY IS NOT 0
-                                    if (utils.getStoredInteger(getActivity(), FIRST_TIME_PREMIUM_ADS_QUANTITY) != 0) {
-
-                                        // REMOVING 1 IN FIRST TIME ADS QUANTITY
-                                        utils.storeInteger(getActivity(), FIRST_TIME_PREMIUM_ADS_QUANTITY, utils.getStoredInteger(getActivity(), FIRST_TIME_PREMIUM_ADS_QUANTITY) - 1);
-                                        adsQuantityTxt.setText(String.valueOf(quantity - 1));
-                                        return;
-                                    }
+                                    utils.storeFloat(getActivity(), CURRENT_BALANCE, utils.getStoredFloat(getActivity(), CURRENT_BALANCE) + 0.20f);
 
                                     // REMOVING 1 IN THE PREMIUM ADS QUANTITY
-                                    utils.storeInteger(getActivity(), PREMIUM_ADS_QUANTITY, utils.getStoredInteger(getActivity(), PREMIUM_ADS_QUANTITY) - 1);
+                                    utils.storeInteger(getActivity(), DAILY_ADS_QUANTITY, utils.getStoredInteger(getActivity(), DAILY_ADS_QUANTITY) - 1);
                                     adsQuantityTxt.setText(String.valueOf(quantity - 1));
 
                                     verifyBtn.setVisibility(View.GONE);
