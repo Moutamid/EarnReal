@@ -70,6 +70,14 @@
             android:text="People you invited, using your referral code will show up down below."
             android:textAlignment="center"
             android:textSize="18sp" />
+<!--implementation 'androidx.recyclerview:recyclerview:1.1.0'-->
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:paddingBottom="55dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/team_recyclerView"
+            android:layout_margin="20dp"/>
 
         <RelativeLayout
             android:layout_width="match_parent"
