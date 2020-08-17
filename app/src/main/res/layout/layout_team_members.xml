@@ -5,40 +5,37 @@
     android:background="@color/white"
     android:padding="10dp">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_centerVertical="true"
-        android:orientation="horizontal">
-
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:background="@color/green"
-            android:layout_gravity="center_vertical"
+            android:layout_alignParentStart="true"
+            android:id="@+id/paid_status_image_layout_team"
+            android:layout_centerVertical="true"
             android:src="@drawable/boy0" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:gravity="center"
+            android:layout_toStartOf="@id/paid_status_textview_layout_team"
+            android:gravity="start"
+            android:layout_toEndOf="@id/paid_status_image_layout_team"
+            android:layout_centerVertical="true"
+            android:id="@+id/user_email_layout_team"
             android:ellipsize="marquee"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@color/darkBlue"
             android:layout_marginStart="10dp"
             android:text="Moutamiddd waseem"
-            android:maxLength="15" />
-
-    </LinearLayout>
+             />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:textStyle="bold"
+        android:id="@+id/paid_status_textview_layout_team"
         android:textSize="20sp"
         android:layout_alignParentEnd="true"
         android:textColor="@color/darkBlue"

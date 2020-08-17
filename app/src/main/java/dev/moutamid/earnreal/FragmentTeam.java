@@ -5,6 +5,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -34,21 +36,19 @@ public class FragmentTeam extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_team_layout,container,false);
+        View view = inflater.inflate(R.layout.fragment_team_layout, container, false);
 
         mAuth = FirebaseAuth.getInstance();
 
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.keepSynced(true);
 
-        getTeamFromDatabase();
-
-        initRecyclerView(view);
+        getTeamFromDatabase(view);
 
         return view;
     }
 
-    private void getTeamFromDatabase() {
+    private void getTeamFromDatabase(final View view) {
         databaseReference.child("teams").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -68,14 +68,16 @@ public class FragmentTeam extends Fragment {
                     //teamMembers_tv.setText(String.valueOf(refUsersList.size()));
 
                     // LOOPING THROUGH THE TEAM LIST AND EXTRACTING OUT PAID MEMBERS
-                    for (int i = 0; i <= refUsersList.size() - 1; i++) {
-                        if (refUsersList.get(i).isPaid()) {
-                            paid_membersList.add(refUsersList.get(i).getEmail());
-                        }
-                    }// COUNTING THE PAID MEMBERS LIST AND SETTING THE SIZE TO TEXT VIEW
+//                    for (int i = 0; i <= refUsersList.size() - 1; i++) {
+//                        if (refUsersList.get(i).isPaid()) {
+//                            paid_membersList.add(refUsersList.get(i).getEmail());
+//                        }
+//                    } COUNTING THE PAID MEMBERS LIST AND SETTING THE SIZE TO TEXT VIEW
                     //paidMembers_tv.setText(String.valueOf(paid_membersList.size()));
 
+                    initRecyclerView(view);
                 } else {
+                    // USER HAS NOT INVITED ANYONE
                     Log.i(TAG, "onDataChange: No child exists");
 
 //                    teamMembers_tv.setText("0");
@@ -112,6 +114,38 @@ public class FragmentTeam extends Fragment {
 
     }
 
+    private static class refUser {
+
+        private String email;
+        private boolean paid;
+
+        refUser() {
+
+        }
+
+        public refUser(String email, boolean paid) {
+            this.email = email;
+            this.paid = paid;
+        }
+
+        public boolean isPaid() {
+            return paid;
+        }
+
+        public void setPaid(boolean paid) {
+            this.paid = paid;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+
+    }
+
     private class RecyclerViewAdapterTeam extends RecyclerView.Adapter
             <RecyclerViewAdapterTeam.ViewHolderTeam> {
 
@@ -145,55 +179,23 @@ public class FragmentTeam extends Fragment {
         @Override
         public int getItemCount() {
 //            if (currentMessagesArrayList == null)
-                return 0;
+            return 0;
 //            return currentMessagesArrayList.size();
         }
 
         public class ViewHolderTeam extends RecyclerView.ViewHolder {
 
-            //TextView leftText, rightText;
-            //LinearLayout rightTextLayout;
+            TextView userEmail, userStatusTxt;
+            ImageView paidStatusImg;
 
             public ViewHolderTeam(@NonNull View v) {
                 super(v);
 
-//                leftText = v.findViewById(R.id.leftText);
-//                rightText = v.findViewById(R.id.rightText);
-                //  rightTextLayout = v.findViewById(R.id.rightTextLayout);
+                userEmail = v.findViewById(R.id.user_email_layout_team);
+                paidst = v.findViewById(R.id.rightText);
+                rightTextLayout = v.findViewById(R.id.rightTextLayout);
             }
         }
-    }
-
-    private static class refUser {
-
-        private String email;
-        private boolean paid;
-
-        refUser() {
-
-        }
-
-        public refUser(String email, boolean paid) {
-            this.email = email;
-            this.paid = paid;
-        }
-
-        public boolean isPaid() {
-            return paid;
-        }
-
-        public void setPaid(boolean paid) {
-            this.paid = paid;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-
     }
 
 }
