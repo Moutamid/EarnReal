@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -29,6 +30,7 @@ public class FragmentUpgrade extends Fragment {
 
     private static final String PAID_STATUS = "paidStatus";
     private static final String REQUESTS_QUANTITY = "requestQuantity";
+    private static final String PAID_EXPIRE_DATE = "paidExpireDate";
     private static final String USER_EMAIL = "userEmail";
     private static final String REQUEST_DATE = "requestDate";
 
@@ -55,6 +57,9 @@ public class FragmentUpgrade extends Fragment {
 
             methodSelectionLayout.setVisibility(View.GONE);
             paidAccountLayout.setVisibility(View.VISIBLE);
+
+            TextView expireDate = view.findViewById(R.id.paid_expire_date_fragment_upgrade);
+            expireDate.setText("You are a paid member until " + utils.getStoredString(getActivity(), PAID_EXPIRE_DATE));
 
         } else {
 

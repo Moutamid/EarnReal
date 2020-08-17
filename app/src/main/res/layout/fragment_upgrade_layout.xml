@@ -34,8 +34,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:textAlignment="center"
+            android:id="@+id/paid_expire_date_fragment_upgrade"
             android:textSize="18sp"
-            android:text="You are a paid member until 02/06/2020"/>
+            android:text="Description"/>
 
     </LinearLayout>
 
