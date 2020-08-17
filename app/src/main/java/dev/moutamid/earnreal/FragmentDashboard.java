@@ -31,7 +31,7 @@ public class FragmentDashboard extends Fragment {
     private static final String TAG = "FragmentDashboard";
 
     private static final String PREMIUM_ADS_QUANTITY = "premium_ads_quantity";
-    private static final String DAILY_ADS_QUANTITY = "premium_ads_quantity";
+    private static final String DAILY_ADS_QUANTITY = "daily_ads_quantity";
     private static final String PAID_STATUS = "paidStatus";
     private static final String PAID_EXPIRE_DATE = "paidExpireDate";
     private static final String CURRENT_BALANCE = "currentBalance";

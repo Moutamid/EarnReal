@@ -26,7 +26,7 @@ public class FragmentPremiumAds extends Fragment {
     private static final String TAG = "FragmentPremiumAds";
 
     private static final String FIRST_TIME_PREMIUM_ADS_QUANTITY = "first_time_premium_ads_quantity";
-    private static final String PAID_STATUS = "paidStatus";
+
     private static final String CURRENT_BALANCE = "currentBalance";
     private static final String PREMIUM_ADS_QUANTITY = "premium_ads_quantity";
 
