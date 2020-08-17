@@ -343,7 +343,7 @@ public class FragmentDashboard extends Fragment {
         }
 
         // IF DATE IS'NT CHANGING THEN SHOW THE REAL QUANTITY OF ADS
-        dailyAds_tv.setText(utils.getStoredInteger(getActivity(), DAILY_ADS_QUANTITY));
+        dailyAds_tv.setText(String.valueOf(utils.getStoredInteger(getActivity(), DAILY_ADS_QUANTITY)));
 
         isDone_getDailyAdsQuantity = true;
     }
@@ -415,6 +415,7 @@ public class FragmentDashboard extends Fragment {
                         // THIS FIELD WILL UPDATE EVERY SINGLE TIME FRAGMENT OPEN SO DO SOMETING ABOUT THIS
 
                         // RESETTING THE VALUES OF PREMIUM ADS IN THE PREFERENCES
+
                         int oldAdsQuantity = utils.getStoredInteger(getActivity(), PREMIUM_ADS_QUANTITY);
                         utils.storeInteger(getActivity(), PREMIUM_ADS_QUANTITY, newPaidMembersList.size() * 12 + oldAdsQuantity);
 
