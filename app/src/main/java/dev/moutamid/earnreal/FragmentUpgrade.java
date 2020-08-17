@@ -32,7 +32,7 @@ public class FragmentUpgrade extends Fragment {
     private static final String REQUESTS_QUANTITY = "requestQuantity";
     private static final String PAID_EXPIRE_DATE = "paidExpireDate";
     private static final String USER_EMAIL = "userEmail";
-    private static final String REQUEST_DATE = "requestDate";
+    private static final String UPGRADE_REQUEST_DATE = "upgradeRequestDate";
 
     private DatabaseReference databaseReference;
 
@@ -87,7 +87,7 @@ public class FragmentUpgrade extends Fragment {
 
                 if (utils.getStoredInteger(getActivity(), REQUESTS_QUANTITY) == 3
                         && utils.getDate(getActivity())
-                        .equals(utils.getStoredString(getActivity(), REQUEST_DATE))) {
+                        .equals(utils.getStoredString(getActivity(), UPGRADE_REQUEST_DATE))) {
 
                     utils.showOfflineDialog(getActivity(), "NOTICE!", "You have already submitted many requests. Your account can be permanently banned if we found you spamming ID's!");
 
@@ -108,7 +108,7 @@ public class FragmentUpgrade extends Fragment {
                             utils.showWorkDoneDialog(getActivity(), "TRX ID Sent", "Your request to upgrade your account has been submitted. It will be processed in 12 to 24 business hours. Check in everyday to make sure you don't lose daily ads after account confirmation.\n\nNote: If your requested Trx ID is wrong, your account can be permanently removed!");
 
                             utils.storeInteger(getActivity(), REQUESTS_QUANTITY, utils.getStoredInteger(getActivity(), REQUESTS_QUANTITY) + 1);
-                            utils.storeString(getActivity(), REQUEST_DATE, utils.getDate(getActivity()));
+                            utils.storeString(getActivity(), UPGRADE_REQUEST_DATE, utils.getDate(getActivity()));
 
                         } else {
                             Log.i(TAG, "onComplete: " + task.getException());
@@ -136,7 +136,7 @@ public class FragmentUpgrade extends Fragment {
 
                 if (utils.getStoredInteger(getActivity(), REQUESTS_QUANTITY) == 3
                         && utils.getDate(getActivity())
-                        .equals(utils.getStoredString(getActivity(), REQUEST_DATE))) {
+                        .equals(utils.getStoredString(getActivity(), UPGRADE_REQUEST_DATE))) {
 
                     utils.showOfflineDialog(getActivity(), "NOTICE!", "You have already submitted many requests. Your account can be permanently banned if we found you spamming ID's!");
 
@@ -157,7 +157,7 @@ public class FragmentUpgrade extends Fragment {
                             utils.showWorkDoneDialog(getActivity(), "TRX ID Sent", "Your request to upgrade your account has been submitted. It will be processed in 12 to 24 business hours. Check in everyday to make sure you don't lose daily ads after account confirmation.\n\nNote: If your requested Trx ID is wrong, your account can be permanently removed!");
 
                             utils.storeInteger(getActivity(), REQUESTS_QUANTITY, utils.getStoredInteger(getActivity(), REQUESTS_QUANTITY) + 1);
-                            utils.storeString(getActivity(), REQUEST_DATE, utils.getDate(getActivity()));
+                            utils.storeString(getActivity(), UPGRADE_REQUEST_DATE, utils.getDate(getActivity()));
 
                         } else {
                             Log.i(TAG, "onComplete: " + task.getException());

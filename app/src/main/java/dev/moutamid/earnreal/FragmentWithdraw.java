@@ -15,18 +15,30 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class FragmentWithdraw extends Fragment {
+    private static final String TAG = "FragmentWithdraw";
+
+    private static final String WITHDRAW_REQUEST_DATE = "withdrawRequestDate";
 
     private Utils utils = new Utils();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_withdraw_layout,container,false);
+        View view = inflater.inflate(R.layout.fragment_withdraw_layout, container, false);
 
+
+        setSubmitBtnClickListener(view);
+
+        return view;
+    }
+
+    private void setSubmitBtnClickListener(View view) {
         final RadioGroup radioGroup = (RadioGroup) view.findViewById(R.id.radioGroup_withdraw_layout);
 
         final EditText accountNameEt = view.findViewById(R.id.accountName_et_withdraw_layout);
@@ -37,16 +49,33 @@ public class FragmentWithdraw extends Fragment {
         submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                RadioButton radioBtn = radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
 
-                String details = "Method: "+radioBtn.getText().toString() + "\n\n" + "Account: " + accountNameEt.getText().toString() + "\n\n" + "Account number: " + accountNmbrEt.getText().toString() + "\n\n" + "Amount: " + amountEt.getText().toString();
+                // IF USER HAS ALREADY SUBMITTED ONE REQUEST TODAY THEN STOP REQUESTING AGAIN
+                if (utils.getStoredString(getActivity(), WITHDRAW_REQUEST_DATE).equals(utils.getDate(getActivity())) && utils.getStoredBoolean(getActivity(), "isRequested")) {
 
-                new Utils().showDialog(getActivity(), "Please confirm your details!", details, "Submit", "Cancel", new DialogInterface.OnClickListener() {
+                    utils.showOfflineDialog(getActivity(), "Request denied!", "You can only do one withdrawal request per day. Come again tomorrow to submit a new request.");
+                    return;
+                }
+
+                // IF REQUESTED AMOUNT IS LESS THAN 300
+                if (Integer.parseInt(amountEt.getText().toString()) < 300) {
+                    amountEt.setError("You can only request minimum amount of Rs: 300");
+                    amountEt.requestFocus();
+                    return;
+                }
+
+                final RadioButton radioBtn = radioGroup.findViewById(radioGroup.getCheckedRadioButtonId());
+
+                String details = "Method: " + radioBtn.getText().toString() + "\n\n" +
+                        "Account name: " + accountNameEt.getText().toString() + "\n\n" +
+                        "Account number: " + accountNmbrEt.getText().toString() + "\n\n" +
+                        "Amount: " + amountEt.getText().toString();
+
+                utils.showDialog(getActivity(), "Please confirm your details!", details, "Submit", "Cancel", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        utils.showWorkDoneDialog(getActivity(), "Successful!", "Your request to withdraw money has been submitted successfully. It will be processed in 12 to 24 business hours.");
 
-                        uploadWithdrawDetails();
+                        uploadWithdrawDetails(radioBtn.getText().toString(), accountNameEt.getText().toString(), accountNmbrEt.getText().toString(), amountEt.getText().toString());
 
                         dialogInterface.dismiss();
                     }
@@ -60,8 +89,6 @@ public class FragmentWithdraw extends Fragment {
 
             }
         });
-
-        return view;
     }
 
     private void uploadWithdrawDetails(String method, String name, String number, String amount) {
@@ -69,7 +96,21 @@ public class FragmentWithdraw extends Fragment {
 
         withdrawRequestDetails details = new withdrawRequestDetails(method, name, number, amount);
 
-        databaseReference.child("withdraw_requests").push().setValue(details)
+        databaseReference.child("withdraw_requests").push().setValue(details).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()) {
+                    utils.showWorkDoneDialog(getActivity(), "Successful!", "Your request to withdraw money has been submitted successfully. It will be processed in 12 to 24 business hours.");
+
+                    utils.storeString(getActivity(), WITHDRAW_REQUEST_DATE, utils.getDate(getActivity()));
+                    utils.storeBoolean(getActivity(), "isRequested", true);
+
+                } else {
+                    //Log.i(TAG, "onComplete: " + task.getException());
+                    Toast.makeText(getActivity(), task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
     }
 
     private static class withdrawRequestDetails {
@@ -82,6 +123,10 @@ public class FragmentWithdraw extends Fragment {
             this.name = name;
             this.number = number;
             this.amount = amount;
+        }
+
+        withdrawRequestDetails() {
+
         }
 
         public String getMethod() {
@@ -116,10 +161,5 @@ public class FragmentWithdraw extends Fragment {
             this.amount = amount;
         }
 
-        withdrawRequestDetails() {
-
-        }
-
     }
-
 }
