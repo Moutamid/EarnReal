@@ -6,7 +6,6 @@
     <ScrollView
         android:layout_width="match_parent"
         android:id="@+id/paid_layout_fragment_team"
-        android:visibility="gone"
         android:layout_height="wrap_content">
 
     <LinearLayout
@@ -30,6 +29,7 @@
         android:layout_marginTop="15dp"
         android:text="537432576"
         android:textStyle="bold"
+        android:id="@+id/user_id_textView"
         android:textColor="@color/red"
         android:textSize="20sp" />
 
@@ -38,6 +38,7 @@
             android:layout_height="wrap_content"
             android:background="@drawable/submit_btn_background"
             android:layout_marginTop="15dp"
+            android:id="@+id/copy_btn_user_id"
             android:text="Copy"
             android:textColor="@color/white"
             android:textSize="17sp" />
@@ -78,6 +79,35 @@
             android:textSize="18sp" />
 <!--implementation 'androidx.recyclerview:recyclerview:1.1.0'-->
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:rotation="-30"
+            android:paddingBottom="80dp"
+            android:id="@+id/no_team_member_layout"
+            android:layout_marginTop="70dp"
+            android:gravity="center"
+            android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="NO MEMBERS"
+            android:textSize="30sp"
+            android:textColor="@color/orange"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="5dp"
+            android:textColor="@color/orange"
+            android:text="Please invite people using your referral code. For every paid user, you'll get Rs: 75"
+            android:textAlignment="center"
+            android:textSize="17sp" />
+
+        </LinearLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:paddingBottom="55dp"
@@ -94,6 +124,7 @@
         android:id="@+id/not_paid_layout_team"
         android:layout_height="match_parent"
         android:padding="20dp"
+        android:visibility="gone"
         android:background="@color/white"
         android:gravity="center_horizontal"
         android:orientation="vertical">

@@ -1,5 +1,9 @@
 package dev.moutamid.earnreal;
 
+import android.app.ProgressDialog;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,14 +33,17 @@ import java.util.ArrayList;
 public class FragmentTeam extends Fragment {
     private static final String TAG = "FragmentTeam";
 
-    private ArrayList<refUser> refUsersList = new ArrayList<>();
-
     private static final String PAID_STATUS = "paidStatus";
+    private static final String USER_ID = "userReferralCode";
+
+    private ArrayList<refUser> refUsersList = new ArrayList<>();
 
     private DatabaseReference databaseReference;
     private FirebaseAuth mAuth;
 
     private Utils utils = new Utils();
+
+    private ProgressDialog dialog;
 
     @Nullable
     @Override
@@ -45,6 +52,11 @@ public class FragmentTeam extends Fragment {
 
         // IF USER IS PAID
         if (utils.getStoredBoolean(getActivity(), PAID_STATUS)) {
+
+            dialog = new ProgressDialog(getActivity());
+            dialog.setMessage("Loading team members...");
+            dialog.show();
+
             LinearLayout notPaidLayout = view.findViewById(R.id.not_paid_layout_team);
             ScrollView paiLayout = view.findViewById(R.id.paid_layout_fragment_team);
 
@@ -58,6 +70,21 @@ public class FragmentTeam extends Fragment {
 
             getTeamFromDatabase(view);
 
+            TextView userIdTxt = view.findViewById(R.id.user_id_textView);
+            userIdTxt.setText(utils.getStoredString(getActivity(), USER_ID));
+
+            view.findViewById(R.id.copy_btn_user_id).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    ClipboardManager clipboardManager = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+                    ClipData clipData = ClipData.newPlainText("User ID", utils.getStoredString(getActivity(), USER_ID));
+                    clipboardManager.setPrimaryClip(clipData);
+
+                    utils.showWorkDoneDialog(getActivity(), "Copied!", "Your referral ID has been copied to clipboard. Now tell others to sign up using your ID and after they upgrade their account, you'll get 15 premium ads worth of Rs: 75");
+                }
+            });
+
         }
         return view;
     }
@@ -68,6 +95,9 @@ public class FragmentTeam extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
 
                 if (snapshot.hasChild(mAuth.getCurrentUser().getUid())) {
+
+                    LinearLayout noMemberLayout = view.findViewById(R.id.no_team_member_layout);
+                    noMemberLayout.setVisibility(View.GONE);
 
                     // CLEARING ALL THE ITEMS
                     refUsersList.clear();
@@ -81,6 +111,9 @@ public class FragmentTeam extends Fragment {
 
                     initRecyclerView(view);
                 } else {
+
+                    dialog.dismiss();
+
                     // USER HAS NOT INVITED ANYONE
                     Log.i(TAG, "onDataChange: No child exists");
 
@@ -111,6 +144,7 @@ public class FragmentTeam extends Fragment {
 
         conversationRecyclerView.setAdapter(adapter);
 
+        dialog.dismiss();
     }
 
     private static class refUser {
@@ -160,13 +194,13 @@ public class FragmentTeam extends Fragment {
         public void onBindViewHolder(@NonNull ViewHolderTeam holder, int position) {
             Log.d(TAG, "onBindViewHolder: " + position);
 
-            if (refUsersList.get(position).isPaid()){
+            if (refUsersList.get(position).isPaid()) {
 
                 holder.paidStatusImg.setImageResource(R.drawable.ic_done);
                 holder.userEmail.setText(refUsersList.get(position).getEmail());
                 holder.userStatusTxt.setText("PAID");
 
-            }else {
+            } else {
 
                 holder.userEmail.setText(refUsersList.get(position).getEmail());
 
@@ -176,7 +210,7 @@ public class FragmentTeam extends Fragment {
         @Override
         public int getItemCount() {
             if (refUsersList == null)
-            return 0;
+                return 0;
 
             return refUsersList.size();
         }
