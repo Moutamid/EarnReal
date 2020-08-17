@@ -8,11 +8,10 @@
         <ImageView
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:background="@color/green"
             android:layout_alignParentStart="true"
             android:id="@+id/paid_status_image_layout_team"
             android:layout_centerVertical="true"
-            android:src="@drawable/boy0" />
+            android:src="@drawable/ic_info" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -27,7 +26,7 @@
             android:textStyle="bold"
             android:textColor="@color/darkBlue"
             android:layout_marginStart="10dp"
-            android:text="Moutamiddd waseem"
+            android:text="User email"
              />
 
     <TextView
@@ -40,6 +39,6 @@
         android:layout_alignParentEnd="true"
         android:textColor="@color/darkBlue"
         android:layout_marginEnd="10dp"
-        android:text="PAID" />
+        android:text="NOT PAID" />
 
 </RelativeLayout>

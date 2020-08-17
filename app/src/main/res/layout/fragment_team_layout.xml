@@ -1,7 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:id="@+id/paid_layout_fragment_team"
+        android:visibility="gone"
+        android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -79,104 +85,42 @@
             android:id="@+id/team_recyclerView"
             android:layout_margin="20dp"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
+    </LinearLayout>
+
+    </ScrollView>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:id="@+id/not_paid_layout_team"
+        android:layout_height="match_parent"
+        android:padding="20dp"
+        android:background="@color/white"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="100dp"
+            android:layout_marginTop="20dp"
+            android:layout_height="100dp"
+            android:src="@drawable/ic_info"/>
+
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:layout_margin="20dp"
-            android:padding="10dp">
+            android:text="Sorry!"
+            android:textSize="25sp"
+            android:layout_marginTop="20dp"
+            android:textColor="@color/darkBlue"
+            android:textStyle="bold"/>
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:background="@color/green"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/boy0" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center"
-                    android:ellipsize="marquee"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/darkBlue"
-                    android:layout_marginStart="10dp"
-                    android:text="Moutamiddd waseem"
-                    android:maxLength="15" />
-
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:layout_alignParentEnd="true"
-                android:textColor="@color/darkBlue"
-                android:layout_marginEnd="10dp"
-                android:text="PAID" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
+        <TextView
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:layout_margin="20dp"
-            android:padding="10dp">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_centerVertical="true"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
-                    android:background="@color/green"
-                    android:layout_gravity="center_vertical"
-                    android:src="@drawable/boy0" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:gravity="center"
-                    android:ellipsize="marquee"
-                    android:textSize="16sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/darkBlue"
-                    android:layout_marginStart="10dp"
-                    android:text="Moutamiddd waseem"
-                    android:maxLength="15" />
-
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:textStyle="bold"
-                android:textSize="20sp"
-                android:layout_alignParentEnd="true"
-                android:textColor="@color/darkBlue"
-                android:layout_marginEnd="10dp"
-                android:text="PAID" />
-
-        </RelativeLayout>
+            android:layout_marginTop="10dp"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            android:text="You are not a paid member. You need to upgrade your account to unlock this section.\n\nAfter that, for every paid invitation you will earn Rs: 75"/>
 
     </LinearLayout>
 
-</ScrollView>
+</RelativeLayout>

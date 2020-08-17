@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,23 +30,35 @@ public class FragmentTeam extends Fragment {
     private static final String TAG = "FragmentTeam";
 
     private ArrayList<refUser> refUsersList = new ArrayList<>();
-    private ArrayList<String> paid_membersList = new ArrayList<>();
+
+    private static final String PAID_STATUS = "paidStatus";
 
     private DatabaseReference databaseReference;
     private FirebaseAuth mAuth;
+
+    private Utils utils = new Utils();
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_team_layout, container, false);
 
-        mAuth = FirebaseAuth.getInstance();
+        // IF USER IS PAID
+        if (utils.getStoredBoolean(getActivity(), PAID_STATUS)) {
+            LinearLayout notPaidLayout = view.findViewById(R.id.not_paid_layout_team);
+            ScrollView paiLayout = view.findViewById(R.id.paid_layout_fragment_team);
 
-        databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.keepSynced(true);
+            notPaidLayout.setVisibility(View.GONE);
+            paiLayout.setVisibility(View.VISIBLE);
 
-        getTeamFromDatabase(view);
+            mAuth = FirebaseAuth.getInstance();
 
+            databaseReference = FirebaseDatabase.getInstance().getReference();
+            databaseReference.keepSynced(true);
+
+            getTeamFromDatabase(view);
+
+        }
         return view;
     }
 
@@ -57,34 +71,20 @@ public class FragmentTeam extends Fragment {
 
                     // CLEARING ALL THE ITEMS
                     refUsersList.clear();
-                    paid_membersList.clear();
 
                     // LOOPING THROUGH ALL THE CHILDREN OF TEAM
                     for (DataSnapshot dataSnapshot : snapshot.child(mAuth.getCurrentUser().getUid()).child("users").getChildren()) {
 
                         refUsersList.add(dataSnapshot.getValue(refUser.class));
 
-                    }// COUNTING AMOUNT OF TEAM MEMBERS AND SETTING TO TEXT VIEW
-                    //teamMembers_tv.setText(String.valueOf(refUsersList.size()));
-
-                    // LOOPING THROUGH THE TEAM LIST AND EXTRACTING OUT PAID MEMBERS
-//                    for (int i = 0; i <= refUsersList.size() - 1; i++) {
-//                        if (refUsersList.get(i).isPaid()) {
-//                            paid_membersList.add(refUsersList.get(i).getEmail());
-//                        }
-//                    } COUNTING THE PAID MEMBERS LIST AND SETTING THE SIZE TO TEXT VIEW
-                    //paidMembers_tv.setText(String.valueOf(paid_membersList.size()));
+                    }
 
                     initRecyclerView(view);
                 } else {
                     // USER HAS NOT INVITED ANYONE
                     Log.i(TAG, "onDataChange: No child exists");
 
-//                    teamMembers_tv.setText("0");
-//                    paidMembers_tv.setText("0");
                 }
-
-//                isDone_getTeamFromDatabase = true;
             }
 
             @Override
@@ -93,13 +93,12 @@ public class FragmentTeam extends Fragment {
 
                 Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
 
-//                isDone_getTeamFromDatabase = true;
             }
         });
     }
 
     private void initRecyclerView(View view) {
-        //Log.d(TAG, "initRecyclerView: ");
+        Log.d(TAG, "initRecyclerView: ");
 
         RecyclerView conversationRecyclerView = view.findViewById(R.id.team_recyclerView);
         RecyclerViewAdapterTeam adapter = new RecyclerViewAdapterTeam();
@@ -152,35 +151,34 @@ public class FragmentTeam extends Fragment {
         @NonNull
         @Override
         public ViewHolderTeam onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-            //Log.d(TAG, "onCreateViewHolder: ");
+            Log.d(TAG, "onCreateViewHolder: ");
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_team_members, parent, false);
             return new ViewHolderTeam(view);
         }
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolderTeam holder, int position) {
-            //Log.d(TAG, "onBindViewHolder: " + position);
-//
-//            if (currentMessagesArrayList.get(position).getMsgUser().equals("me")) {
-//
-//                holder.rightText.setText(currentMessagesArrayList.get(position).getMsgText());
-//
-//                holder.leftText.setVisibility(View.GONE);
-//
-//            } else {
-//
-//                holder.leftText.setText(currentMessagesArrayList.get(position).getMsgText());
-//
-//                holder.rightText.setVisibility(View.GONE);
-//            }
+            Log.d(TAG, "onBindViewHolder: " + position);
 
+            if (refUsersList.get(position).isPaid()){
+
+                holder.paidStatusImg.setImageResource(R.drawable.ic_done);
+                holder.userEmail.setText(refUsersList.get(position).getEmail());
+                holder.userStatusTxt.setText("PAID");
+
+            }else {
+
+                holder.userEmail.setText(refUsersList.get(position).getEmail());
+
+            }
         }
 
         @Override
         public int getItemCount() {
-//            if (currentMessagesArrayList == null)
+            if (refUsersList == null)
             return 0;
-//            return currentMessagesArrayList.size();
+
+            return refUsersList.size();
         }
 
         public class ViewHolderTeam extends RecyclerView.ViewHolder {
@@ -192,8 +190,8 @@ public class FragmentTeam extends Fragment {
                 super(v);
 
                 userEmail = v.findViewById(R.id.user_email_layout_team);
-                paidst = v.findViewById(R.id.rightText);
-                rightTextLayout = v.findViewById(R.id.rightTextLayout);
+                userStatusTxt = v.findViewById(R.id.paid_status_textview_layout_team);
+                paidStatusImg = v.findViewById(R.id.paid_status_image_layout_team);
             }
         }
     }
