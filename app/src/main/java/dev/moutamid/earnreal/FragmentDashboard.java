@@ -61,6 +61,8 @@ public class FragmentDashboard extends Fragment {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         databaseReference.keepSynced(true);
 
+        checkPaidExpireDateAndRemovePaidStatus();
+
         initViews(view);
 
         // CHECKING FOR ALL THE METHODS TO COMPLETE AND THEN DISMISSING THE DIALOG
@@ -89,6 +91,28 @@ public class FragmentDashboard extends Fragment {
         setDialogsOnAllLayouts(view);
 
         return view;
+    }
+
+    private void checkPaidExpireDateAndRemovePaidStatus() {
+        databaseReference.child("users")
+                .child(mAuth.getCurrentUser().getUid())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String expireDate = snapshot.child("details").child("paidExpireDate").getValue(String.class);
+                if (expireDate.equals(utils.getDate(getActivity()))){
+                    databaseReference.child("users")
+                            .child(mAuth.getCurrentUser().getUid())
+                            .child("paid").setValue(false);
+                    utils.storeBoolean(getActivity(), PAID_STATUS, false);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     Runnable booleanCheckerRunnable = new Runnable() {
@@ -459,6 +483,7 @@ public class FragmentDashboard extends Fragment {
 
                     Details details = snapshot.child("details").getValue(Details.class);
                     setValuesToTextViews(details.getTotalBlnc(), details.gettWithdrw(), details.getCvBlnce(), details.getPaidExpireDate());
+
                     utils.storeString(getActivity(), PAID_EXPIRE_DATE, details.getPaidExpireDate());
                     utils.storeString(getActivity(), CURRENT_BALANCE, details.getCvBlnce());
 
