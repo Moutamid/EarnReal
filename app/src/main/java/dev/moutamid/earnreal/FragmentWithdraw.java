@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +25,7 @@ public class FragmentWithdraw extends Fragment {
     private static final String TAG = "FragmentWithdraw";
 
     private static final String WITHDRAW_REQUEST_DATE = "withdrawRequestDate";
+    private static final String CURRENT_BALANCE = "currentBalance";
 
     private Utils utils = new Utils();
 
@@ -32,6 +34,8 @@ public class FragmentWithdraw extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_withdraw_layout, container, false);
 
+        TextView balance = view.findViewById(R.id.current_balance_textView_withdraw);
+        balance.setText(utils.getStoredString(getActivity(), CURRENT_BALANCE));
 
         setSubmitBtnClickListener(view);
 
@@ -60,6 +64,13 @@ public class FragmentWithdraw extends Fragment {
                 // IF REQUESTED AMOUNT IS LESS THAN 300
                 if (Integer.parseInt(amountEt.getText().toString()) < 300) {
                     amountEt.setError("You can only request minimum amount of Rs: 300");
+                    amountEt.requestFocus();
+                    return;
+                }
+
+                // IF AMOUNT IS GREATER THAN THE CURRENT BALANCE AMOUNT
+                if (Integer.parseInt(amountEt.getText().toString()) > Integer.parseInt(utils.getStoredString(getActivity(), CURRENT_BALANCE))){
+                    amountEt.setError("Your amount is greater than your current balance!");
                     amountEt.requestFocus();
                     return;
                 }
@@ -100,7 +111,7 @@ public class FragmentWithdraw extends Fragment {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
-                    utils.showWorkDoneDialog(getActivity(), "Successful!", "Your request to withdraw money has been submitted successfully. It will be processed in 12 to 24 business hours.");
+                    utils.showWorkDoneDialog(getActivity(), "Successful!", "Your request to withdraw money has been submitted successfully. It will be processed in 12 to 24 business hours.\n\nNote: If we found any suspicious activity in your account, you will be permanently removed and you will lose all of your money!");
 
                     utils.storeString(getActivity(), WITHDRAW_REQUEST_DATE, utils.getDate(getActivity()));
                     utils.storeBoolean(getActivity(), "isRequested", true);
