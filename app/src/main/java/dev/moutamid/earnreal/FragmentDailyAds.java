@@ -95,24 +95,24 @@ public class FragmentDailyAds extends Fragment {
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    // UPDATING TOTAL BALANCE FIELD BY ADDING Rs: 5
+                                    // UPDATING TOTAL BALANCE FIELD BY ADDING Rs: 0.20
                                     int totalBalance = Integer.parseInt(snapshot.child("totalBlnc").getValue(String.class));
                                     databaseReference
                                             .child("users")
                                             .child(mAuth.getCurrentUser().getUid())
                                             .child("details")
-                                            .child("totalBlnc").setValue(String.valueOf(totalBalance + 5));
+                                            .child("totalBlnc").setValue(String.valueOf(totalBalance + 0.20));
 
-                                    // UPDATING CURRENT BALANCE FIELD BY ADDING Rs: 5
+                                    // UPDATING CURRENT BALANCE FIELD BY ADDING Rs: 0.20
                                     int currentBalance = Integer.parseInt(snapshot.child("cvBlnce").getValue(String.class));
                                     databaseReference
                                             .child("users")
                                             .child(mAuth.getCurrentUser().getUid())
                                             .child("details")
-                                            .child("cvBlnce").setValue(String.valueOf(currentBalance + 5));
+                                            .child("cvBlnce").setValue(String.valueOf(currentBalance + 0.20));
 
-                                    // ADDING Rs: 5 IN CURRENT BALANCE IN PREFERENCES
-                                    utils.storeInteger(getActivity(), CURRENT_BALANCE, utils.getStoredInteger(getActivity(), CURRENT_BALANCE) + 5);
+                                    // ADDING Rs: 0.20 IN CURRENT BALANCE IN PREFERENCES
+                                    utils.storeInteger(getActivity(), CURRENT_BALANCE, utils.getStoredInteger(getActivity(), CURRENT_BALANCE) + 0.20);
 
                                     // IF FIRST TIME ADS QUANTITY IS NOT 0
                                     if (utils.getStoredInteger(getActivity(), FIRST_TIME_PREMIUM_ADS_QUANTITY) != 0) {

@@ -54,14 +54,14 @@ public class Utils {
         return sharedPreferences.getBoolean(name, false);
     }
 
-    public void storeInteger(Context context1, String name, int value) {
+    public void storeInteger(Context context1, String name, float value) {
         sharedPreferences = context1.getSharedPreferences(PACKAGE_NAME, Context.MODE_PRIVATE);
-        sharedPreferences.edit().putInt(name, value).apply();
+        sharedPreferences.edit().putFloat(name, value).apply();
     }
 
-    public int getStoredInteger(Context context1, String name) {
+    public float getStoredInteger(Context context1, String name) {
         sharedPreferences = context1.getSharedPreferences(PACKAGE_NAME, Context.MODE_PRIVATE);
-        return sharedPreferences.getInt(name, 0);
+        return sharedPreferences.getFloat(name, 0);
     }
 
     public String getRandomNmbr(int length) {
