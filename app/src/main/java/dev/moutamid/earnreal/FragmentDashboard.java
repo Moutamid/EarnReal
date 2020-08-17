@@ -29,6 +29,7 @@ import java.util.List;
 
 public class FragmentDashboard extends Fragment {
     private static final String TAG = "FragmentDashboard";
+
     private static final String PREMIUM_ADS_QUANTITY = "premium_ads_quantity";
     private static final String DAILY_ADS_QUANTITY = "premium_ads_quantity";
     private static final String PAID_STATUS = "paidStatus";
@@ -485,17 +486,17 @@ public class FragmentDashboard extends Fragment {
                     setValuesToTextViews(details.getTotalBlnc(), details.gettWithdrw(), details.getCvBlnce(), details.getPaidExpireDate());
 
                     utils.storeString(getActivity(), PAID_EXPIRE_DATE, details.getPaidExpireDate());
-                    utils.storeString(getActivity(), CURRENT_BALANCE, details.getCvBlnce());
+                    utils.storeInteger(getActivity(), CURRENT_BALANCE, Integer.parseInt(details.getCvBlnce()));
 
                 } else {
-                    Details details1 = new Details("error", "0.00", "0.00", "0.00");
+                    Details details1 = new Details("error", "0", "0", "0");
                     databaseReference
                             .child("users")
                             .child(mAuth.getCurrentUser().getUid())
                             .child("details")
                             .setValue(details1);
                     setValuesToTextViews("0.00", "0.00", "0.00", "");
-                    utils.storeString(getActivity(), CURRENT_BALANCE, "0.00");
+                    utils.storeInteger(getActivity(), CURRENT_BALANCE, 0);
                 }
                 isDone_getDetailsFromDatabase = true;
             }

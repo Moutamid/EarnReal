@@ -35,7 +35,7 @@ public class FragmentWithdraw extends Fragment {
         View view = inflater.inflate(R.layout.fragment_withdraw_layout, container, false);
 
         TextView balance = view.findViewById(R.id.current_balance_textView_withdraw);
-        balance.setText(utils.getStoredString(getActivity(), CURRENT_BALANCE));
+        balance.setText(String.valueOf(utils.getStoredInteger(getActivity(), CURRENT_BALANCE)));
 
         setSubmitBtnClickListener(view);
 
@@ -69,7 +69,7 @@ public class FragmentWithdraw extends Fragment {
                 }
 
                 // IF AMOUNT IS GREATER THAN THE CURRENT BALANCE AMOUNT
-                if (Integer.parseInt(amountEt.getText().toString()) > Integer.parseInt(utils.getStoredString(getActivity(), CURRENT_BALANCE))){
+                if (Integer.parseInt(amountEt.getText().toString()) > utils.getStoredInteger(getActivity(), CURRENT_BALANCE)){
                     amountEt.setError("Your amount is greater than your current balance!");
                     amountEt.requestFocus();
                     return;
