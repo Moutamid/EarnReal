@@ -102,7 +102,7 @@
             android:layout_marginEnd="20dp"
             android:layout_marginTop="5dp"
             android:textColor="@color/orange"
-            android:text="Please invite people using your referral code. For every paid user, you'll get Rs: 75"
+            android:text="Please invite people using your referral code. For every paid user, you will get 15 ads and every ad will give you Rs: 5"
             android:textAlignment="center"
             android:textSize="17sp" />
 

@@ -44,7 +44,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:text="You need to be a paid member to watch daily ads. You will get 20 ads daily on becoming a premium member and you will get 15 premiumm ads worth Rs: 75"
+            android:text="You need to be a paid member to watch daily ads. You will get 20 ads daily on becoming a premium member and you will get 15 premium ads by referring a paid member and every ad will give you Rs: 5"
             android:layout_gravity="center_horizontal"
             android:gravity="center_horizontal"
             android:textSize="20sp"

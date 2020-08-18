@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-
 import androidx.appcompat.app.AppCompatActivity;
 
 
@@ -15,10 +14,6 @@ public class ActivityWelcome extends AppCompatActivity {
     private Button loginBtn;
     private TextView goToSignUpBtn;
 
-//    private FirebaseAuth mAuth;
-
-    private static final String PACKAGE_NAME = "dev.moutamid.strangers";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,11 +21,6 @@ public class ActivityWelcome extends AppCompatActivity {
 
         loginBtn = findViewById(R.id.loginBtn_welcome);
         goToSignUpBtn = findViewById(R.id.goTo_signUp_activity_welcome);
-  //      mAuth = FirebaseAuth.getInstance();
-
-        this.getSharedPreferences(PACKAGE_NAME, Context.MODE_PRIVATE).edit().clear().apply();
-//        if (mAuth.getCurrentUser() != null)
-//            mAuth.signOut();
 
         loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override

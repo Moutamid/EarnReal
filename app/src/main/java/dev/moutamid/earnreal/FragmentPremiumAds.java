@@ -146,7 +146,7 @@ public class FragmentPremiumAds extends Fragment {
                             });
 
                 } else
-                    utils.showOfflineDialog(getActivity(), "Sorry!", "Your request is not verified because premium ads are 0. In order to get more ads please invite people and after they upgrade you'll get 15 ads worth Rs: 75");
+                    utils.showOfflineDialog(getActivity(), "Sorry!", "Your request is not verified because premium ads are 0. In order to get more ads please invite people and after they upgrade you'll get 15 ads worth and every ad will give you Rs: 5");
             }
         });
 
